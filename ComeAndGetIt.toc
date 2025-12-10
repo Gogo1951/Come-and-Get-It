@@ -1,13 +1,15 @@
 ## Title: Come & Get It!
 ## Notes: Announce herbs or ore that you can't use in the zone general chat.
 ## Author: Gogo1951
-## Version: @project-version@
-
-## X-Curse-Project-ID: 1128926
 
 ## Interface: 110205, 50502, 11508
+## Version: @project-version@
+## X-Curse-Project-ID: 1128926
 
+# Come & Get It!
 ComeAndGetIt.lua
 
-# Open Sesame! on CurseForge : https://legacy.curseforge.com/wow/addons/come-get-it
-# Open Sesame! on GitHub : https://github.com/Gogo1951/ComeAndGetIt
+# Feedback Welcome! (=
+# Come & Get It! on CurseForge // https://legacy.curseforge.com/wow/addons/come-get-it
+# Come & Get It! on GitHub // https://github.com/Gogo1951/Come-and-Get-It
+# Come & Get It! on Discord // https://discord.gg/eh8hKq992Q
