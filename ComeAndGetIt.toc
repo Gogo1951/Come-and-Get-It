@@ -10,6 +10,6 @@
 ComeAndGetIt.lua
 
 # Feedback Welcome! (=
-# Come & Get It! on CurseForge // https://legacy.curseforge.com/wow/addons/come-get-it
-# Come & Get It! on GitHub // https://www.curseforge.com/wow/addons/come-get-it
+# Come & Get It! on CurseForge // https://www.curseforge.com/wow/addons/come-get-it
+# Come & Get It! on GitHub // https://github.com/Gogo1951/Come-and-Get-It
 # Come & Get It! on Discord // https://discord.gg/eh8hKq992Q
