@@ -1,73 +1,157 @@
 local addonName, addonTable = ...
+local L = {
+    enUS = {
+        ROGUES = "Rogues",
+        HERBALISTS = "Herbalists",
+        MINERS = "Miners",
+        ACTION_OPEN = "open",
+        ACTION_PICK = "pick",
+        ACTION_MINE = "mine",
+        PREFIX_LOCKED = "a locked",
+        PREFIX_HERB = "some",
+        PREFIX_MINE = "a",
+        MATCH_HERB = "Herbalism",
+        MATCH_MINE = "Mining",
+        MSG_FORMAT = "{rt7} Come & Get It // Hey %s, I came across %s %s that I can't %s at %s, %s in %s!"
+    },
+    deDE = {
+        ROGUES = "Schurken",
+        HERBALISTS = "Kräuterkundige",
+        MINERS = "Bergbauer",
+        ACTION_OPEN = "öffnen",
+        ACTION_PICK = "pflücken",
+        ACTION_MINE = "abbauen",
+        PREFIX_LOCKED = "ein verschlossenes",
+        PREFIX_HERB = "ein",
+        PREFIX_MINE = "ein",
+        MATCH_HERB = "Kräuterkunde",
+        MATCH_MINE = "Bergbau",
+        MSG_FORMAT = "{rt7} Kommt und holt es // Hey %s, ich habe %s %s gefunden! Ich kann es nicht %s. (%s, %s in %s)"
+    },
+    frFR = {
+        ROGUES = "Voleurs",
+        HERBALISTS = "Herboristes",
+        MINERS = "Mineurs",
+        ACTION_OPEN = "ouvrir",
+        ACTION_PICK = "cuillir",
+        ACTION_MINE = "miner",
+        PREFIX_LOCKED = "un verrouillé",
+        PREFIX_HERB = "quelques",
+        PREFIX_MINE = "un",
+        MATCH_HERB = "Herboristerie",
+        MATCH_MINE = "Minage",
+        MSG_FORMAT = "{rt7} Venez le chercher // Hé %s, j'ai trouvé %s %s que je ne peux pas %s à %s, %s dans %s !"
+    },
+    esES = {
+        ROGUES = "Pícaros",
+        HERBALISTS = "Herboristas",
+        MINERS = "Mineros",
+        ACTION_OPEN = "abrir",
+        ACTION_PICK = "recolectar",
+        ACTION_MINE = "minar",
+        PREFIX_LOCKED = "un cerrado",
+        PREFIX_HERB = "algunas",
+        PREFIX_MINE = "un",
+        MATCH_HERB = "Herboristería",
+        MATCH_MINE = "Minería",
+        MSG_FORMAT = "{rt7} Ven y tómalo // Oye %s, encontré %s %s que no puedo %s en %s, %s en %s!"
+    },
+    ruRU = {
+        ROGUES = "Разбойники",
+        HERBALISTS = "Травники",
+        MINERS = "Шахтеры",
+        ACTION_OPEN = "открыть",
+        ACTION_PICK = "собрать",
+        ACTION_MINE = "выкопать",
+        PREFIX_LOCKED = "запертый",
+        PREFIX_HERB = "куст",
+        PREFIX_MINE = "жилу",
+        MATCH_HERB = "Травничество",
+        MATCH_MINE = "Горное дело",
+        MSG_FORMAT = "{rt7} Забирайте // Эй, %s, я нашел %s %s, не могу %s! Координаты: %s, %s в %s."
+    },
+    koKR = {
+        ROGUES = "도적",
+        HERBALISTS = "약초채집가",
+        MINERS = "채광사",
+        ACTION_OPEN = "열기",
+        ACTION_PICK = "채집",
+        ACTION_MINE = "채광",
+        PREFIX_LOCKED = "잠긴",
+        PREFIX_HERB = "",
+        PREFIX_MINE = "",
+        MATCH_HERB = "약초채집",
+        MATCH_MINE = "채광",
+        MSG_FORMAT = "{rt7} 와서 가져가세요 // 저기요 %s님, %s %s(을)를 발견했는데 %s 할 수 없네요! 위치: %s, %s (%s)"
+    },
+    zhCN = {
+        ROGUES = "盗贼",
+        HERBALISTS = "草药师",
+        MINERS = "矿工",
+        ACTION_OPEN = "打开",
+        ACTION_PICK = "采集",
+        ACTION_MINE = "挖掘",
+        PREFIX_LOCKED = "上锁的",
+        PREFIX_HERB = "",
+        PREFIX_MINE = "",
+        MATCH_HERB = "草药学",
+        MATCH_MINE = "采矿",
+        MSG_FORMAT = "{rt7} 快来拿 // 嘿 %s，我发现了一个 %s %s，但我无法 %s！坐标：%s, %s 在 %s"
+    }
+}
+local locale = GetLocale()
+if locale == "esMX" then
+    locale = "esES"
+end
+if locale == "enGB" then
+    locale = "enUS"
+end
+local loc = L[locale] or L.enUS
 
-local ANNOUNCE_COOLDOWN = 5
-local ERROR_LOCKED_CHEST = 268
-
-local GetTime = GetTime
-local IsInInstance = IsInInstance
-local GetBestMapForUnit = C_Map and C_Map.GetBestMapForUnit
-local GetPlayerMapPosition = C_Map and C_Map.GetPlayerMapPosition
-local GetMapInfo = C_Map and C_Map.GetMapInfo
-local OpenChat = ChatFrame_OpenChat
-local format = string.format
-local GetChannelList = GetChannelList
-local GetChannelInfo = C_ChatInfo and C_ChatInfo.GetChannelInfo
-local ERR_SKILL_REQUIRES = _G.ERR_SKILL_REQUIRES or "Requires %s"
-
-local lastAnnounce = 0
-local layerIndexByZoneAndInstance = {}
-local nextLayerIndexByZone = {}
+local ANNOUNCE_COOLDOWN, ERROR_LOCKED_CHEST, lastAnnounce = 5, 268, 0
+local GetTime, IsInInstance, OpenChat, format = GetTime, IsInInstance, ChatFrame_OpenChat, string.format
+local GetBestMapForUnit, GetPlayerMapPosition, GetMapInfo = C_Map and C_Map.GetBestMapForUnit, C_Map and C_Map.GetPlayerMapPosition, C_Map and C_Map.GetMapInfo
 
 local errorMapping = {
-    [ERROR_LOCKED_CHEST] = {role = "Rogues", prefix = "a locked", defaultNode = "TREASURE CHEST", action = "open"},
-    Herbalism = {role = "Herbalists", prefix = "some", defaultNode = "HERB NAME", action = "pick"},
-    Mining = {role = "Miners", prefix = "a", defaultNode = "MINERAL VEIN", action = "mine"}
+    [ERROR_LOCKED_CHEST] = {
+        role = loc.ROGUES,
+        prefix = loc.PREFIX_LOCKED,
+        defaultNode = "TREASURE CHEST",
+        action = loc.ACTION_OPEN
+    },
+    [loc.MATCH_HERB] = {
+        role = loc.HERBALISTS,
+        prefix = loc.PREFIX_HERB,
+        defaultNode = "HERB NAME",
+        action = loc.ACTION_PICK
+    },
+    [loc.MATCH_MINE] = {
+        role = loc.MINERS,
+        prefix = loc.PREFIX_MINE,
+        defaultNode = "MINERAL VEIN",
+        action = loc.ACTION_MINE
+    }
 }
-
-local requiresPattern
-do
-    local p = ERR_SKILL_REQUIRES:gsub("([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1")
-    requiresPattern = p:gsub("%%s", "(.+)")
-end
-
-local function NormalizeSkillName(skill)
-    if not skill then
-        return nil
-    end
-    skill = skill:gsub("%b()", "")
-    skill = skill:match("^%s*(.-)%s*$")
-    return skill
-end
 
 local function GetNodeName()
     local f = _G.GameTooltipTextLeft1
     return f and f:GetText()
 end
 
-local function ResolveGeneralLayer(zoneName)
-    if not GetChannelInfo then
+local function MatchError(messageID, message)
+    if errorMapping[messageID] then
+        return errorMapping[messageID]
+    end
+    if not message then
         return nil
     end
-    local list = {GetChannelList()}
-    for i = 1, #list, 3 do
-        local id = list[i]
-        local name = list[i + 1]
-        if id and name and name:match("^General %- ") and name:find(zoneName, 1, true) then
-            local info = GetChannelInfo(id)
-            if info and info.instanceID and info.instanceID > 0 then
-                local inst = tostring(info.instanceID)
-                local key = zoneName .. ":" .. inst
-                local idx = layerIndexByZoneAndInstance[key]
-                if not idx then
-                    local n = nextLayerIndexByZone[zoneName] or 1
-                    idx = n
-                    layerIndexByZoneAndInstance[key] = idx
-                    nextLayerIndexByZone[zoneName] = n + 1
-                end
-                return idx
-            end
+    local lowerMessage = string.lower(message)
+    for key, mapping in pairs(errorMapping) do
+        if type(key) == "string" and string.find(lowerMessage, string.lower(key), 1, true) then
+            return mapping
         end
     end
+    return nil
 end
 
 local function Announce(mapping)
@@ -81,81 +165,35 @@ local function Announce(mapping)
     if not GetBestMapForUnit or not GetPlayerMapPosition or not GetMapInfo then
         return
     end
-
     local mapID = GetBestMapForUnit("player")
     if not mapID then
         return
     end
-
     local pos = GetPlayerMapPosition(mapID, "player")
     if not pos then
         return
     end
-
     local mapInfo = GetMapInfo(mapID)
     if not mapInfo or not mapInfo.name then
         return
     end
-
     local node = GetNodeName() or mapping.defaultNode
     if not node or node == "" then
         return
     end
-
-    local x = format("%.0f", pos.x * 100)
-    local y = format("%.0f", pos.y * 100)
-
-    local zone = mapInfo.name
-    local layer = ResolveGeneralLayer(zone)
-    local layerText = layer and format(" (Layer %d)", layer) or ""
-
-    local msg =
-        format(
-        "{rt7} Come & Get It // Hey %s, I came across %s %s that I can't %s at %s, %s in %s%s!",
-        mapping.role,
-        mapping.prefix,
-        node,
-        mapping.action,
-        x,
-        y,
-        zone,
-        layerText
-    )
-
-    OpenChat("/1 " .. msg, ChatFrame1)
+    local currentPrefix = mapping.prefix
+    if (locale == "enUS" or locale == "enGB") and currentPrefix == "a" and string.find(node, "^[AEIOUaeiou]") then
+        currentPrefix = "an"
+    end
+    OpenChat("/1 " .. format(loc.MSG_FORMAT, mapping.role, currentPrefix, node, mapping.action, format("%.0f", pos.x * 100), format("%.0f", pos.y * 100), mapInfo.name), ChatFrame1)
     lastAnnounce = now
-end
-
-local function MatchError(messageID, message)
-    local m = errorMapping[messageID]
-    if m then
-        return m
-    end
-    if not message then
-        return nil
-    end
-
-    local skill = message:match(requiresPattern)
-    if not skill then
-        skill = message:match("Requires%s+([%a ]+)")
-    end
-
-    skill = NormalizeSkillName(skill)
-    if not skill or skill == "" then
-        return nil
-    end
-
-    return errorMapping[skill]
 end
 
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("UI_ERROR_MESSAGE")
-frame:SetScript(
-    "OnEvent",
-    function(_, _, messageID, message)
-        local map = MatchError(messageID, message)
-        if map then
-            Announce(map)
-        end
+frame:SetScript("OnEvent", function(_, _, messageID, message)
+    local map = MatchError(messageID, message)
+    if map then
+        Announce(map)
     end
-)
+end)
