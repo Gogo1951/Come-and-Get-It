@@ -1,5 +1,5 @@
 ## Title: Come & Get It
-## Notes: Herb, Ore, and Treasure Chest Location Announcer.
+## Notes: Herb, Ore, and Treasure Chest Location Announcer
 ## Author: Gogo1951
 
 ## IconTexture: Interface\AddOns\ComeAndGetIt\ComeAndGetIt.tga
