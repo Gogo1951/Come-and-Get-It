@@ -20,19 +20,13 @@ https://www.curseforge.com/wow/addons/come-get-it
 
 ## Testing Status
 
-🟢 World of Warcraft Classic : Classic Era
+🟢 World of Warcraft Classic
 
-🟢 World of Warcraft Classic : Hardcore
-
-🟢 World of Warcraft Classic : Season of Discovery
-
-🟢 World of Warcraft Classic : Anniversary Realms
-
-🟢 World of Warcraft Classic : Hardcore Anniversary Realms
+🟢 Burning Crusade Anniversary
 
 🟢 Mists of Pandaria Classic
 
-🔴 World of Warcraft
+🟡 World of Warcraft
 
 Please reach out if you would like to be involved with testing!
 
