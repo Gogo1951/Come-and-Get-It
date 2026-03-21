@@ -1,199 +1,176 @@
-local addonName, addonTable = ...
-local L = {
-    enUS = {
-        ROGUES = "Rogues",
-        HERBALISTS = "Herbalists",
-        MINERS = "Miners",
-        ACTION_OPEN = "open",
-        ACTION_PICK = "pick",
-        ACTION_MINE = "mine",
-        PREFIX_LOCKED = "a locked",
-        PREFIX_HERB = "some",
-        PREFIX_MINE = "a",
-        MATCH_HERB = "Herbalism",
-        MATCH_MINE = "Mining",
-        MSG_FORMAT = "{rt7} Come & Get It // Hey %s, I came across %s %s that I can't %s at %s, %s in %s!"
-    },
-    deDE = {
-        ROGUES = "Schurken",
-        HERBALISTS = "Kräuterkundige",
-        MINERS = "Bergbauer",
-        ACTION_OPEN = "öffnen",
-        ACTION_PICK = "pflücken",
-        ACTION_MINE = "abbauen",
-        PREFIX_LOCKED = "ein verschlossenes",
-        PREFIX_HERB = "ein",
-        PREFIX_MINE = "ein",
-        MATCH_HERB = "Kräuterkunde",
-        MATCH_MINE = "Bergbau",
-        MSG_FORMAT = "{rt7} Kommt und holt es // Hey %s, ich habe %s %s gefunden! Ich kann es nicht %s. (%s, %s in %s)"
-    },
-    frFR = {
-        ROGUES = "Voleurs",
-        HERBALISTS = "Herboristes",
-        MINERS = "Mineurs",
-        ACTION_OPEN = "ouvrir",
-        ACTION_PICK = "cuillir",
-        ACTION_MINE = "miner",
-        PREFIX_LOCKED = "un verrouillé",
-        PREFIX_HERB = "quelques",
-        PREFIX_MINE = "un",
-        MATCH_HERB = "Herboristerie",
-        MATCH_MINE = "Minage",
-        MSG_FORMAT = "{rt7} Venez le chercher // Hé %s, j'ai trouvé %s %s que je ne peux pas %s à %s, %s dans %s !"
-    },
-    esES = {
-        ROGUES = "Pícaros",
-        HERBALISTS = "Herboristas",
-        MINERS = "Mineros",
-        ACTION_OPEN = "abrir",
-        ACTION_PICK = "recolectar",
-        ACTION_MINE = "minar",
-        PREFIX_LOCKED = "un cerrado",
-        PREFIX_HERB = "algunas",
-        PREFIX_MINE = "un",
-        MATCH_HERB = "Herboristería",
-        MATCH_MINE = "Minería",
-        MSG_FORMAT = "{rt7} Ven y tómalo // Oye %s, encontré %s %s que no puedo %s en %s, %s en %s!"
-    },
-    ruRU = {
-        ROGUES = "Разбойники",
-        HERBALISTS = "Травники",
-        MINERS = "Шахтеры",
-        ACTION_OPEN = "открыть",
-        ACTION_PICK = "собрать",
-        ACTION_MINE = "выкопать",
-        PREFIX_LOCKED = "запертый",
-        PREFIX_HERB = "куст",
-        PREFIX_MINE = "жилу",
-        MATCH_HERB = "Травничество",
-        MATCH_MINE = "Горное дело",
-        MSG_FORMAT = "{rt7} Забирайте // Эй, %s, я нашел %s %s, не могу %s! Координаты: %s, %s в %s."
-    },
-    koKR = {
-        ROGUES = "도적",
-        HERBALISTS = "약초채집가",
-        MINERS = "채광사",
-        ACTION_OPEN = "열기",
-        ACTION_PICK = "채집",
-        ACTION_MINE = "채광",
-        PREFIX_LOCKED = "잠긴",
-        PREFIX_HERB = "",
-        PREFIX_MINE = "",
-        MATCH_HERB = "약초채집",
-        MATCH_MINE = "채광",
-        MSG_FORMAT = "{rt7} 와서 가져가세요 // 저기요 %s님, %s %s(을)를 발견했는데 %s 할 수 없네요! 위치: %s, %s (%s)"
-    },
-    zhCN = {
-        ROGUES = "盗贼",
-        HERBALISTS = "草药师",
-        MINERS = "矿工",
-        ACTION_OPEN = "打开",
-        ACTION_PICK = "采集",
-        ACTION_MINE = "挖掘",
-        PREFIX_LOCKED = "上锁的",
-        PREFIX_HERB = "",
-        PREFIX_MINE = "",
-        MATCH_HERB = "草药学",
-        MATCH_MINE = "采矿",
-        MSG_FORMAT = "{rt7} 快来拿 // 嘿 %s，我发现了一个 %s %s，但我无法 %s！坐标：%s, %s 在 %s"
-    }
-}
-local locale = GetLocale()
-if locale == "esMX" then
-    locale = "esES"
-end
-if locale == "enGB" then
-    locale = "enUS"
-end
-local loc = L[locale] or L.enUS
+local addonName, namespace = ...
+local L = namespace.L
 
-local ANNOUNCE_COOLDOWN, ERROR_LOCKED_CHEST, lastAnnounce = 5, 268, 0
-local GetTime, IsInInstance, OpenChat, format = GetTime, IsInInstance, ChatFrame_OpenChat, string.format
-local GetBestMapForUnit, GetPlayerMapPosition, GetMapInfo = C_Map and C_Map.GetBestMapForUnit, C_Map and C_Map.GetPlayerMapPosition, C_Map and C_Map.GetMapInfo
+--------------------------------------------------------------------------------
+-- Constants
+--------------------------------------------------------------------------------
 
+-- Blizzard UI error ID for "Item is locked" — fired when a player interacts
+-- with a lockbox they cannot open.  Professions (herb/mine) don't use a fixed
+-- ID; they return a localized message string instead, so those are matched by
+-- substring in MatchError().
+local ERROR_ID_LOCKED_CHEST = 268
+
+-- Seconds between announcements to prevent chat spam when clicking the same
+-- node repeatedly.
+local ANNOUNCE_COOLDOWN = 5
+
+--------------------------------------------------------------------------------
+-- Performance Aliases
+--------------------------------------------------------------------------------
+
+-- Only aliasing hot-path globals and long C_Map paths; ChatFrame_OpenChat is
+-- called at most once per cooldown window so it stays unaliased.
+local GetTime       = GetTime
+local IsInInstance  = IsInInstance
+local format        = string.format
+
+-- C_Map may be nil on very early Classic builds; each reference is guarded at
+-- the call site in AnnounceNode().
+local GetBestMapForUnit    = C_Map and C_Map.GetBestMapForUnit
+local GetPlayerMapPosition = C_Map and C_Map.GetPlayerMapPosition
+local GetMapInfo           = C_Map and C_Map.GetMapInfo
+
+--------------------------------------------------------------------------------
+-- State
+--------------------------------------------------------------------------------
+
+local lastAnnounceTime = 0
+
+--------------------------------------------------------------------------------
+-- Error → Mapping Table
+--------------------------------------------------------------------------------
+
+-- Maps either a numeric error ID or a localized profession-skill substring to
+-- the data needed to build the announcement.  Locked chests use the integer
+-- because Blizzard fires a stable error ID.  Herb and mining nodes fire a
+-- generic "Requires <Skill>" message, so we match on the localized skill name.
 local errorMapping = {
-    [ERROR_LOCKED_CHEST] = {
-        role = loc.ROGUES,
-        prefix = loc.PREFIX_LOCKED,
+    [ERROR_ID_LOCKED_CHEST] = {
+        role        = L["ROGUES"],
+        prefix      = L["PREFIX_LOCKED"],
         defaultNode = "TREASURE CHEST",
-        action = loc.ACTION_OPEN
+        action      = L["ACTION_OPEN"],
     },
-    [loc.MATCH_HERB] = {
-        role = loc.HERBALISTS,
-        prefix = loc.PREFIX_HERB,
+    [L["MATCH_HERB"]] = {
+        role        = L["HERBALISTS"],
+        prefix      = L["PREFIX_HERB"],
         defaultNode = "HERB NAME",
-        action = loc.ACTION_PICK
+        action      = L["ACTION_PICK"],
     },
-    [loc.MATCH_MINE] = {
-        role = loc.MINERS,
-        prefix = loc.PREFIX_MINE,
+    [L["MATCH_MINE"]] = {
+        role        = L["MINERS"],
+        prefix      = L["PREFIX_MINE"],
         defaultNode = "MINERAL VEIN",
-        action = loc.ACTION_MINE
-    }
+        action      = L["ACTION_MINE"],
+    },
 }
+
+--------------------------------------------------------------------------------
+-- Utility Functions
+--------------------------------------------------------------------------------
 
 local function GetNodeName()
-    local f = _G.GameTooltipTextLeft1
-    return f and f:GetText()
+    local tooltipLine = _G.GameTooltipTextLeft1
+    return tooltipLine and tooltipLine:GetText()
 end
 
 local function MatchError(messageID, message)
+    -- Fast path: locked chests fire a known numeric ID.
     if errorMapping[messageID] then
         return errorMapping[messageID]
     end
+
     if not message then
         return nil
     end
+
+    -- Slow path: profession errors only give us a localized message string,
+    -- so we scan for a substring match against the skill name.
     local lowerMessage = string.lower(message)
     for key, mapping in pairs(errorMapping) do
         if type(key) == "string" and string.find(lowerMessage, string.lower(key), 1, true) then
             return mapping
         end
     end
+
     return nil
 end
 
-local function Announce(mapping)
+--------------------------------------------------------------------------------
+-- Announcement Logic
+--------------------------------------------------------------------------------
+
+local function AnnounceNode(mapping)
     if IsInInstance() then
         return
     end
+
     local now = GetTime()
-    if now - lastAnnounce < ANNOUNCE_COOLDOWN then
+    if now - lastAnnounceTime < ANNOUNCE_COOLDOWN then
         return
     end
+
+    -- C_Map APIs are nil on some Classic Era builds where world-map position
+    -- tracking was added later.  Bail gracefully rather than error.
     if not GetBestMapForUnit or not GetPlayerMapPosition or not GetMapInfo then
         return
     end
+
     local mapID = GetBestMapForUnit("player")
     if not mapID then
         return
     end
-    local pos = GetPlayerMapPosition(mapID, "player")
-    if not pos then
+
+    local position = GetPlayerMapPosition(mapID, "player")
+    if not position then
         return
     end
+
     local mapInfo = GetMapInfo(mapID)
     if not mapInfo or not mapInfo.name then
         return
     end
-    local node = GetNodeName() or mapping.defaultNode
-    if not node or node == "" then
+
+    local nodeName = GetNodeName() or mapping.defaultNode
+    if not nodeName or nodeName == "" then
         return
     end
+
+    -- English indefinite article correction: "a Arcane Crystal" → "an Arcane Crystal"
     local currentPrefix = mapping.prefix
-    if (locale == "enUS" or locale == "enGB") and currentPrefix == "a" and string.find(node, "^[AEIOUaeiou]") then
+    local currentLocale = GetLocale()
+    if (currentLocale == "enUS" or currentLocale == "enGB")
+        and currentPrefix == "a"
+        and string.find(nodeName, "^[AEIOUaeiou]")
+    then
         currentPrefix = "an"
     end
-    OpenChat("/1 " .. format(loc.MSG_FORMAT, mapping.role, currentPrefix, node, mapping.action, format("%.0f", pos.x * 100), format("%.0f", pos.y * 100), mapInfo.name), ChatFrame1)
-    lastAnnounce = now
+
+    local announcement = format(
+        L["MSG_FORMAT"],
+        mapping.role,
+        currentPrefix,
+        nodeName,
+        mapping.action,
+        format("%.0f", position.x * 100),
+        format("%.0f", position.y * 100),
+        mapInfo.name
+    )
+
+    ChatFrame_OpenChat("/1 " .. announcement, ChatFrame1)
+    lastAnnounceTime = now
 end
 
-local frame = CreateFrame("Frame")
-frame:RegisterEvent("UI_ERROR_MESSAGE")
-frame:SetScript("OnEvent", function(_, _, messageID, message)
-    local map = MatchError(messageID, message)
-    if map then
-        Announce(map)
+--------------------------------------------------------------------------------
+-- Event Handling
+--------------------------------------------------------------------------------
+
+local eventFrame = CreateFrame("Frame")
+eventFrame:RegisterEvent("UI_ERROR_MESSAGE")
+eventFrame:SetScript("OnEvent", function(_, _, messageID, message)
+    local mapping = MatchError(messageID, message)
+    if mapping then
+        AnnounceNode(mapping)
     end
 end)
