@@ -6,9 +6,21 @@
 ## Category-enUS: Farming
 ## X-License: MIT
 
-## Interface: 11508, 20505, 50503, 110207
+## Interface: 11508, 20505, 50503, 120001
 ## Version: @project-version@
 ## X-Curse-Project-ID: 1128926
+
+# Locales
+Locales/enUS.lua
+Locales/deDE.lua
+Locales/esES.lua
+Locales/frFR.lua
+Locales/itIT.lua
+Locales/koKR.lua
+Locales/ptBR.lua
+Locales/ruRU.lua
+Locales/zhCN.lua
+Locales/zhTW.lua
 
 # Come & Get It!
 ComeAndGetIt.lua
