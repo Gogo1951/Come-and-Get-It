@@ -45,23 +45,23 @@ local lastAnnounceTime = 0
 -- the data needed to build the announcement.  Locked chests use the integer
 -- because Blizzard fires a stable error ID.  Herb and mining nodes fire a
 -- generic "Requires <Skill>" message, so we match on the localized skill name.
-local errorMapping = {
+local ERROR_MAPPING = {
     [ERROR_ID_LOCKED_CHEST] = {
         role        = L["ROGUES"],
         prefix      = L["PREFIX_LOCKED"],
-        defaultNode = "TREASURE CHEST",
+        defaultNode = L["DEFAULT_TREASURE"],
         action      = L["ACTION_OPEN"],
     },
     [L["MATCH_HERB"]] = {
         role        = L["HERBALISTS"],
         prefix      = L["PREFIX_HERB"],
-        defaultNode = "HERB NAME",
+        defaultNode = L["DEFAULT_HERB"],
         action      = L["ACTION_PICK"],
     },
     [L["MATCH_MINE"]] = {
         role        = L["MINERS"],
         prefix      = L["PREFIX_MINE"],
-        defaultNode = "MINERAL VEIN",
+        defaultNode = L["DEFAULT_MINE"],
         action      = L["ACTION_MINE"],
     },
 }
@@ -77,8 +77,8 @@ end
 
 local function MatchError(messageID, message)
     -- Fast path: locked chests fire a known numeric ID.
-    if errorMapping[messageID] then
-        return errorMapping[messageID]
+    if ERROR_MAPPING[messageID] then
+        return ERROR_MAPPING[messageID]
     end
 
     if not message then
@@ -88,7 +88,7 @@ local function MatchError(messageID, message)
     -- Slow path: profession errors only give us a localized message string,
     -- so we scan for a substring match against the skill name.
     local lowerMessage = string.lower(message)
-    for key, mapping in pairs(errorMapping) do
+    for key, mapping in pairs(ERROR_MAPPING) do
         if type(key) == "string" and string.find(lowerMessage, string.lower(key), 1, true) then
             return mapping
         end
