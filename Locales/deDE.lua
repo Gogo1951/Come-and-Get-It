@@ -10,11 +10,15 @@ L["ACTION_OPEN"]   = "öffnen"
 L["ACTION_PICK"]   = "pflücken"
 L["ACTION_MINE"]   = "abbauen"
 
-L["PREFIX_LOCKED"]  = "ein verschlossenes"
+L["PREFIX_LOCKED"]  = "eine verschlossene"
 L["PREFIX_HERB"]    = "ein"
 L["PREFIX_MINE"]    = "ein"
 
 L["MATCH_HERB"]    = "Kräuterkunde"
 L["MATCH_MINE"]    = "Bergbau"
 
-L["MSG_FORMAT"]    = "{rt7} Kommt und holt es // Hey %s, ich habe %s %s gefunden! Ich kann es nicht %s. (%s, %s in %s)"
+L["DEFAULT_TREASURE"] = "Schatztruhe"
+L["DEFAULT_HERB"]     = "Kraut"
+L["DEFAULT_MINE"]     = "Erzvorkommen"
+
+L["MSG_FORMAT"]    = "{rt7} Kommt und holt es euch // Hey %s, ich habe %s %s gefunden! Ich kann es nicht %s. (%s, %s in %s)"

@@ -1,20 +1,24 @@
 local addonName, namespace = ...
-if GetLocale() ~= "zhCN" then return end
+if GetLocale() ~= "itIT" then return end
 local L = namespace.L
 
-L["ROGUES"]        = "盗贼"
-L["HERBALISTS"]    = "草药师"
-L["MINERS"]        = "矿工"
+L["ROGUES"]        = "Ladri"
+L["HERBALISTS"]    = "Erbalisti"
+L["MINERS"]        = "Minatori"
 
-L["ACTION_OPEN"]   = "打开"
-L["ACTION_PICK"]   = "采集"
-L["ACTION_MINE"]   = "挖掘"
+L["ACTION_OPEN"]   = "aprire"
+L["ACTION_PICK"]   = "raccogliere"
+L["ACTION_MINE"]   = "estrarre"
 
-L["PREFIX_LOCKED"]  = "上锁的"
-L["PREFIX_HERB"]    = ""
-L["PREFIX_MINE"]    = ""
+L["PREFIX_LOCKED"]  = "un"
+L["PREFIX_HERB"]    = "un po' di"
+L["PREFIX_MINE"]    = "un"
 
-L["MATCH_HERB"]    = "草药学"
-L["MATCH_MINE"]    = "采矿"
+L["MATCH_HERB"]    = "Erbalismo"
+L["MATCH_MINE"]    = "Estrazione"
 
-L["MSG_FORMAT"]    = "{rt7} 快来拿 // 嘿 %s，我发现了一个 %s %s，但我无法 %s！坐标：%s, %s 在 %s"
+L["DEFAULT_TREASURE"] = "Forziere Chiuso"
+L["DEFAULT_HERB"]     = "Erba"
+L["DEFAULT_MINE"]     = "Filone di Minerali"
+
+L["MSG_FORMAT"]    = "{rt7} Venite a prenderlo // Ehi %s, ho trovato %s %s che non posso %s alle %s, %s in %s!"

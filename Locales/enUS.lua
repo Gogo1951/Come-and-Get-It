@@ -32,4 +32,8 @@ L["PREFIX_MINE"]    = "a"
 L["MATCH_HERB"]    = "Herbalism"
 L["MATCH_MINE"]    = "Mining"
 
+L["DEFAULT_TREASURE"] = "Treasure Chest"
+L["DEFAULT_HERB"]     = "Herb"
+L["DEFAULT_MINE"]     = "Mineral Vein"
+
 L["MSG_FORMAT"]    = "{rt7} Come & Get It // Hey %s, I came across %s %s that I can't %s at %s, %s in %s!"
