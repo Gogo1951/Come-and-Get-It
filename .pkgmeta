@@ -1,6 +1,23 @@
 # .pkgmeta
 package-as: ComeAndGetIt
 
+externals:
+    Includes/LibStub:
+        url: https://repos.wowace.com/wow/libstub/trunk
+        tag: latest
+    Includes/CallbackHandler-1.0:
+        url: https://repos.wowace.com/wow/callbackhandler/trunk/CallbackHandler-1.0
+        tag: latest
+    Includes/AceLocale-3.0:
+        url: https://repos.wowace.com/wow/ace3/trunk/AceLocale-3.0
+        tag: latest
+    Includes/AceGUI-3.0:
+        url: https://repos.wowace.com/wow/ace3/trunk/AceGUI-3.0
+        tag: latest
+    Includes/AceConfig-3.0:
+        url: https://repos.wowace.com/wow/ace3/trunk/AceConfig-3.0
+        tag: latest
+
 ignore:
     - .git
     - .gitignore
