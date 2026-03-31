@@ -1,6 +1,5 @@
-local addonName, namespace = ...
-if GetLocale() ~= "itIT" then return end
-local L = namespace.L
+local L = LibStub("AceLocale-3.0"):NewLocale("ComeAndGetIt", "itIT")
+if not L then return end
 
 L["ROGUES"]        = "Ladri"
 L["HERBALISTS"]    = "Erbalisti"
@@ -21,4 +20,10 @@ L["DEFAULT_TREASURE"] = "Forziere Chiuso"
 L["DEFAULT_HERB"]     = "Erba"
 L["DEFAULT_MINE"]     = "Filone di Minerali"
 
-L["MSG_FORMAT"]    = "{rt7} Venite a prenderlo // Ehi %s, ho trovato %s %s che non posso %s alle %s, %s in %s!"
+L["MSG_FORMAT"]    = "{rt7} Come & Get It // Ehi %s, ho trovato %s %s che non posso %s alle %s, %s in %s!"
+
+L["OPTIONS_DESCRIPTION"] = "Announces herb nodes, ore veins, and treasure chests you cannot gather so nearby group members can pick them up."
+L["FEEDBACK_HEADER"]     = "Feedback and Support"
+L["FEEDBACK_CURSEFORGE"] = "CurseForge"
+L["FEEDBACK_GITHUB"]     = "GitHub"
+L["FEEDBACK_DISCORD"]    = "Discord"

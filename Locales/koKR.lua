@@ -1,6 +1,5 @@
-local addonName, namespace = ...
-if GetLocale() ~= "koKR" then return end
-local L = namespace.L
+local L = LibStub("AceLocale-3.0"):NewLocale("ComeAndGetIt", "koKR")
+if not L then return end
 
 L["ROGUES"]        = "도적"
 L["HERBALISTS"]    = "약초채집가"
@@ -21,4 +20,10 @@ L["DEFAULT_TREASURE"] = "보물 상자"
 L["DEFAULT_HERB"]     = "약초"
 L["DEFAULT_MINE"]     = "광맥"
 
-L["MSG_FORMAT"]    = "{rt7} 와서 가져가세요 // 저기요 %s님, 제가 %s %s(을)를 발견했는데 %s 할 수 없네요! 위치: %s, %s (%s)"
+L["MSG_FORMAT"]    = "{rt7} Come & Get It // 저기요 %s님, 제가 %s %s(을)를 발견했는데 %s 할 수 없네요! 위치: %s, %s (%s)"
+
+L["OPTIONS_DESCRIPTION"] = "Announces herb nodes, ore veins, and treasure chests you cannot gather so nearby group members can pick them up."
+L["FEEDBACK_HEADER"]     = "Feedback and Support"
+L["FEEDBACK_CURSEFORGE"] = "CurseForge"
+L["FEEDBACK_GITHUB"]     = "GitHub"
+L["FEEDBACK_DISCORD"]    = "Discord"
