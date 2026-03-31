@@ -1,19 +1,12 @@
 local addonName, namespace = ...
-local L = namespace.L
+local L = LibStub("AceLocale-3.0"):GetLocale("ComeAndGetIt")
 
 --------------------------------------------------------------------------------
 -- Constants
 --------------------------------------------------------------------------------
 
--- Blizzard UI error ID for "Item is locked" — fired when a player interacts
--- with a lockbox they cannot open.  Professions (herb/mine) don't use a fixed
--- ID; they return a localized message string instead, so those are matched by
--- substring in MatchError().
-local ERROR_ID_LOCKED_CHEST = 268
-
--- Seconds between announcements to prevent chat spam when clicking the same
--- node repeatedly.
-local ANNOUNCE_COOLDOWN = 5
+local ERROR_ID_LOCKED_CHEST = namespace.ERROR_ID_LOCKED_CHEST
+local ANNOUNCE_COOLDOWN     = namespace.ANNOUNCE_COOLDOWN
 
 --------------------------------------------------------------------------------
 -- Performance Aliases
@@ -38,7 +31,7 @@ local GetMapInfo           = C_Map and C_Map.GetMapInfo
 local lastAnnounceTime = 0
 
 --------------------------------------------------------------------------------
--- Error → Mapping Table
+-- Error Mapping
 --------------------------------------------------------------------------------
 
 -- Maps either a numeric error ID or a localized profession-skill substring to

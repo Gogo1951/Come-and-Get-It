@@ -2,7 +2,7 @@
 ## Notes: Herb, Ore, and Treasure Chest Location Announcer
 ## Author: Gogo1951
 
-## IconTexture: Interface\AddOns\ComeAndGetIt\ComeAndGetIt.tga
+## IconTexture: Interface/AddOns/ComeAndGetIt/ComeAndGetIt.tga
 ## Category-enUS: Farming
 ## X-License: MIT
 
@@ -10,7 +10,20 @@
 ## Version: @project-version@
 ## X-Curse-Project-ID: 1128926
 
-# Locales
+## X-Discord: https://discord.gg/eh8hKq992Q
+
+# Includes
+Includes/LibStub/LibStub.lua
+Includes/CallbackHandler-1.0/CallbackHandler-1.0.lua
+Includes/AceLocale-3.0/AceLocale-3.0.lua
+Includes/AceGUI-3.0/AceGUI-3.0.lua
+Includes/AceConfig-3.0/AceConfigRegistry-3.0/AceConfigRegistry-3.0.lua
+Includes/AceConfig-3.0/AceConfigDialog-3.0/AceConfigDialog-3.0.lua
+
+# Data
+Data.lua
+
+# Localization
 Locales/enUS.lua
 Locales/deDE.lua
 Locales/esES.lua
@@ -22,10 +35,11 @@ Locales/ruRU.lua
 Locales/zhCN.lua
 Locales/zhTW.lua
 
-# Come & Get It!
-ComeAndGetIt.lua
+# Come & Get It
+Core.lua
+Options.lua
 
 # Feedback Welcome! (=
-# Come & Get It! on CurseForge // https://www.curseforge.com/wow/addons/come-get-it
-# Come & Get It! on GitHub // https://github.com/Gogo1951/Come-and-Get-It
-# Come & Get It! on Discord // https://discord.gg/eh8hKq992Q
+# Come & Get It on CurseForge // https://www.curseforge.com/wow/addons/come-get-it
+# Come & Get It on GitHub // https://github.com/Gogo1951/Come-and-Get-It
+# Come & Get It on Discord // https://discord.gg/eh8hKq992Q
