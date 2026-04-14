@@ -1,22 +1,34 @@
 # Come & Get It
 
-A simple add-on to broadcast the location of mineral veins, herbs, and treasure chests that you can't use yourself.
+Found a mineral vein you can't mine? An herb you can't pick? A locked chest with no Rogue in sight? Come & Get It broadcasts the location to General chat so someone nearby can grab it. Just right-click the node and the addon prepares the message — you hit Enter to send.
 
-Simply right-click on a node or chest, and Come & Get It will automatically prepare a message for your /1 General chat channel:
+> {rt7} Come & Get It // Hey Miners, I came across a Rich Thorium Vein that I can't mine at 25, 54 in Burning Steppes!
 
-> {rt7} Come & Get It : Hey Miners, I came across a {Mineral Vein} that I can't mine at 25.5, 54.2!
+> {rt7} Come & Get It // Hey Herbalists, I came across some Dreamfoil that I can't pick at 18, 36 in Un'Goro Crater!
 
-> {rt7} Come & Get It : Hey Herbalists, I came across some {Herb} that I can't pick at 18.2, 36.5!
+> {rt7} Come & Get It // Hey Rogues, I came across a locked Treasure Chest that I can't open at 18, 39 in Tanaris!
 
-> {rt7} Come & Get It : Hey Rogues, I came across a locked {Treasure Chest} that I can't open at 18.3, 39.2!
+## Features
 
-Customizable Messaging: The message won't be sent until you hit Enter, giving you the flexibility to edit it or share it with your guild, party, or friends instead.
+📣 **One-Click Announce** : Right-click a node you can't gather and Come & Get It prepares a message in your /1 General chat with the node name, coordinates, and zone.
 
-## Download
+✏️ **You Control the Send** : The message loads into your chat box but doesn't send until you hit Enter. Edit it, redirect it to guild or party, or just close the chat box to cancel.
 
-You can find this on Curseforge.
+🌿 **Herbs, Ore, and Chests** : Detects Herbalism nodes, Mining veins, and locked Treasure Chests. Each announcement is tailored to the right audience — Herbalists, Miners, or Rogues.
 
-https://www.curseforge.com/wow/addons/come-get-it
+📍 **Coordinates Included** : Every announcement includes your map coordinates and zone name so people can actually find the node.
+
+🦺 **Instance Safe** : Announcements are disabled inside dungeons and raids so you never accidentally spam group chat.
+
+🗺️ **Localized** : Announcement messages work in all Classic WoW Locales (enUS, deDE, esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW).
+
+## Setup
+
+1. Install the addon.
+2. Log in.
+3. Right-click an herb, ore vein, or locked chest you can't interact with.
+4. Come & Get It loads the announcement into your chat box. Hit Enter to send.
+5. Done — be a good neighbor. (=
 
 ## Testing Status
 
@@ -30,8 +42,8 @@ https://www.curseforge.com/wow/addons/come-get-it
 
 Please reach out if you would like to be involved with testing!
 
-## Report Issues & Get Involved
+## Links
 
-You can find this project on GitHub // https://github.com/Gogo1951/ComeAndGetIt
-
-😈 Gogo1951 on Discord // https://discord.gg/eh8hKq992Q
+* [CurseForge](https://www.curseforge.com/wow/addons/come-get-it)
+* [GitHub](https://github.com/Gogo1951/Come-and-Get-It)
+* [Discord](https://discord.gg/eh8hKq992Q)
