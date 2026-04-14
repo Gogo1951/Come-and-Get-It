@@ -20,7 +20,7 @@ Found a mineral vein you can't mine? An herb you can't pick? A locked chest with
 
 🦺 **Instance Safe** : Announcements are disabled inside dungeons and raids so you never accidentally spam group chat.
 
-🗺️ **Localized** : Announcement messages work in all Classic WoW Locales (enUS, deDE, esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW).
+🗺️ Localized : Works with all Classic WoW Locales (enUS, deDE, esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW).
 
 ## Setup
 
