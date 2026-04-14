@@ -2,9 +2,9 @@
 
 Found a mineral vein you can't mine? An herb you can't pick? A locked chest with no Rogue in sight? Come & Get It broadcasts the location to General chat so someone nearby can grab it. Just right-click the node and the addon prepares the message — you hit Enter to send.
 
-> {rt7} Come & Get It // Hey Miners, I came across a Rich Thorium Vein that I can't mine at 25, 54 in Burning Steppes!
+> {rt7} Come & Get It // Hey Miners, I came across a Rich Thorium Vein that I can't mine at 25, 54 in Eastern Plaguelands!
 
-> {rt7} Come & Get It // Hey Herbalists, I came across some Dreamfoil that I can't pick at 18, 36 in Un'Goro Crater!
+> {rt7} Come & Get It // Hey Herbalists, I came across some Black Lotus that I can't pick at 62, 37 in Winterspring!
 
 > {rt7} Come & Get It // Hey Rogues, I came across a locked Treasure Chest that I can't open at 18, 39 in Tanaris!
 
