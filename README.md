@@ -1,6 +1,6 @@
 # Come & Get It
 
-Found a mineral vein you can't mine? An herb you can't pick? A locked chest with no Rogue in sight? Come & Get It broadcasts the location to General chat so someone nearby can grab it. Just right-click the node and the addon prepares the message — you hit Enter to send.
+Found an herb you can’t pick, a mineral vein you can’t mine, or a locked treasure chest with no Rogue in sight? Right-click it, and Come & Get It creates a message you can use to share or broadcast the coordinates. Being a hero has never been so easy.
 
 > {rt7} Come & Get It // Hey Miners, I came across a Rich Thorium Vein that I can't mine at 25, 54 in Eastern Plaguelands!
 
@@ -10,40 +10,58 @@ Found a mineral vein you can't mine? An herb you can't pick? A locked chest with
 
 ## Features
 
-📣 **One-Click Announce** : Right-click a node you can't gather and Come & Get It prepares a message in your /1 General chat with the node name, coordinates, and zone.
+🌿 **Herbs, Ore, and Chests** // Works with Herbalism nodes, Mining veins, and locked Treasure Chests. Each announcement is tailored to the right audience — Herbalists, Miners, or Rogues.
 
-✏️ **You Control the Send** : The message loads into your chat box but doesn't send until you hit Enter. Edit it, redirect it to guild or party, or just close the chat box to cancel.
+📍 **Coordinates and Zone Included** // Every announcement carries the node name, your map coordinates, and the zone, so anyone nearby can actually find it.
 
-🌿 **Herbs, Ore, and Chests** : Detects Herbalism nodes, Mining veins, and locked Treasure Chests. Each announcement is tailored to the right audience — Herbalists, Miners, or Rogues.
+✏️ **You Hit Send** // The draft appears in your chat box but won’t send until you press Enter—edit it, redirect it to guild or party, or close it to cancel.
 
-📍 **Coordinates Included** : Every announcement includes your map coordinates and zone name so people can actually find the node.
-
-🦺 **Instance Safe** : Announcements are disabled inside dungeons and raids so you never accidentally spam group chat.
-
-🗺️ Localized : Works with all Classic WoW Locales (enUS, deDE, esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW).
+🦺 **Safety First** // Announcements are disabled inside dungeons and raids so you never accidentally spam information about something that the audience cna't actually gather.
 
 ## Setup
 
-1. Install the addon.
+1. Install the add-on, ideally using [CurseForge](https://www.curseforge.com/wow/addons/come-get-it).
 2. Log in.
-3. Right-click an herb, ore vein, or locked chest you can't interact with.
-4. Come & Get It loads the announcement into your chat box. Hit Enter to send.
-5. Done — be a good neighbor. (=
+3. Right-click an herb, ore vein, or locked treasure chest you can't gather.
+4. Come & Get It drafts the announcement in your chat box — hit Enter to send.
+5. Be the change you want to mine in the world. (=
 
-## Testing Status
+## Testing & Localization Status
 
-🟢 World of Warcraft Classic
+🟢 World of Warcraft Classic (🟢 Season of Discovery) // WoW 1.15.8
 
-🟢 Burning Crusade Anniversary
+🟢 Burning Crusade Anniversary // WoW 2.5.5
 
-🟢 Mists of Pandaria Classic
+🟢 Mists of Pandaria Classic // WoW 5.5.3
 
-🟡 World of Warcraft
+🟢 World of Warcraft // WoW 12.0.5
 
-Please reach out if you would like to be involved with testing!
+**Localization Status** // Works with all Classic WoW Locales (enUS, deDE, esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW).
+
+Please reach out if you would like to be involved!
 
 ## Links
 
 * [CurseForge](https://www.curseforge.com/wow/addons/come-get-it)
 * [GitHub](https://github.com/Gogo1951/Come-and-Get-It)
 * [Discord](https://discord.gg/eh8hKq992Q)
+
+## Related Add-ons
+
+🟢 Pairs With // BetterAddons' [GatherProClassic](https://www.curseforge.com/wow/addons/gatherproclassic)
+
+🟢 Pairs With // Cladhaire's [TomTom](https://www.curseforge.com/wow/addons/tomtom)
+
+🟢 Pairs With // Foxthorn's [GatherNotify](https://www.curseforge.com/wow/addons/gathernotify)
+
+🟢 Pairs With // gogo1951's [Tracking Eye](https://www.curseforge.com/wow/addons/tracking-eye-classic)
+
+🟢 Pairs With // Michigras' [Lockbox Cracker](https://www.curseforge.com/wow/addons/lockbox-cracker)
+
+🟢 Pairs With // Nevcairiel's [GatherMate2 Classic](https://www.curseforge.com/wow/addons/gathermate2-classic)
+
+🟢 Pairs With // Protuhj's [TomPoints](https://www.curseforge.com/wow/addons/tompoints)
+
+🟢 Pairs With // Xinhuan's [Routes](https://www.curseforge.com/wow/addons/routes)
+
+🟢 Pairs With // a14st0r's [nOde: the Omnitracker](https://www.curseforge.com/wow/addons/node)
