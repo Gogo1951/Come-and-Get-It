@@ -1,12 +1,12 @@
-local addonName, namespace = ...
-local L = LibStub("AceLocale-3.0"):GetLocale("ComeAndGetIt")
+local _, namespace = ...
+local L = namespace.L
 
 --------------------------------------------------------------------------------
 -- Constants
 --------------------------------------------------------------------------------
 
 local ERROR_ID_LOCKED_CHEST = namespace.ERROR_ID_LOCKED_CHEST
-local ANNOUNCE_COOLDOWN     = namespace.ANNOUNCE_COOLDOWN
+local ANNOUNCE_COOLDOWN = namespace.ANNOUNCE_COOLDOWN
 
 --------------------------------------------------------------------------------
 -- Performance Aliases
@@ -14,15 +14,16 @@ local ANNOUNCE_COOLDOWN     = namespace.ANNOUNCE_COOLDOWN
 
 -- Only aliasing hot-path globals and long C_Map paths; ChatFrame_OpenChat is
 -- called at most once per cooldown window so it stays unaliased.
-local GetTime       = GetTime
-local IsInInstance  = IsInInstance
-local format        = string.format
+local GetTime = GetTime
+local IsInInstance = IsInInstance
+local InCombatLockdown = InCombatLockdown
+local format = string.format
 
 -- C_Map may be nil on very early Classic builds; each reference is guarded at
 -- the call site in AnnounceNode().
-local GetBestMapForUnit    = C_Map and C_Map.GetBestMapForUnit
+local GetBestMapForUnit = C_Map and C_Map.GetBestMapForUnit
 local GetPlayerMapPosition = C_Map and C_Map.GetPlayerMapPosition
-local GetMapInfo           = C_Map and C_Map.GetMapInfo
+local GetMapInfo = C_Map and C_Map.GetMapInfo
 
 --------------------------------------------------------------------------------
 -- State
@@ -99,6 +100,12 @@ local function AnnounceNode(mapping)
         return
     end
 
+    -- Opening the chat editbox in combat steals keyboard focus and breaks
+    -- WASD movement, so suppress announcements until combat ends.
+    if InCombatLockdown() then
+        return
+    end
+
     local now = GetTime()
     if now - lastAnnounceTime < ANNOUNCE_COOLDOWN then
         return
@@ -151,8 +158,41 @@ local function AnnounceNode(mapping)
         mapInfo.name
     )
 
+    -- Don't clobber a draft the user is already typing in any chat editbox.
+    if ChatEdit_GetActiveWindow and ChatEdit_GetActiveWindow() then
+        return
+    end
+
     ChatFrame_OpenChat("/1 " .. announcement, ChatFrame1)
     lastAnnounceTime = now
+end
+
+--------------------------------------------------------------------------------
+-- Chat
+--------------------------------------------------------------------------------
+
+local GetColor = namespace.GetColor
+
+local function PrintMessage(msg)
+    print(GetColor("INFO") .. "Come & Get It" .. "|r "
+        .. GetColor("SEP") .. "//" .. "|r "
+        .. GetColor("TEXT") .. msg .. "|r")
+end
+
+local function PrintWelcome()
+    if not ComeAndGetItDB.showWelcome then return end
+    PrintMessage(format(L["CHAT_LOADED"], namespace.Version))
+end
+
+--------------------------------------------------------------------------------
+-- Saved Variables
+--------------------------------------------------------------------------------
+
+local function InitSavedVariables()
+    ComeAndGetItDB = ComeAndGetItDB or {}
+    if ComeAndGetItDB.showWelcome == nil then
+        ComeAndGetItDB.showWelcome = true
+    end
 end
 
 --------------------------------------------------------------------------------
@@ -160,10 +200,20 @@ end
 --------------------------------------------------------------------------------
 
 local eventFrame = CreateFrame("Frame")
+eventFrame:RegisterEvent("PLAYER_LOGIN")
 eventFrame:RegisterEvent("UI_ERROR_MESSAGE")
-eventFrame:SetScript("OnEvent", function(_, _, messageID, message)
-    local mapping = MatchError(messageID, message)
-    if mapping then
-        AnnounceNode(mapping)
+eventFrame:SetScript("OnEvent", function(_, event, ...)
+    if event == "PLAYER_LOGIN" then
+        InitSavedVariables()
+        PrintWelcome()
+        return
+    end
+
+    if event == "UI_ERROR_MESSAGE" then
+        local messageID, message = ...
+        local mapping = MatchError(messageID, message)
+        if mapping then
+            AnnounceNode(mapping)
+        end
     end
 end)
