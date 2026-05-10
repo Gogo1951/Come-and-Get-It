@@ -1,29 +1,47 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("ComeAndGetIt", "ruRU")
 if not L then return end
 
-L["ROGUES"]        = "Разбойники"
-L["HERBALISTS"]    = "Травники"
-L["MINERS"]        = "Рудокопы"
+--------------------------------------------------------------------------------
+-- Announcement Strings
+--------------------------------------------------------------------------------
 
-L["ACTION_OPEN"]   = "открыть"
-L["ACTION_PICK"]   = "собрать"
-L["ACTION_MINE"]   = "добыть"
+L["ROGUES"] = "Разбойники"
+L["HERBALISTS"] = "Травники"
+L["MINERS"] = "Рудокопы"
 
-L["PREFIX_LOCKED"]  = "запертый"
-L["PREFIX_HERB"]    = "немного"
-L["PREFIX_MINE"]    = "какую-то"
+L["ACTION_OPEN"] = "открыть"
+L["ACTION_PICK"] = "собрать"
+L["ACTION_MINE"] = "добыть"
 
-L["MATCH_HERB"]    = "Травничество"
-L["MATCH_MINE"]    = "Горное дело"
+L["PREFIX_LOCKED"] = "запертый"
+L["PREFIX_HERB"] = "немного"
+L["PREFIX_MINE"] = "какую-то"
+
+L["MATCH_HERB"] = "Травничество"
+L["MATCH_MINE"] = "Горное дело"
 
 L["DEFAULT_TREASURE"] = "Сундук с сокровищами"
-L["DEFAULT_HERB"]     = "Трава"
-L["DEFAULT_MINE"]     = "Рудная жила"
+L["DEFAULT_HERB"] = "Трава"
+L["DEFAULT_MINE"] = "Рудная жила"
 
-L["MSG_FORMAT"]    = "{rt7} Come & Get It // Эй, %s, я нашел %s %s, но не могу %s! Координаты: %s, %s в %s."
+L["MSG_FORMAT"] = "{rt7} Come & Get It // Эй, %s, я нашел %s %s, но не могу %s! Координаты: %s, %s в %s."
 
-L["OPTIONS_DESCRIPTION"] = "Announces herb nodes, ore veins, and treasure chests you cannot gather so nearby group members can pick them up."
-L["FEEDBACK_HEADER"]     = "Feedback and Support"
+--------------------------------------------------------------------------------
+-- Chat
+--------------------------------------------------------------------------------
+
+L["CHAT_LOADED"] = "Версия %s. Настройки (включая возможность отключить это сообщение) находятся в меню Настройки > Модификации > Come & Get It. Нравится аддон? Расскажи другу! (="
+
+--------------------------------------------------------------------------------
+-- Options Panel
+--------------------------------------------------------------------------------
+
+L["OPTIONS_DESCRIPTION"] = "Нашли траву, которую не можете собрать, рудную жилу, которую не можете добыть, или запертый сундук с сокровищами, а разбойника поблизости нет? Кликните по нему правой кнопкой мыши, и Come & Get It создаст сообщение, которое можно использовать, чтобы поделиться координатами или объявить их. Быть героем еще никогда не было так просто."
+
+L["OPTIONS_WELCOME_NAME"] = "Включить приветственное сообщение"
+L["OPTIONS_WELCOME_DESC"] = "Выводить приветственное сообщение в чат при входе в игру."
+
+L["FEEDBACK_HEADER"] = "Обратная связь и поддержка"
 L["FEEDBACK_CURSEFORGE"] = "CurseForge"
-L["FEEDBACK_GITHUB"]     = "GitHub"
-L["FEEDBACK_DISCORD"]    = "Discord"
+L["FEEDBACK_GITHUB"] = "GitHub"
+L["FEEDBACK_DISCORD"] = "Discord"
