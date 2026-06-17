@@ -43,10 +43,10 @@ L["OPTIONS_DESCRIPTION"] = "發現了你無法採集的草藥、無法開採的�
 L["OPTIONS_WELCOME_NAME"] = "啟用歡迎訊息"
 L["OPTIONS_WELCOME_DESC"] = "登入時在聊天視窗印出歡迎訊息。"
 
-L["OPTIONS_OUTPUT_HEADER"] = "Default Output"
-L["OPTIONS_OUTPUT_NAME"] = "Default Output"
-L["OPTIONS_OUTPUT_DESC"] = "Choose which chat channel the announcement is addressed to. The draft opens in your chat box so you can review or redirect it before sending."
-L["OPTIONS_OUTPUT_NOTE"] = "Note: Local (/1) is the zone's General channel and is layer-specific — your message reaches the whole zone, but only players on your current layer will see it."
+L["OPTIONS_OUTPUT_HEADER"] = "預設輸出"
+L["OPTIONS_OUTPUT_NAME"] = "預設輸出"
+L["OPTIONS_OUTPUT_DESC"] = "選擇將訊息傳送到哪個聊天頻道。草稿會出現在你的聊天輸入框中，你可以在傳送前檢查，或更改目標頻道。"
+L["OPTIONS_OUTPUT_NOTE"] = "注意：本地 (/1) 是該區域的綜合頻道，且會因分層而異——你的訊息會傳遍整個區域，但只有與你處於同一層的玩家才能看到。"
 
 L["OPTIONS_OUTPUT_CHANNEL1"] = "本地 (/1)"
 L["OPTIONS_OUTPUT_SAY"] = "說"

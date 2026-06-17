@@ -43,10 +43,10 @@ L["OPTIONS_DESCRIPTION"] = "Vous avez trouvé une herbe que vous ne pouvez pas c
 L["OPTIONS_WELCOME_NAME"] = "Activer le message de bienvenue"
 L["OPTIONS_WELCOME_DESC"] = "Affiche le message de bienvenue dans le chat lors de la connexion."
 
-L["OPTIONS_OUTPUT_HEADER"] = "Default Output"
-L["OPTIONS_OUTPUT_NAME"] = "Default Output"
-L["OPTIONS_OUTPUT_DESC"] = "Choose which chat channel the announcement is addressed to. The draft opens in your chat box so you can review or redirect it before sending."
-L["OPTIONS_OUTPUT_NOTE"] = "Note: Local (/1) is the zone's General channel and is layer-specific — your message reaches the whole zone, but only players on your current layer will see it."
+L["OPTIONS_OUTPUT_HEADER"] = "Sortie par défaut"
+L["OPTIONS_OUTPUT_NAME"] = "Sortie par défaut"
+L["OPTIONS_OUTPUT_DESC"] = "Choisissez le canal de chat auquel l'annonce est adressée. Le brouillon s'affiche dans votre barre de chat pour que vous puissiez le vérifier ou le rediriger avant de l'envoyer."
+L["OPTIONS_OUTPUT_NOTE"] = "Remarque : Local (/1) est le canal Général de la zone et dépend de la strate — votre message atteint toute la zone, mais seuls les joueurs présents sur votre strate actuelle le verront."
 
 L["OPTIONS_OUTPUT_CHANNEL1"] = "Local (/1)"
 L["OPTIONS_OUTPUT_SAY"] = "Dire"

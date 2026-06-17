@@ -43,10 +43,10 @@ L["OPTIONS_DESCRIPTION"] = "Encontrou uma erva que você não pode coletar, um v
 L["OPTIONS_WELCOME_NAME"] = "Ativar Mensagem de Boas-vindas"
 L["OPTIONS_WELCOME_DESC"] = "Mostra a mensagem de boas-vindas no chat ao entrar no jogo."
 
-L["OPTIONS_OUTPUT_HEADER"] = "Default Output"
-L["OPTIONS_OUTPUT_NAME"] = "Default Output"
-L["OPTIONS_OUTPUT_DESC"] = "Choose which chat channel the announcement is addressed to. The draft opens in your chat box so you can review or redirect it before sending."
-L["OPTIONS_OUTPUT_NOTE"] = "Note: Local (/1) is the zone's General channel and is layer-specific — your message reaches the whole zone, but only players on your current layer will see it."
+L["OPTIONS_OUTPUT_HEADER"] = "Saída padrão"
+L["OPTIONS_OUTPUT_NAME"] = "Saída padrão"
+L["OPTIONS_OUTPUT_DESC"] = "Escolha para qual canal de chat o anúncio será direcionado. O rascunho abre na sua caixa de chat para que você possa revisá-lo ou redirecioná-lo antes de enviar."
+L["OPTIONS_OUTPUT_NOTE"] = "Observação: Local (/1) é o canal Geral da zona e é específico de cada camada — sua mensagem alcança toda a zona, mas apenas os jogadores na sua camada atual a verão."
 
 L["OPTIONS_OUTPUT_CHANNEL1"] = "Local (/1)"
 L["OPTIONS_OUTPUT_SAY"] = "Falar"

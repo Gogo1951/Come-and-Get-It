@@ -43,10 +43,10 @@ L["OPTIONS_DESCRIPTION"] = "Нашли траву, которую не може�
 L["OPTIONS_WELCOME_NAME"] = "Включить приветственное сообщение"
 L["OPTIONS_WELCOME_DESC"] = "Выводить приветственное сообщение в чат при входе в игру."
 
-L["OPTIONS_OUTPUT_HEADER"] = "Default Output"
-L["OPTIONS_OUTPUT_NAME"] = "Default Output"
-L["OPTIONS_OUTPUT_DESC"] = "Choose which chat channel the announcement is addressed to. The draft opens in your chat box so you can review or redirect it before sending."
-L["OPTIONS_OUTPUT_NOTE"] = "Note: Local (/1) is the zone's General channel and is layer-specific — your message reaches the whole zone, but only players on your current layer will see it."
+L["OPTIONS_OUTPUT_HEADER"] = "Вывод по умолчанию"
+L["OPTIONS_OUTPUT_NAME"] = "Вывод по умолчанию"
+L["OPTIONS_OUTPUT_DESC"] = "Выберите, в какой канал чата будет адресовано объявление. Черновик откроется в поле ввода чата, чтобы вы могли проверить его или перенаправить перед отправкой."
+L["OPTIONS_OUTPUT_NOTE"] = "Примечание: Локальный (/1) — это канал «Общий» данной зоны, и он зависит от слоя: ваше сообщение дойдёт до всей зоны, но увидят его только игроки на вашем текущем слое."
 
 L["OPTIONS_OUTPUT_CHANNEL1"] = "Локальный (/1)"
 L["OPTIONS_OUTPUT_SAY"] = "Сказать"

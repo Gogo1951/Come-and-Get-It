@@ -43,10 +43,10 @@ L["OPTIONS_DESCRIPTION"] = "Hast du ein Kraut gefunden, das du nicht pflücken k
 L["OPTIONS_WELCOME_NAME"] = "Willkommensnachricht aktivieren"
 L["OPTIONS_WELCOME_DESC"] = "Gibt die Willkommensnachricht im Chat aus, wenn du dich einloggst."
 
-L["OPTIONS_OUTPUT_HEADER"] = "Default Output"
-L["OPTIONS_OUTPUT_NAME"] = "Default Output"
-L["OPTIONS_OUTPUT_DESC"] = "Choose which chat channel the announcement is addressed to. The draft opens in your chat box so you can review or redirect it before sending."
-L["OPTIONS_OUTPUT_NOTE"] = "Note: Local (/1) is the zone's General channel and is layer-specific — your message reaches the whole zone, but only players on your current layer will see it."
+L["OPTIONS_OUTPUT_HEADER"] = "Standardausgabe"
+L["OPTIONS_OUTPUT_NAME"] = "Standardausgabe"
+L["OPTIONS_OUTPUT_DESC"] = "Wähle, an welchen Chatkanal die Ankündigung gerichtet wird. Der Entwurf erscheint in deinem Chat-Eingabefeld, sodass du ihn vor dem Senden überprüfen oder umleiten kannst."
+L["OPTIONS_OUTPUT_NOTE"] = "Hinweis: Lokal (/1) ist der Allgemein-Kanal der Zone und ist Layer-spezifisch — deine Nachricht erreicht die ganze Zone, aber nur Spieler auf deinem aktuellen Layer sehen sie."
 
 L["OPTIONS_OUTPUT_CHANNEL1"] = "Lokal (/1)"
 L["OPTIONS_OUTPUT_SAY"] = "Sagen"
