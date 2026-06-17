@@ -2,6 +2,12 @@ local L = LibStub("AceLocale-3.0"):NewLocale("ComeAndGetIt", "koKR")
 if not L then return end
 
 --------------------------------------------------------------------------------
+-- Add-on
+--------------------------------------------------------------------------------
+
+L["ADDON_TITLE"] = "Come & Get It"
+
+--------------------------------------------------------------------------------
 -- Announcement Strings
 --------------------------------------------------------------------------------
 
@@ -20,11 +26,7 @@ L["PREFIX_MINE"] = "하나의"
 L["MATCH_HERB"] = "약초채집"
 L["MATCH_MINE"] = "채광"
 
-L["DEFAULT_TREASURE"] = "보물 상자"
-L["DEFAULT_HERB"] = "약초"
-L["DEFAULT_MINE"] = "광맥"
-
-L["MSG_FORMAT"] = "{rt7} Come & Get It // 저기요 %s님, 제가 %s %s(을)를 발견했는데 %s 할 수 없네요! 위치: %s, %s (%s)"
+L["MSG_FORMAT"] = "저기요 %s님, 제가 %s %s(을)를 발견했는데 %s 할 수 없네요! 위치: %s, %s (%s)"
 
 --------------------------------------------------------------------------------
 -- Chat
@@ -40,6 +42,17 @@ L["OPTIONS_DESCRIPTION"] = "채집할 수 없는 약초, 캘 수 없는 광맥, 
 
 L["OPTIONS_WELCOME_NAME"] = "환영 메시지 활성화"
 L["OPTIONS_WELCOME_DESC"] = "로그인 시 채팅창에 환영 메시지를 출력합니다."
+
+L["OPTIONS_OUTPUT_HEADER"] = "기본 출력"
+L["OPTIONS_OUTPUT_NAME"] = "기본 출력"
+L["OPTIONS_OUTPUT_DESC"] = "공지를 어느 채팅 채널로 보낼지 선택합니다. 초안이 채팅 입력창에 표시되므로 보내기 전에 검토하거나 다른 채널로 변경할 수 있습니다."
+L["OPTIONS_OUTPUT_NOTE"] = "참고: 지역 (/1)은 현재 지역의 공개 채널이며 레이어별로 분리됩니다. 메시지는 지역 전체에 전달되지만, 현재 레이어에 있는 플레이어만 볼 수 있습니다."
+
+L["OPTIONS_OUTPUT_CHANNEL1"] = "지역 (/1)"
+L["OPTIONS_OUTPUT_SAY"] = "말하기"
+L["OPTIONS_OUTPUT_YELL"] = "외치기"
+L["OPTIONS_OUTPUT_PARTY"] = "파티"
+L["OPTIONS_OUTPUT_GUILD"] = "길드"
 
 L["FEEDBACK_HEADER"] = "피드백 및 지원"
 L["FEEDBACK_CURSEFORGE"] = "CurseForge"
