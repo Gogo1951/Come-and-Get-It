@@ -2,6 +2,12 @@ local L = LibStub("AceLocale-3.0"):NewLocale("ComeAndGetIt", "zhTW")
 if not L then return end
 
 --------------------------------------------------------------------------------
+-- Add-on
+--------------------------------------------------------------------------------
+
+L["ADDON_TITLE"] = "Come & Get It"
+
+--------------------------------------------------------------------------------
 -- Announcement Strings
 --------------------------------------------------------------------------------
 
@@ -20,11 +26,7 @@ L["PREFIX_MINE"] = "一個"
 L["MATCH_HERB"] = "草藥學"
 L["MATCH_MINE"] = "採礦"
 
-L["DEFAULT_TREASURE"] = "寶箱"
-L["DEFAULT_HERB"] = "草藥"
-L["DEFAULT_MINE"] = "礦脈"
-
-L["MSG_FORMAT"] = "{rt7} Come & Get It // 嘿 %s，我發現了%s%s，但我無法%s！座標：%s, %s 於 %s"
+L["MSG_FORMAT"] = "嘿 %s，我發現了%s%s，但我無法%s！座標：%s, %s 於 %s"
 
 --------------------------------------------------------------------------------
 -- Chat
@@ -40,6 +42,17 @@ L["OPTIONS_DESCRIPTION"] = "發現了你無法採集的草藥、無法開採的�
 
 L["OPTIONS_WELCOME_NAME"] = "啟用歡迎訊息"
 L["OPTIONS_WELCOME_DESC"] = "登入時在聊天視窗印出歡迎訊息。"
+
+L["OPTIONS_OUTPUT_HEADER"] = "Default Output"
+L["OPTIONS_OUTPUT_NAME"] = "Default Output"
+L["OPTIONS_OUTPUT_DESC"] = "Choose which chat channel the announcement is addressed to. The draft opens in your chat box so you can review or redirect it before sending."
+L["OPTIONS_OUTPUT_NOTE"] = "Note: Local (/1) is the zone's General channel and is layer-specific — your message reaches the whole zone, but only players on your current layer will see it."
+
+L["OPTIONS_OUTPUT_CHANNEL1"] = "本地 (/1)"
+L["OPTIONS_OUTPUT_SAY"] = "說"
+L["OPTIONS_OUTPUT_YELL"] = "大喊"
+L["OPTIONS_OUTPUT_PARTY"] = "隊伍"
+L["OPTIONS_OUTPUT_GUILD"] = "公會"
 
 L["FEEDBACK_HEADER"] = "回饋與支援"
 L["FEEDBACK_CURSEFORGE"] = "CurseForge"

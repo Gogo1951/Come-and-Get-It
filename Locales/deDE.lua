@@ -2,6 +2,12 @@ local L = LibStub("AceLocale-3.0"):NewLocale("ComeAndGetIt", "deDE")
 if not L then return end
 
 --------------------------------------------------------------------------------
+-- Add-on
+--------------------------------------------------------------------------------
+
+L["ADDON_TITLE"] = "Come & Get It"
+
+--------------------------------------------------------------------------------
 -- Announcement Strings
 --------------------------------------------------------------------------------
 
@@ -20,11 +26,7 @@ L["PREFIX_MINE"] = "ein"
 L["MATCH_HERB"] = "Kräuterkunde"
 L["MATCH_MINE"] = "Bergbau"
 
-L["DEFAULT_TREASURE"] = "Schatztruhe"
-L["DEFAULT_HERB"] = "Kraut"
-L["DEFAULT_MINE"] = "Erzvorkommen"
-
-L["MSG_FORMAT"] = "{rt7} Come & Get It // Hey %s, ich habe %s %s gefunden! Ich kann es nicht %s. (%s, %s in %s)"
+L["MSG_FORMAT"] = "Hey %s, ich habe %s %s gefunden! Ich kann es nicht %s. (%s, %s in %s)"
 
 --------------------------------------------------------------------------------
 -- Chat
@@ -40,6 +42,17 @@ L["OPTIONS_DESCRIPTION"] = "Hast du ein Kraut gefunden, das du nicht pflücken k
 
 L["OPTIONS_WELCOME_NAME"] = "Willkommensnachricht aktivieren"
 L["OPTIONS_WELCOME_DESC"] = "Gibt die Willkommensnachricht im Chat aus, wenn du dich einloggst."
+
+L["OPTIONS_OUTPUT_HEADER"] = "Default Output"
+L["OPTIONS_OUTPUT_NAME"] = "Default Output"
+L["OPTIONS_OUTPUT_DESC"] = "Choose which chat channel the announcement is addressed to. The draft opens in your chat box so you can review or redirect it before sending."
+L["OPTIONS_OUTPUT_NOTE"] = "Note: Local (/1) is the zone's General channel and is layer-specific — your message reaches the whole zone, but only players on your current layer will see it."
+
+L["OPTIONS_OUTPUT_CHANNEL1"] = "Lokal (/1)"
+L["OPTIONS_OUTPUT_SAY"] = "Sagen"
+L["OPTIONS_OUTPUT_YELL"] = "Schreien"
+L["OPTIONS_OUTPUT_PARTY"] = "Gruppe"
+L["OPTIONS_OUTPUT_GUILD"] = "Gilde"
 
 L["FEEDBACK_HEADER"] = "Feedback und Support"
 L["FEEDBACK_CURSEFORGE"] = "CurseForge"
