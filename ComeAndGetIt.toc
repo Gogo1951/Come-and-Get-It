@@ -6,7 +6,7 @@
 ## Category-enUS: Farming
 ## X-License: MIT
 
-## Interface: 11508, 20505, 50504, 120007
+## Interface: 11508, 20506, 50504, 120007
 ## Version: @project-version@
 ## X-Curse-Project-ID: 1128926
 
