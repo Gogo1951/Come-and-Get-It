@@ -38,7 +38,7 @@ ns.TARGET_MARKER = "{rt7}" -- Cross
 
 --[[
     Ordered manifest of chat channels the announcement draft can target. Each
-    entry pairs a stable key (saved to ComeAndGetItDB.defaultOutput, never
+    entry pairs a stable key (saved to ns.db.profile.defaultOutput, never
     localized) with the slash command Core hands to ChatFrame_OpenChat and the
     locale key Options resolves for the dropdown label. Array order is dropdown
     order. This is the single source of truth: Core derives its key→command
@@ -50,14 +50,14 @@ ns.TARGET_MARKER = "{rt7}" -- Cross
     the draft reaches the whole zone but only players on the caller's layer.
 ]]
 ns.OUTPUT_CHANNELS = {
-    {key = "channel1", command = "/1",     labelKey = "OPTIONS_OUTPUT_CHANNEL1"},
-    {key = "say",      command = "/say",   labelKey = "OPTIONS_OUTPUT_SAY"},
-    {key = "yell",     command = "/yell",  labelKey = "OPTIONS_OUTPUT_YELL"},
-    {key = "party",    command = "/party", labelKey = "OPTIONS_OUTPUT_PARTY"},
-    {key = "guild",    command = "/guild", labelKey = "OPTIONS_OUTPUT_GUILD"}
+	{ key = "channel1", command = "/1", labelKey = "OPTIONS_OUTPUT_CHANNEL1" },
+	{ key = "say", command = "/say", labelKey = "OPTIONS_OUTPUT_SAY" },
+	{ key = "yell", command = "/yell", labelKey = "OPTIONS_OUTPUT_YELL" },
+	{ key = "party", command = "/party", labelKey = "OPTIONS_OUTPUT_PARTY" },
+	{ key = "guild", command = "/guild", labelKey = "OPTIONS_OUTPUT_GUILD" },
 }
 
--- Fallback when ComeAndGetItDB.defaultOutput is unset or holds a stale key.
+-- Fallback when ns.db.profile.defaultOutput is unset or holds a stale key.
 ns.DEFAULT_OUTPUT_CHANNEL = "channel1"
 
 --------------------------------------------------------------------------------
@@ -67,6 +67,7 @@ ns.DEFAULT_OUTPUT_CHANNEL = "channel1"
 ns.URL_CURSEFORGE = "https://www.curseforge.com/wow/addons/come-get-it"
 ns.URL_GITHUB = "https://github.com/Gogo1951/Come-and-Get-It"
 ns.URL_DISCORD = "https://discord.gg/eh8hKq992Q"
+ns.URL_WAGO = "https://addons.wago.io/addons/come-and-get-it"
 
 --------------------------------------------------------------------------------
 -- Options Registry
@@ -77,7 +78,9 @@ ns.URL_DISCORD = "https://discord.gg/eh8hKq992Q"
     NotifyChange across the options files; never built inline, never localized.
 ]]
 ns.OPTIONS_REGISTRY = {
-    Diagnostics = ADDON_NAME .. "_Diagnostics"
+	General = ADDON_NAME,
+	Profiles = ADDON_NAME .. "_Profiles",
+	Diagnostics = ADDON_NAME .. "_Diagnostics",
 }
 
 --------------------------------------------------------------------------------

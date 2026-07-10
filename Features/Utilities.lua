@@ -13,16 +13,16 @@ local _, ns = ...
 local COLOR_PREFIX = "|cff"
 
 local COLORS = {
-    TITLE = COLOR_PREFIX .. ns.C_TITLE,
-    INFO = COLOR_PREFIX .. ns.C_INFO,
-    BODY = COLOR_PREFIX .. ns.C_BODY,
-    TEXT = COLOR_PREFIX .. ns.C_TEXT,
-    ON = COLOR_PREFIX .. ns.C_ON,
-    OFF = COLOR_PREFIX .. ns.C_OFF,
-    SEPARATOR = COLOR_PREFIX .. ns.C_SEPARATOR,
-    MUTED = COLOR_PREFIX .. ns.C_MUTED
+	TITLE = COLOR_PREFIX .. ns.C_TITLE,
+	INFO = COLOR_PREFIX .. ns.C_INFO,
+	BODY = COLOR_PREFIX .. ns.C_BODY,
+	TEXT = COLOR_PREFIX .. ns.C_TEXT,
+	ON = COLOR_PREFIX .. ns.C_ON,
+	OFF = COLOR_PREFIX .. ns.C_OFF,
+	SEPARATOR = COLOR_PREFIX .. ns.C_SEPARATOR,
+	MUTED = COLOR_PREFIX .. ns.C_MUTED,
 }
 
 function ns.GetColor(key)
-    return COLORS[key] or COLORS.TEXT
+	return COLORS[key] or COLORS.TEXT
 end

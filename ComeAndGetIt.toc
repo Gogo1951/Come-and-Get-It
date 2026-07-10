@@ -2,13 +2,25 @@
 ## Notes: Found an herb you can't pick, a mineral vein you can't mine, or a locked treasure chest with no Rogue in sight? Right-click it, and Come & Get It creates a message you can use to share or broadcast the coordinates. Being a hero has never been so easy.
 ## Author: Gogo1951
 
+## Category-enUS: Other
+## Category-deDE: Anderes
+## Category-esES: Otros
+## Category-esMX: Otros
+## Category-frFR: Autre
+## Category-itIT: Altro
+## Category-koKR: 기타
+## Category-ptBR: Outro
+## Category-ruRU: Другое
+## Category-zhCN: 其它
+## Category-zhTW: 其他
+
 ## IconTexture: Interface/AddOns/ComeAndGetIt/Includes/Images/Come-And-Get-It.tga
-## Category-enUS: Farming
 ## X-License: MIT
 
-## Interface: 11508, 20506, 50504, 120007
+## Interface: 11508, 20506
 ## Version: @project-version@
 ## X-Curse-Project-ID: 1128926
+## X-Wago-ID: QN537vKB
 
 ## SavedVariables: ComeAndGetItDB
 
@@ -16,11 +28,13 @@
 Includes/Libraries/LibStub/LibStub.lua
 Includes/Libraries/CallbackHandler-1.0/CallbackHandler-1.0.lua
 Includes/Libraries/AceLocale-3.0/AceLocale-3.0.lua
+Includes/Libraries/AceDB-3.0/AceDB-3.0.lua
 Includes/Libraries/AceGUI-3.0/AceGUI-3.0.xml
 Includes/Libraries/AceConfig-3.0/AceConfigRegistry-3.0/AceConfigRegistry-3.0.lua
 Includes/Libraries/AceConfig-3.0/AceConfigCmd-3.0/AceConfigCmd-3.0.lua
 Includes/Libraries/AceConfig-3.0/AceConfigDialog-3.0/AceConfigDialog-3.0.lua
 Includes/Libraries/AceConfig-3.0/AceConfig-3.0.lua
+Includes/Libraries/AceDBOptions-3.0/AceDBOptions-3.0.lua
 
 # Localization
 Locales/enUS.lua
@@ -46,10 +60,10 @@ Features/Announcements.lua
 Features/Diagnostics.lua
 Options/Options-Utilities.lua
 Options/Options-General.lua
+Options/Options-Profiles.lua
 Options/Options-Diagnostics.lua
 Options/Options.lua
 
 # Feedback Welcome! (=
-# Come & Get It on CurseForge // https://www.curseforge.com/wow/addons/come-get-it
 # Come & Get It on GitHub // https://github.com/Gogo1951/Come-and-Get-It
 # Come & Get It on Discord // https://discord.gg/eh8hKq992Q
