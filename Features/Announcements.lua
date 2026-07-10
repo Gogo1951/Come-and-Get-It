@@ -8,9 +8,17 @@ local GetColor = ns.GetColor
 
 -- Format: |cff[INFO]Add-on Name|r |cff[SEPARATOR]//|r |cff[TEXT]Message|r
 function ns:PrintMessage(msg)
-    print(GetColor("INFO") .. L["ADDON_TITLE"] .. "|r "
-        .. GetColor("SEPARATOR") .. "//" .. "|r "
-        .. GetColor("TEXT") .. msg .. "|r")
+	print(
+		GetColor("INFO")
+			.. L["ADDON_TITLE"]
+			.. "|r "
+			.. GetColor("SEPARATOR")
+			.. "//"
+			.. "|r "
+			.. GetColor("TEXT")
+			.. msg
+			.. "|r"
+	)
 end
 
 --------------------------------------------------------------------------------
@@ -18,8 +26,10 @@ end
 --------------------------------------------------------------------------------
 
 function ns:PrintWelcome()
-    if not ComeAndGetItDB.showWelcome then return end
-    ns:PrintMessage(string.format(L["CHAT_LOADED"], ns.Version))
+	if not (ns.db and ns.db.profile.showWelcome) then
+		return
+	end
+	ns:PrintMessage(string.format(L["CHAT_LOADED"], ns.Version))
 end
 
 --------------------------------------------------------------------------------
@@ -33,5 +43,11 @@ end
     varargs fill its %s slots via string.format.
 ]]
 function ns:BuildAnnounceMessage(formatKey, ...)
-    return ns.TARGET_MARKER .. " " .. L["ADDON_TITLE"] .. " // " .. string.format(L[formatKey], ...)
+	local template = L[formatKey]
+	if not template then
+		return nil
+	end
+	local message = ns.TARGET_MARKER .. " " .. L["ADDON_TITLE"] .. " // " .. string.format(template, ...)
+	-- Bodies never carry item links, so stripping stray pipes is safe here.
+	return (message:gsub("|", ""))
 end
