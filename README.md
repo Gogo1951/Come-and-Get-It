@@ -10,25 +10,25 @@ Found an herb you can't pick, an ore vein you can't mine, or a locked treasure c
 
 ## Features
 
-🌿 **Herbs, Ore, and Chests** // Works with Herbalism nodes, Mining veins, and locked Treasure Chests. Each announcement is tailored to the right audience — Herbalists, Miners, or Rogues.
+🌿 **Herbs, Ore, and Chests** // Works with Herbalism nodes, Mining veins, and locked Treasure Chests. Each announcement is addressed to the right audience — Herbalists, Miners, or Rogues.
 
 📍 **Coordinates and Zone Included** // Every announcement carries the node name, your map coordinates, and the zone, so anyone nearby can actually find it.
 
-✏️ **You Hit Send** // The draft appears in your chat box but won't send until you press Enter. Edit it, redirect it to guild or party, or close it to cancel.
+✏️ **You Hit Send** // The draft lands in your chat box and waits. Pick a default channel — Local, Say, Yell, Party, or Guild — then edit, redirect, or cancel any draft before it goes out.
 
-🦺 **Safety First** // Announcements are disabled inside dungeons and raids, so you never accidentally spam info about something the audience can't gather anyway.
+🦺 **Safety First** // Nothing fires inside dungeons and raids, or while you're in combat, so it never steals your movement keys mid-fight or spams a group that can't gather it anyway.
 
 ## Setup
 
 1. Install the add-on, ideally using [CurseForge](https://www.curseforge.com/wow/addons/come-get-it) or [Wago](https://addons.wago.io/addons/come-and-get-it).
 2. Log in.
 3. Right-click an herb, ore vein, or locked treasure chest you can't gather.
-4. Come & Get It drafts the announcement in your chat box — hit Enter to send.
-5. Be the change you want to mine in the world. (=
+4. The draft appears in your chat box — hit Enter to send.
+5. Come & Get It // *"If you ping it, they will come."*
 
 ## Testing & Localization Status
 
-🟢 World of Warcraft Classic (🟡 Season of Discovery) // WoW 1.15.8
+🟢 World of Warcraft Classic (🟡 Season of Discovery) // WoW 1.15.9
 
 🟢 Burning Crusade Anniversary // WoW 2.5.6
 
@@ -47,22 +47,22 @@ Please reach out if you would like to be involved!
 
 ## Related Add-ons
 
-* 🟢 Pairs With // Wuild's [GatherLite](https://www.curseforge.com/wow/addons/gatherlite)
+🟢 Pairs With // Petazo's [Gather Tracker](https://www.curseforge.com/wow/addons/gather-tracker)
 
-* 🟢 Pairs With // Nevcairiel's [GatherMate2 Classic](https://www.curseforge.com/wow/addons/gathermate2-classic)
+🟢 Pairs With // Wuild's [GatherLite](https://www.curseforge.com/wow/addons/gatherlite)
 
-* 🟢 Pairs With // Foxthorn's [GatherNotify](https://www.curseforge.com/wow/addons/gathernotify)
+🟢 Pairs With // Nevcairiel's [GatherMate2 Classic](https://www.curseforge.com/wow/addons/gathermate2-classic)
 
-* 🟢 Pairs With // BetterAddons' [GatherProClassic](https://www.curseforge.com/wow/addons/gatherproclassic)
+🟢 Pairs With // BetterAddons' [GatherProClassic](https://www.curseforge.com/wow/addons/gatherproclassic)
 
-* 🟢 Pairs With // Michigras' [Lockbox Cracker](https://www.curseforge.com/wow/addons/lockbox-cracker)
+🟢 Pairs With // Efron's [LockboxLVL](https://www.curseforge.com/wow/addons/lockboxlvl)
 
-* 🟢 Pairs With // a14st0r's [nOde: the Omnitracker](https://www.curseforge.com/wow/addons/node)
+🟢 Pairs With // ilvec90's [NodeCounter](https://www.curseforge.com/wow/addons/nodecounter)
 
-* 🟢 Pairs With // Xinhuan's [Routes](https://www.curseforge.com/wow/addons/routes)
+🟢 Pairs With // a14st0r's [nOde: the Omnitracker](https://www.curseforge.com/wow/addons/node)
 
-* 🟢 Pairs With // Protuhj's [TomPoints](https://www.curseforge.com/wow/addons/tompoints)
+🟢 Pairs With // Xinhuan's [Routes](https://www.curseforge.com/wow/addons/routes)
 
-* 🟢 Pairs With // Cladhaire's [TomTom](https://www.curseforge.com/wow/addons/tomtom)
+🟢 Pairs With // Cladhaire's [TomTom](https://www.curseforge.com/wow/addons/tomtom)
 
-* 🟢 Pairs With // gogo1951's [Tracking Eye](https://www.curseforge.com/wow/addons/tracking-eye-classic)
+🟢 Pairs With // gogo1951's [Tracking Eye](https://www.curseforge.com/wow/addons/tracking-eye-classic)

@@ -58,10 +58,11 @@ L["OPTIONS_DESCRIPTION"] =
 	"发现了你无法采集的草药、无法开采的矿脉，或者是一个上锁的宝箱，而附近却没有潜行者？右键点击它，Come & Get It 会生成一条消息，你可以用来分享或广播坐标。成为英雄从未如此简单。"
 
 L["OPTIONS_WELCOME_NAME"] = "启用欢迎消息"
-L["OPTIONS_WELCOME_DESC"] = "登录时在聊天窗口打印欢迎消息。"
+L["OPTIONS_WELCOME_DESCRIPTION"] = "登录时在聊天窗口打印欢迎消息。"
 
+L["OPTIONS_OUTPUT_HEADER"] = "输出"
 L["OPTIONS_OUTPUT_NAME"] = "默认输出"
-L["OPTIONS_OUTPUT_DESC"] =
+L["OPTIONS_OUTPUT_DESCRIPTION"] =
 	"选择将消息发送到哪个聊天频道。草稿会出现在你的聊天输入框中，你可以在发送前检查，或更改目标频道。"
 L["OPTIONS_OUTPUT_NOTE"] =
 	"注意：本地 (/1) 是该区域的综合频道，且因分层而异：你的消息会传遍整个区域，但只有与你处于同一层的玩家才能看到。"

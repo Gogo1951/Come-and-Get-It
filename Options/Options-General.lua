@@ -10,12 +10,7 @@ local OptionsSpacer = ns.OptionsSpacer
 -- Output Channel Dropdown
 --------------------------------------------------------------------------------
 
---[[
-	Dropdown values/sorting are derived once from the OUTPUT_CHANNELS manifest
-	(Data.lua) so the channel list, its order, and Core's command lookup all
-	trace back to one definition. Keys are stable and saved to the DB; labels
-	are localized here at display time.
-]]
+-- Derived from the OUTPUT_CHANNELS manifest (Data.lua); labels localized at display time.
 local OUTPUT_VALUES = {}
 local OUTPUT_SORTING = {}
 for index, channel in ipairs(ns.OUTPUT_CHANNELS) do
@@ -38,7 +33,7 @@ function ns.BuildGeneralOptions()
 			welcomeToggle = {
 				type = "toggle",
 				name = L["OPTIONS_WELCOME_NAME"],
-				desc = L["OPTIONS_WELCOME_DESC"],
+				desc = L["OPTIONS_WELCOME_DESCRIPTION"],
 				width = "full",
 				order = 6,
 				get = function()
@@ -65,7 +60,7 @@ function ns.BuildGeneralOptions()
 			outputChannel = {
 				type = "select",
 				name = "",
-				desc = L["OPTIONS_OUTPUT_DESC"],
+				desc = L["OPTIONS_OUTPUT_DESCRIPTION"],
 				style = "dropdown",
 				order = 14,
 				values = OUTPUT_VALUES,
@@ -81,7 +76,7 @@ function ns.BuildGeneralOptions()
 
 			descOutputNote = {
 				type = "description",
-				name = GetColor("BODY") .. L["OPTIONS_OUTPUT_NOTE"] .. "|r",
+				name = GetColor("HELP") .. L["OPTIONS_OUTPUT_NOTE"] .. "|r",
 				fontSize = "medium",
 				order = 16,
 			},

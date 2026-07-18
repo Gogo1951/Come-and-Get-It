@@ -58,10 +58,11 @@ L["OPTIONS_DESCRIPTION"] =
 	"Vous avez trouvé une herbe que vous ne pouvez pas cueillir, un filon de minerai que vous ne pouvez pas miner ou un coffre au trésor verrouillé sans aucun voleur en vue ? Faites un clic droit dessus, et Come & Get It créera un message que vous pourrez utiliser pour partager ou diffuser les coordonnées. Être un héros n'a jamais été aussi facile."
 
 L["OPTIONS_WELCOME_NAME"] = "Activer le message de bienvenue"
-L["OPTIONS_WELCOME_DESC"] = "Affiche le message de bienvenue dans le chat lors de la connexion."
+L["OPTIONS_WELCOME_DESCRIPTION"] = "Affiche le message de bienvenue dans le chat lors de la connexion."
 
+L["OPTIONS_OUTPUT_HEADER"] = "Sortie"
 L["OPTIONS_OUTPUT_NAME"] = "Sortie par défaut"
-L["OPTIONS_OUTPUT_DESC"] =
+L["OPTIONS_OUTPUT_DESCRIPTION"] =
 	"Choisissez le canal de chat auquel l'annonce est adressée. Le brouillon s'affiche dans votre barre de chat pour que vous puissiez le vérifier ou le rediriger avant de l'envoyer."
 L["OPTIONS_OUTPUT_NOTE"] =
 	"Remarque : Local (/1) est le canal Général de la zone et dépend de la strate : votre message atteint toute la zone, mais seuls les joueurs présents sur votre strate actuelle le verront."
@@ -72,7 +73,7 @@ L["OPTIONS_OUTPUT_YELL"] = "Crier"
 L["OPTIONS_OUTPUT_PARTY"] = "Groupe"
 L["OPTIONS_OUTPUT_GUILD"] = "Guilde"
 
-L["FEEDBACK_HEADER"] = "Commentaires & Assistance"
+L["FEEDBACK_HEADER"] = "Commentaires et assistance"
 L["FEEDBACK_CURSEFORGE"] = "CurseForge"
 L["FEEDBACK_GITHUB"] = "GitHub"
 L["FEEDBACK_DISCORD"] = "Discord"

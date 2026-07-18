@@ -112,14 +112,15 @@ local EVENT_LOG_MAX_ARGS = 8
 local EVENT_LOG_MAX_ARG_LENGTH = 255
 
 --[[
-    Firehose events flood the log in milliseconds and bury the signal, so the
-    logger skips them. Come & Get It registers no firehose events today; the
-    entries below are defensive defaults in case more events are added later.
+    Events ns:LogEvent drops before recording — deliberately empty. The
+    dispatcher only ever hands LogEvent the events Come & Get It registers
+    (ns.EVENT_NAMES: PLAYER_LOGIN, UI_ERROR_MESSAGE), and the log never sees an
+    event the add-on didn't register — so listing a generic offender here
+    (COMBAT_LOG_EVENT_UNFILTERED, UNIT_AURA, ...) would be dead code. The lookup
+    in LogEvent stays so a genuine no-signal firehose can be excluded here if one
+    is ever registered later.
 ]]
-ns.DIAGNOSTIC_EVENT_EXCLUDE = {
-	COMBAT_LOG_EVENT_UNFILTERED = true,
-	UNIT_AURA = true,
-}
+ns.DIAGNOSTIC_EVENT_EXCLUDE = {}
 
 function ns:StartEventLog()
 	ns.diagnostics.log = {}

@@ -55,14 +55,14 @@ L["CHAT_LOADED"] =
 --------------------------------------------------------------------------------
 
 L["OPTIONS_DESCRIPTION"] =
-	"Found an herb you can't pick, a mineral vein you can't mine, or a locked treasure chest with no Rogue in sight? Right-click it, and Come & Get It creates a message you can use to share or broadcast the coordinates. Being a hero has never been so easy."
+	"Found an herb you can't pick, an ore vein you can't mine, or a locked treasure chest with no Rogue around? Right-click it and Come & Get It drafts a chat message with the node name and coordinates, ready to share. Being a hero has never been easier."
 
 L["OPTIONS_WELCOME_NAME"] = "Enable Welcome Message"
-L["OPTIONS_WELCOME_DESC"] = "Prints the welcome message in chat when you log in."
+L["OPTIONS_WELCOME_DESCRIPTION"] = "Prints the welcome message in chat when you log in."
 
 L["OPTIONS_OUTPUT_HEADER"] = "Output"
 L["OPTIONS_OUTPUT_NAME"] = "Default Output"
-L["OPTIONS_OUTPUT_DESC"] =
+L["OPTIONS_OUTPUT_DESCRIPTION"] =
 	"Choose which chat channel the announcement is addressed to. The draft opens in your chat box so you can review or redirect it before sending."
 L["OPTIONS_OUTPUT_NOTE"] =
 	"Note: Local (/1) is the zone's General channel and is layer-specific: your message reaches the whole zone, but only players on your current layer will see it."

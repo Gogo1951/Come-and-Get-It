@@ -58,10 +58,11 @@ L["OPTIONS_DESCRIPTION"] =
 	"채집할 수 없는 약초, 캘 수 없는 광맥, 또는 근처에 도적이 없는 잠긴 보물 상자를 발견하셨나요? 우클릭하면 Come & Get It이 좌표를 공유하거나 알릴 수 있는 메시지를 생성합니다. 영웅이 되는 것이 이렇게 쉬운 적은 없었습니다."
 
 L["OPTIONS_WELCOME_NAME"] = "환영 메시지 활성화"
-L["OPTIONS_WELCOME_DESC"] = "로그인 시 채팅창에 환영 메시지를 출력합니다."
+L["OPTIONS_WELCOME_DESCRIPTION"] = "로그인 시 채팅창에 환영 메시지를 출력합니다."
 
+L["OPTIONS_OUTPUT_HEADER"] = "출력"
 L["OPTIONS_OUTPUT_NAME"] = "기본 출력"
-L["OPTIONS_OUTPUT_DESC"] =
+L["OPTIONS_OUTPUT_DESCRIPTION"] =
 	"공지를 어느 채팅 채널로 보낼지 선택합니다. 초안이 채팅 입력창에 표시되므로 보내기 전에 검토하거나 다른 채널로 변경할 수 있습니다."
 L["OPTIONS_OUTPUT_NOTE"] =
 	"참고: 지역 (/1)은 현재 지역의 공개 채널이며 레이어별로 분리됩니다. 메시지는 지역 전체에 전달되지만, 현재 레이어에 있는 플레이어만 볼 수 있습니다."

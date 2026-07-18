@@ -5,12 +5,7 @@ ns.L = LibStub("AceLocale-3.0"):GetLocale(ADDON_NAME)
 -- Constants
 --------------------------------------------------------------------------------
 
---[[
-    Blizzard UI error ID for "Item is locked" — fired when a player interacts
-    with a lockbox they cannot open.  Professions (herb/mine) don't use a fixed
-    ID; they return a localized message string instead, so those are matched by
-    substring in Core.
-]]
+-- Blizzard's "Item is locked" error. Herb/mine have no fixed ID; Core matches those by substring.
 ns.ERROR_ID_LOCKED_CHEST = 268
 
 ns.ANNOUNCE_COOLDOWN = 5
@@ -20,15 +15,11 @@ ns.ANNOUNCE_COOLDOWN = 5
 --------------------------------------------------------------------------------
 
 --[[
-    Single source of truth for the sent-message raid target marker.
     {rt1} Star, {rt2} Circle, {rt3} Diamond, {rt4} Triangle,
     {rt5} Moon, {rt6} Square, {rt7} Cross, {rt8} Skull
 
-    Decoration is centralized: ns:BuildAnnounceMessage (Features/Announcements.lua)
-    prepends this marker, the add-on name, and " // " at send time. Every locale's
-    MSG_FORMAT must therefore be the message BODY ONLY -- a locale that re-bakes
-    the marker/name/separator will double-prefix. This constant is the canonical
-    marker; changing it takes effect everywhere without editing locale files.
+    Applied at send time by ns:BuildAnnounceMessage (Features/Announcements.lua),
+    so changing it here takes effect everywhere without touching locale files.
 ]]
 ns.TARGET_MARKER = "{rt7}" -- Cross
 
@@ -37,17 +28,11 @@ ns.TARGET_MARKER = "{rt7}" -- Cross
 --------------------------------------------------------------------------------
 
 --[[
-    Ordered manifest of chat channels the announcement draft can target. Each
-    entry pairs a stable key (saved to ns.db.profile.defaultOutput, never
-    localized) with the slash command Core hands to ChatFrame_OpenChat and the
-    locale key Options resolves for the dropdown label. Array order is dropdown
-    order. This is the single source of truth: Core derives its key→command
-    lookup from it and Options derives the dropdown values/sorting, so the list,
-    its order, and the command mapping can never drift apart. Adding a channel
-    is one row here plus its OPTIONS_OUTPUT_* locale string.
-
-    Local (/1) is the zone General channel, which is layer-specific in Classic:
-    the draft reaches the whole zone but only players on the caller's layer.
+    Single source of truth for output channels: Core derives its key -> command
+    lookup and Options derives the dropdown from this one table, so the list, its
+    order, and the command mapping can't drift. Array order is dropdown order;
+    keys are saved to the DB and never localized. Adding a channel is one row
+    here plus its OPTIONS_OUTPUT_* locale string.
 ]]
 ns.OUTPUT_CHANNELS = {
 	{ key = "channel1", command = "/1", labelKey = "OPTIONS_OUTPUT_CHANNEL1" },
@@ -73,10 +58,7 @@ ns.URL_WAGO = "https://addons.wago.io/addons/come-and-get-it"
 -- Options Registry
 --------------------------------------------------------------------------------
 
---[[
-    Stable AceConfig registry names, derived from the add-on name. Referenced by
-    NotifyChange across the options files; never built inline, never localized.
-]]
+-- Stable AceConfig registry names; referenced by NotifyChange, never built inline or localized.
 ns.OPTIONS_REGISTRY = {
 	General = ADDON_NAME,
 	Profiles = ADDON_NAME .. "_Profiles",
@@ -87,15 +69,15 @@ ns.OPTIONS_REGISTRY = {
 -- Colors
 --------------------------------------------------------------------------------
 
---[[
-    Raw hex palette only. The derived COLORS table and ns.GetColor live in
-    Features/Utilities.lua — Data files hold no logic.
-]]
-ns.C_TITLE = "FFD100"
-ns.C_INFO = "00BBFF"
-ns.C_BODY = "CCCCCC"
-ns.C_TEXT = "FFFFFF"
-ns.C_ON = "33CC33"
-ns.C_OFF = "CC3333"
-ns.C_SEPARATOR = "AAAAAA"
-ns.C_MUTED = "808080"
+-- Raw hex only; the derived COLORS table and ns.GetColor live in Features/Utilities.lua.
+ns.PALETTE = {
+	TITLE = "FFD100", -- Gold: Titles, Headers, Section Names, Field Titles
+	INFO = "00BBFF", -- Blue: Interactions, Toggles, Links, Keybinds, Slash Commands
+	BODY = "FFFFFF", -- White: Descriptions, Options Body Text
+	HELP = "CCCCCC", -- Silver: Pro Tips, Helper Text
+	TEXT = "FFFFFF", -- White: Messages, Values, Spell Names
+	ON = "33CC33", -- Green: On
+	OFF = "CC3333", -- Red: Off
+	SEPARATOR = "AAAAAA", -- Gray: Separators, Dividers
+	MUTED = "808080", -- Dark Gray: Meta-data, Version Numbers
+}

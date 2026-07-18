@@ -5,10 +5,7 @@ local L = ns.L
 -- Version
 --------------------------------------------------------------------------------
 
---[[
-    Version is "Dev" when the @project-version@ token is unreplaced (a dev copy);
-    the packager substitutes the real version at build time. The @ is the signal.
-]]
+-- "Dev" until the packager substitutes the version token at build time; @ is the signal.
 local function GetVersion()
 	local getMetadata = (C_AddOns and C_AddOns.GetAddOnMetadata) or GetAddOnMetadata
 	local version = getMetadata and getMetadata(ADDON_NAME, "Version")
@@ -31,19 +28,13 @@ local ANNOUNCE_COOLDOWN = ns.ANNOUNCE_COOLDOWN
 -- Performance Aliases
 --------------------------------------------------------------------------------
 
---[[
-    Only aliasing hot-path globals and long C_Map paths; ChatFrame_OpenChat is
-    called at most once per cooldown window so it stays unaliased.
-]]
+-- Hot-path globals only; ChatFrame_OpenChat runs once per cooldown window, so it stays unaliased.
 local GetTime = GetTime
 local IsInInstance = IsInInstance
 local InCombatLockdown = InCombatLockdown
 local format = string.format
 
---[[
-    C_Map may be nil on very early Classic builds; each reference is guarded at
-    the call site in AnnounceNode().
-]]
+-- C_Map is nil on early Classic builds; AnnounceNode bails if any alias is missing.
 local GetBestMapForUnit = C_Map and C_Map.GetBestMapForUnit
 local GetPlayerMapPosition = C_Map and C_Map.GetPlayerMapPosition
 local GetMapInfo = C_Map and C_Map.GetMapInfo
@@ -59,10 +50,9 @@ local lastAnnounceTime = 0
 --------------------------------------------------------------------------------
 
 --[[
-    Maps either a numeric error ID or a localized profession-skill substring to
-    the data needed to build the announcement.  Locked chests use the integer
-    because Blizzard fires a stable error ID.  Herb and mining nodes fire a
-    generic "Requires <Skill>" message, so we match on the localized skill name.
+    Two key kinds in disjoint namespaces: locked chests key on Blizzard's stable
+    numeric error ID; herb/mine nodes fire a generic "Requires <Skill>" string
+    with no stable ID, so they key on the localized skill name.
 ]]
 local ERROR_MAPPING = {
 	[ERROR_ID_LOCKED_CHEST] = {
@@ -82,11 +72,7 @@ local ERROR_MAPPING = {
 	},
 }
 
---[[
-    Lowercased lookup of ERROR_MAPPING's string keys, built once at load so the
-    per-error slow path skips repeated string.lower on constants. Numeric keys
-    are excluded -- they take the fast path.
-]]
+-- Lowercased string keys, built once so the slow path never re-lowers constants.
 local LOWER_MATCH = {}
 for key, mapping in pairs(ERROR_MAPPING) do
 	if type(key) == "string" then
@@ -98,10 +84,7 @@ end
 -- Output Channels
 --------------------------------------------------------------------------------
 
---[[
-    Derived key→slash-command lookup, built once from the OUTPUT_CHANNELS
-    manifest (Data.lua) so the announcement path stays a single hash read.
-]]
+-- key -> slash command, derived once from the OUTPUT_CHANNELS manifest (Data.lua).
 local OUTPUT_COMMAND = {}
 for _, channel in ipairs(ns.OUTPUT_CHANNELS) do
 	OUTPUT_COMMAND[channel.key] = channel.command
@@ -117,11 +100,9 @@ local function GetNodeName()
 end
 
 --[[
-    Bag lockboxes fire the same "Item is locked" error (ERROR_ID_LOCKED_CHEST) as
-    world treasure chests, but the tooltip is then describing the carried item.
-    World nodes (herbs, veins, chests) are never items, so an item on the tooltip
-    is the discriminator: it means the trigger came from the bags, not the world.
-    Pick one API by availability per the COMPATIBILITY rule and call exactly one.
+    Bag lockboxes fire the same locked error as world chests. World nodes are
+    never items, so an item on the tooltip means the trigger came from the bags.
+    Pick one API by availability and call exactly one.
 ]]
 local function TooltipShowsItem()
 	if TooltipUtil and TooltipUtil.GetDisplayedItem then
@@ -146,14 +127,10 @@ local function MatchError(messageID, message)
 	end
 
 	--[[
-        Slow path: gather errors carry only a localized "Requires <skill>"
-        string, so we substring-scan it for the skill name.
-
-        ACCEPTED TRADEOFF: a substring can in theory fire on unrelated error text
+        ACCEPTED TRADEOFF: substring-scanning can fire on unrelated error text
         containing the skill word. Kept because no gather error has a numeric ID
         stable across the supported clients, word-boundary patterns break CJK
-        locales, and the residual risk is bounded -- AnnounceNode never auto-sends
-        (it opens the chat editbox; the user still presses Enter).
+        locales, and the risk is bounded -- AnnounceNode never auto-sends.
     ]]
 	local lowerMessage = string.lower(message)
 	for lowerKey, mapping in pairs(LOWER_MATCH) do
@@ -175,12 +152,10 @@ local function AnnounceNode(mapping)
 	end
 
 	--[[
-        INTENTIONAL — by design, not a bug. Do not "fix" by announcing in
-        combat. AnnounceNode() opens the chat editbox (ChatFrame_OpenChat),
-        which steals keyboard focus and breaks WASD movement mid-fight. We
-        deliberately drop the announcement entirely while in combat rather than
-        queue it, since a stale node callout after combat ends is noise. Nodes
-        are re-detected on the next gather/loot error once combat drops.
+        INTENTIONAL, not a bug: ChatFrame_OpenChat steals keyboard focus and
+        breaks movement mid-fight. Drop the announcement rather than queue it --
+        a stale callout after combat is noise, and the node re-fires its error on
+        the next interaction. Do not replace this with a deferred-replay queue.
     ]]
 	if InCombatLockdown() then
 		return
@@ -191,10 +166,6 @@ local function AnnounceNode(mapping)
 		return
 	end
 
-	--[[
-        C_Map APIs are nil on some Classic Era builds where world-map position
-        tracking was added later.  Bail gracefully rather than error.
-    ]]
 	if not GetBestMapForUnit or not GetPlayerMapPosition or not GetMapInfo then
 		return
 	end
@@ -214,12 +185,7 @@ local function AnnounceNode(mapping)
 		return
 	end
 
-	--[[
-        No fallback name: if the tooltip read comes back nil/empty we stay
-        silent rather than announce a generic node. The miss is logged in the
-        UI_ERROR_MESSAGE handler below (GetNodeName tap) so reports can surface
-        it instead of it hiding behind a vague message.
-    ]]
+	-- No fallback name: stay silent rather than announce a generic node. The miss is logged.
 	local nodeName = GetNodeName()
 	if not nodeName or nodeName == "" then
 		return
@@ -242,11 +208,7 @@ local function AnnounceNode(mapping)
 		currentPrefix = "an"
 	end
 
-	--[[
-        Message decoration (marker, add-on name, " // " separator) is centralized
-        in ns:BuildAnnounceMessage (Announcements.lua); MSG_FORMAT is the locale
-        body only.
-    ]]
+	-- Decoration lives in ns:BuildAnnounceMessage (Announcements.lua); MSG_FORMAT is body-only.
 	local announcement = ns:BuildAnnounceMessage(
 		"MSG_FORMAT",
 		mapping.role,
@@ -266,10 +228,7 @@ local function AnnounceNode(mapping)
 		return
 	end
 
-	--[[
-        The output channel is user-configurable (Options > Output). Fall back to
-        the manifest default if the saved key is missing or stale.
-    ]]
+	-- User-configurable; falls back to the manifest default if the saved key is stale.
 	local channelKey = (ns.db and ns.db.profile.defaultOutput) or ns.DEFAULT_OUTPUT_CHANNEL
 	local command = OUTPUT_COMMAND[channelKey] or OUTPUT_COMMAND[ns.DEFAULT_OUTPUT_CHANNEL]
 
@@ -282,10 +241,9 @@ end
 --------------------------------------------------------------------------------
 
 --[[
-    Creates the AceDB-3.0 database. The third argument (true) puts every character
-    on one shared "Default" profile out of the box; per-character profiles are
-    opt-in via the Profiles panel. AceDB applies ns.DATABASE_DEFAULTS via
-    metatables, so there is no hand-rolled merge.
+    The third argument (true) puts every character on one shared "Default"
+    profile; per-character profiles are opt-in via the Profiles panel. AceDB
+    applies the defaults via metatables -- no hand-rolled merge.
 ]]
 local function InitSavedVariables()
 	ns.db = LibStub("AceDB-3.0"):New("ComeAndGetItDB", ns.DATABASE_DEFAULTS, true)
@@ -308,11 +266,7 @@ end
 -- Event Handling
 --------------------------------------------------------------------------------
 
---[[
-    Single event manifest, shared with Diagnostics (ns.EVENT_NAMES) so its event
-    log and registration checks can never drift from what the dispatcher
-    registers.
-]]
+-- Single manifest: the dispatcher registers from it and Diagnostics reads it, so they can't drift.
 ns.EVENT_NAMES = {
 	"PLAYER_LOGIN",
 	"UI_ERROR_MESSAGE",
@@ -323,10 +277,7 @@ for _, eventName in ipairs(ns.EVENT_NAMES) do
 	eventFrame:RegisterEvent(eventName)
 end
 eventFrame:SetScript("OnEvent", function(_, event, ...)
-	--[[
-        Diagnostics event-log tap. Guarded by a single boolean so it costs
-        nothing when logging is off; runs before the real handler.
-    ]]
+	-- Diagnostics tap: one boolean check, so it costs nothing when logging is off.
 	if ns.diagnostics and ns.diagnostics.logging then
 		ns:LogEvent(event, ...)
 	end
@@ -342,11 +293,7 @@ eventFrame:SetScript("OnEvent", function(_, event, ...)
 		local messageID, message = ...
 		local mapping = MatchError(messageID, message)
 		if mapping then
-			--[[
-                Diagnostics tap: capture the node-name read at match time -- the
-                one input AnnounceNode depends on that the event args don't carry.
-                A "GetNodeName(nil)" entry is the tooltip-read-missed signal.
-            ]]
+			-- Capture the tooltip read at match time; a nil entry is the read-missed signal.
 			if ns.diagnostics and ns.diagnostics.logging then
 				ns:LogEvent("GetNodeName", GetNodeName())
 			end
