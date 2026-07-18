@@ -57,11 +57,12 @@ L["CHAT_LOADED"] =
 L["OPTIONS_DESCRIPTION"] =
 	"Encontrou uma erva que você não pode coletar, um veio de minério que você não pode minerar ou um baú de tesouro trancado sem nenhum Ladino à vista? Clique com o botão direito nele e o Come & Get It criará uma mensagem que você pode usar para compartilhar ou transmitir as coordenadas. Ser um herói nunca foi tão fácil."
 
-L["OPTIONS_WELCOME_NAME"] = "Ativar Mensagem de Boas-vindas"
-L["OPTIONS_WELCOME_DESC"] = "Mostra a mensagem de boas-vindas no chat ao entrar no jogo."
+L["OPTIONS_WELCOME_NAME"] = "Ativar mensagem de boas-vindas"
+L["OPTIONS_WELCOME_DESCRIPTION"] = "Mostra a mensagem de boas-vindas no chat ao entrar no jogo."
 
+L["OPTIONS_OUTPUT_HEADER"] = "Saída"
 L["OPTIONS_OUTPUT_NAME"] = "Saída padrão"
-L["OPTIONS_OUTPUT_DESC"] =
+L["OPTIONS_OUTPUT_DESCRIPTION"] =
 	"Escolha para qual canal de chat o anúncio será direcionado. O rascunho abre na sua caixa de chat para que você possa revisá-lo ou redirecioná-lo antes de enviar."
 L["OPTIONS_OUTPUT_NOTE"] =
 	"Observação: Local (/1) é o canal Geral da zona e é específico de cada camada: sua mensagem alcança toda a zona, mas apenas os jogadores na sua camada atual a verão."
@@ -72,7 +73,7 @@ L["OPTIONS_OUTPUT_YELL"] = "Gritar"
 L["OPTIONS_OUTPUT_PARTY"] = "Grupo"
 L["OPTIONS_OUTPUT_GUILD"] = "Guilda"
 
-L["FEEDBACK_HEADER"] = "Feedback & Suporte"
+L["FEEDBACK_HEADER"] = "Feedback e suporte"
 L["FEEDBACK_CURSEFORGE"] = "CurseForge"
 L["FEEDBACK_GITHUB"] = "GitHub"
 L["FEEDBACK_DISCORD"] = "Discord"

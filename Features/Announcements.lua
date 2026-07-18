@@ -37,10 +37,8 @@ end
 --------------------------------------------------------------------------------
 
 --[[
-    Centralizes message decoration (Style Guide MESSAGES): the raid marker, the
-    add-on name, and the " // " separator are prepended here so every locale's
-    MSG_FORMAT carries the message BODY ONLY. formatKey is a locale key; the
-    varargs fill its %s slots via string.format.
+    Prepends the marker, add-on name, and " // " so every locale's MSG_FORMAT
+    carries the BODY ONLY. A locale that re-bakes the prefix double-prefixes.
 ]]
 function ns:BuildAnnounceMessage(formatKey, ...)
 	local template = L[formatKey]

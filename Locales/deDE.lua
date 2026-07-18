@@ -58,10 +58,11 @@ L["OPTIONS_DESCRIPTION"] =
 	"Hast du ein Kraut gefunden, das du nicht pflücken kannst, eine Erzader, die du nicht abbauen kannst, oder eine verschlossene Schatztruhe und kein Schurke ist in Sicht? Klicke mit der rechten Maustaste darauf, und Come & Get It erstellt eine Nachricht, mit der du die Koordinaten teilen oder senden kannst. Ein Held zu sein war noch nie so einfach."
 
 L["OPTIONS_WELCOME_NAME"] = "Willkommensnachricht aktivieren"
-L["OPTIONS_WELCOME_DESC"] = "Gibt die Willkommensnachricht im Chat aus, wenn du dich einloggst."
+L["OPTIONS_WELCOME_DESCRIPTION"] = "Gibt die Willkommensnachricht im Chat aus, wenn du dich einloggst."
 
+L["OPTIONS_OUTPUT_HEADER"] = "Ausgabe"
 L["OPTIONS_OUTPUT_NAME"] = "Standardausgabe"
-L["OPTIONS_OUTPUT_DESC"] =
+L["OPTIONS_OUTPUT_DESCRIPTION"] =
 	"Wähle, an welchen Chatkanal die Ankündigung gerichtet wird. Der Entwurf erscheint in deinem Chat-Eingabefeld, sodass du ihn vor dem Senden überprüfen oder umleiten kannst."
 L["OPTIONS_OUTPUT_NOTE"] =
 	"Hinweis: Lokal (/1) ist der Allgemein-Kanal der Zone und ist Layer-spezifisch: Deine Nachricht erreicht die ganze Zone, aber nur Spieler auf deinem aktuellen Layer sehen sie."

@@ -57,11 +57,12 @@ L["CHAT_LOADED"] =
 L["OPTIONS_DESCRIPTION"] =
 	"Hai trovato un'erba che non puoi raccogliere, un filone di minerali che non puoi estrarre o un forziere chiuso senza nessun Ladro in vista? Fai clic col tasto destro su di esso e Come & Get It creerà un messaggio che puoi usare per condividere o trasmettere le coordinate. Essere un eroe non è mai stato così facile."
 
-L["OPTIONS_WELCOME_NAME"] = "Abilita Messaggio di Benvenuto"
-L["OPTIONS_WELCOME_DESC"] = "Stampa il messaggio di benvenuto nella chat al momento dell'accesso."
+L["OPTIONS_WELCOME_NAME"] = "Abilita messaggio di benvenuto"
+L["OPTIONS_WELCOME_DESCRIPTION"] = "Stampa il messaggio di benvenuto nella chat al momento dell'accesso."
 
+L["OPTIONS_OUTPUT_HEADER"] = "Uscita"
 L["OPTIONS_OUTPUT_NAME"] = "Uscita predefinita"
-L["OPTIONS_OUTPUT_DESC"] =
+L["OPTIONS_OUTPUT_DESCRIPTION"] =
 	"Scegli a quale canale di chat è indirizzato l'annuncio. La bozza si apre nella tua barra della chat così puoi rivederla o reindirizzarla prima di inviarla."
 L["OPTIONS_OUTPUT_NOTE"] =
 	"Nota: Locale (/1) è il canale Generale della zona ed è specifico per layer: il tuo messaggio raggiunge l'intera zona, ma solo i giocatori sul tuo layer attuale lo vedranno."
@@ -72,7 +73,7 @@ L["OPTIONS_OUTPUT_YELL"] = "Urlare"
 L["OPTIONS_OUTPUT_PARTY"] = "Gruppo"
 L["OPTIONS_OUTPUT_GUILD"] = "Gilda"
 
-L["FEEDBACK_HEADER"] = "Feedback & Supporto"
+L["FEEDBACK_HEADER"] = "Feedback e supporto"
 L["FEEDBACK_CURSEFORGE"] = "CurseForge"
 L["FEEDBACK_GITHUB"] = "GitHub"
 L["FEEDBACK_DISCORD"] = "Discord"

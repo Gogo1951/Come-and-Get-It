@@ -5,10 +5,7 @@ local GetColor = ns.GetColor
 -- Standard Helpers
 --------------------------------------------------------------------------------
 
---[[
-    Shared options-table widget builders. Dot-defined (no self) so callers use
-    dot invocation, matching the panel builders.
-]]
+-- Dot-defined (no self) so callers use dot invocation, matching the panel builders.
 
 function ns.OptionsHeader(text, order)
 	return { type = "header", name = GetColor("TITLE") .. text .. "|r", order = order }

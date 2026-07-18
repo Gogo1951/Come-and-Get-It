@@ -58,10 +58,11 @@ L["OPTIONS_DESCRIPTION"] =
 	"¿Encontraste una hierba que no puedes recolectar, una veta de mineral que no puedes minar o un cofre cerrado sin un Pícaro a la vista? Haz clic derecho y Come & Get It creará un mensaje que puedes usar para compartir o anunciar las coordenadas. Ser un héroe nunca fue tan fácil."
 
 L["OPTIONS_WELCOME_NAME"] = "Activar mensaje de bienvenida"
-L["OPTIONS_WELCOME_DESC"] = "Muestra el mensaje de bienvenida en el chat al iniciar sesión."
+L["OPTIONS_WELCOME_DESCRIPTION"] = "Muestra el mensaje de bienvenida en el chat al iniciar sesión."
 
+L["OPTIONS_OUTPUT_HEADER"] = "Salida"
 L["OPTIONS_OUTPUT_NAME"] = "Salida predeterminada"
-L["OPTIONS_OUTPUT_DESC"] =
+L["OPTIONS_OUTPUT_DESCRIPTION"] =
 	"Elige a qué canal de chat se dirige el anuncio. El borrador se abre en tu cuadro de chat para que puedas revisarlo o redirigirlo antes de enviarlo."
 L["OPTIONS_OUTPUT_NOTE"] =
 	"Nota: Local (/1) es el canal General de la zona y es específico de cada capa: tu mensaje llega a toda la zona, pero solo lo verán los jugadores que estén en tu capa actual."
