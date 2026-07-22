@@ -55,21 +55,9 @@ local lastAnnounceTime = 0
     with no stable ID, so they key on the localized skill name.
 ]]
 local ERROR_MAPPING = {
-	[ERROR_ID_LOCKED_CHEST] = {
-		role = L["ROGUES"],
-		prefix = L["PREFIX_LOCKED"],
-		action = L["ACTION_OPEN"],
-	},
-	[L["MATCH_HERB"]] = {
-		role = L["HERBALISTS"],
-		prefix = L["PREFIX_HERB"],
-		action = L["ACTION_PICK"],
-	},
-	[L["MATCH_MINE"]] = {
-		role = L["MINERS"],
-		prefix = L["PREFIX_MINE"],
-		action = L["ACTION_MINE"],
-	},
+	[ERROR_ID_LOCKED_CHEST] = { formatKey = "MSG_FORMAT_LOCKED" },
+	[L["MATCH_HERB"]] = { formatKey = "MSG_FORMAT_HERB" },
+	[L["MATCH_MINE"]] = { formatKey = "MSG_FORMAT_MINE" },
 }
 
 -- Lowercased string keys, built once so the slow path never re-lowers constants.
@@ -95,6 +83,9 @@ end
 --------------------------------------------------------------------------------
 
 local function GetNodeName()
+	if not GameTooltip or not GameTooltip:IsShown() then
+		return nil
+	end
 	local tooltipLine = _G.GameTooltipTextLeft1
 	return tooltipLine and tooltipLine:GetText()
 end
@@ -197,24 +188,10 @@ local function AnnounceNode(mapping)
 		return
 	end
 
-	-- English indefinite article correction: "a Arcane Crystal" → "an Arcane Crystal"
-	local currentPrefix = mapping.prefix
-	local currentLocale = GetLocale()
-	if
-		(currentLocale == "enUS" or currentLocale == "enGB")
-		and currentPrefix == "a"
-		and string.find(nodeName, "^[AEIOUaeiou]")
-	then
-		currentPrefix = "an"
-	end
-
-	-- Decoration lives in ns:BuildAnnounceMessage (Announcements.lua); MSG_FORMAT is body-only.
+	-- Decoration lives in ns:BuildAnnounceMessage (Announcements.lua); the MSG_FORMAT_* bodies are body-only.
 	local announcement = ns:BuildAnnounceMessage(
-		"MSG_FORMAT",
-		mapping.role,
-		currentPrefix,
+		mapping.formatKey,
 		nodeName,
-		mapping.action,
 		format("%.0f", position.x * 100),
 		format("%.0f", position.y * 100),
 		mapInfo.name
@@ -231,6 +208,11 @@ local function AnnounceNode(mapping)
 	-- User-configurable; falls back to the manifest default if the saved key is stale.
 	local channelKey = (ns.db and ns.db.profile.defaultOutput) or ns.DEFAULT_OUTPUT_CHANNEL
 	local command = OUTPUT_COMMAND[channelKey] or OUTPUT_COMMAND[ns.DEFAULT_OUTPUT_CHANNEL]
+
+	local messageLength = #announcement
+	if messageLength > ns.CHAT_MESSAGE_MAX_LENGTH then
+		ns:PrintMessage(format(L["CHAT_TOO_LONG"], messageLength, ns.CHAT_MESSAGE_MAX_LENGTH))
+	end
 
 	ChatFrame_OpenChat(command .. " " .. announcement, ChatFrame1)
 	lastAnnounceTime = now
@@ -249,16 +231,27 @@ local function InitSavedVariables()
 	ns.db = LibStub("AceDB-3.0"):New("ComeAndGetItDB", ns.DATABASE_DEFAULTS, true)
 
 	--[[
-        MIGRATION (remove after 2026-10-08): move flat ComeAndGetItDB keys into
-        the AceDB profile. Pre-AceDB builds stored settings at the root of the
-        saved table; lift them into the active profile once, then clear the roots
-        so AceDB owns them from here on.
+        MIGRATION (remove after 2026-10-08): two cleanups of pre-existing saved
+        state.
+
+        Pre-AceDB builds stored settings at the root of ComeAndGetItDB; lift
+        those into the active profile once, then clear the roots so AceDB owns
+        them from here on.
+
+        announceOnClick is a removed setting that AceDB never drops on its own,
+        because a key absent from the defaults is just user data. Clear it from
+        every stored profile rather than ns.db.profile alone, which would leave
+        it behind in whichever profiles are not active at login.
     ]]
 	for _, key in ipairs({ "showWelcome", "defaultOutput" }) do
 		if ComeAndGetItDB[key] ~= nil then
 			ns.db.profile[key] = ComeAndGetItDB[key]
 			ComeAndGetItDB[key] = nil
 		end
+	end
+
+	for _, profile in pairs(ns.db.profiles) do
+		profile.announceOnClick = nil
 	end
 end
 

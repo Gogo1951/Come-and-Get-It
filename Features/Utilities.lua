@@ -8,17 +8,10 @@ local _, ns = ...
 
 local COLOR_PREFIX = "|cff"
 
-local COLORS = {
-	TITLE = COLOR_PREFIX .. ns.PALETTE.TITLE,
-	INFO = COLOR_PREFIX .. ns.PALETTE.INFO,
-	BODY = COLOR_PREFIX .. ns.PALETTE.BODY,
-	HELP = COLOR_PREFIX .. ns.PALETTE.HELP,
-	TEXT = COLOR_PREFIX .. ns.PALETTE.TEXT,
-	ON = COLOR_PREFIX .. ns.PALETTE.ON,
-	OFF = COLOR_PREFIX .. ns.PALETTE.OFF,
-	SEPARATOR = COLOR_PREFIX .. ns.PALETTE.SEPARATOR,
-	MUTED = COLOR_PREFIX .. ns.PALETTE.MUTED,
-}
+local COLORS = {}
+for key, hex in pairs(ns.PALETTE) do
+	COLORS[key] = COLOR_PREFIX .. hex
+end
 
 function ns.GetColor(key)
 	return COLORS[key] or COLORS.TEXT

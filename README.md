@@ -1,12 +1,12 @@
 # Come & Get It
 
-Found an herb you can't pick, an ore vein you can't mine, or a locked treasure chest with no Rogue around? Right-click it and Come & Get It drafts a chat message with the node name and coordinates, ready to share. Being a hero has never been easier.
+Found an herb you can't pick, a mineral vein you can't mine, or a locked treasure chest with no Rogue in sight? Right-click it, and Come & Get It creates a message you can use to share or broadcast the coordinates. Being a hero has never been so easy.
 
-> {rt7} Come & Get It // Hey Miners, I came across a Rich Thorium Vein that I can't mine at 25, 54 in Eastern Plaguelands!
+> {rt7} Come & Get It // Hey Miners, I came across something I can't mine: Rich Thorium Vein at 25, 54 in Eastern Plaguelands!
 
-> {rt7} Come & Get It // Hey Herbalists, I came across some Black Lotus that I can't pick at 62, 37 in Winterspring!
+> {rt7} Come & Get It // Hey Herbalists, I came across something I can't pick: Black Lotus at 62, 37 in Winterspring!
 
-> {rt7} Come & Get It // Hey Rogues, I came across a locked Treasure Chest that I can't open at 18, 39 in Tanaris!
+> {rt7} Come & Get It // Hey Rogues, I came across something I can't open: Solid Chest at 18, 39 in Tanaris!
 
 ## Features
 
@@ -47,22 +47,10 @@ Please reach out if you would like to be involved!
 
 ## Related Add-ons
 
-🟢 Pairs With // Petazo's [Gather Tracker](https://www.curseforge.com/wow/addons/gather-tracker)
-
-🟢 Pairs With // Wuild's [GatherLite](https://www.curseforge.com/wow/addons/gatherlite)
-
 🟢 Pairs With // Nevcairiel's [GatherMate2 Classic](https://www.curseforge.com/wow/addons/gathermate2-classic)
 
-🟢 Pairs With // BetterAddons' [GatherProClassic](https://www.curseforge.com/wow/addons/gatherproclassic)
+🟢 Pairs With // Gogo1951's [Play It Forward](https://www.curseforge.com/wow/addons/play-it-forward)
 
-🟢 Pairs With // Efron's [LockboxLVL](https://www.curseforge.com/wow/addons/lockboxlvl)
+🟢 Pairs With // jnwhiteh's [TomTom](https://www.curseforge.com/wow/addons/tomtom)
 
-🟢 Pairs With // ilvec90's [NodeCounter](https://www.curseforge.com/wow/addons/nodecounter)
-
-🟢 Pairs With // a14st0r's [nOde: the Omnitracker](https://www.curseforge.com/wow/addons/node)
-
-🟢 Pairs With // Xinhuan's [Routes](https://www.curseforge.com/wow/addons/routes)
-
-🟢 Pairs With // Cladhaire's [TomTom](https://www.curseforge.com/wow/addons/tomtom)
-
-🟢 Pairs With // gogo1951's [Tracking Eye](https://www.curseforge.com/wow/addons/tracking-eye-classic)
+🟢 Pairs With // Gogo1951's [Tracking Eye](https://www.curseforge.com/wow/addons/tracking-eye-classic)

@@ -14,34 +14,30 @@ L["ADDON_TITLE"] = "Come & Get It"
 --------------------------------------------------------------------------------
 
 --[[
-    Translator guidance. MSG_FORMAT is the announcement body; the code fills its
-    seven %s placeholders in this fixed order: role (ROGUES / HERBALISTS /
-    MINERS), prefix (PREFIX_*), node name, action verb (ACTION_*), x coordinate,
-    y coordinate, zone name. Reorder the sentence freely for your language, but
-    never reorder, add, or drop placeholders. PREFIX_* is the article/quantity
-    word placed directly before the node name; ACTION_* is the verb the player
-    cannot perform. The raid marker, add-on name, and " // " separator are
-    prepended by the code -- MSG_FORMAT must stay body-only. MATCH_* must equal
-    the profession skill names exactly as the game client displays them in this
-    language (they are substring-matched against the client's error text).
+    Translator guidance. Each MSG_FORMAT_* string is one complete announcement
+    body, picked by what the player could not interact with. The code fills four
+    %s placeholders in this fixed order: node name, x coordinate, y coordinate,
+    zone name. Reorder the sentence freely for your language, but never reorder,
+    add, or drop placeholders.
+
+    Nothing precedes the node name, so no article or adjective has to agree with
+    a name whose gender and number are unknown until runtime. Keep that property:
+    if your language reads better with an article, restructure the sentence so
+    the article attaches to a fixed word rather than to the placeholder.
+
+    The raid marker, add-on name, and " // " separator are prepended by the code
+    -- the bodies must stay body-only. MATCH_* must equal the profession skill
+    names exactly as the game client displays them in this language (they are
+    substring-matched against the client's error text).
 ]]
-
-L["ROGUES"] = "도적"
-L["HERBALISTS"] = "약초채집가"
-L["MINERS"] = "광부"
-
-L["ACTION_OPEN"] = "열기"
-L["ACTION_PICK"] = "채집"
-L["ACTION_MINE"] = "채광"
-
-L["PREFIX_LOCKED"] = "잠긴"
-L["PREFIX_HERB"] = "약간의"
-L["PREFIX_MINE"] = "하나의"
 
 L["MATCH_HERB"] = "약초채집"
 L["MATCH_MINE"] = "채광"
 
-L["MSG_FORMAT"] = "저기요 %s님, 제가 %s %s(을)를 발견했는데 %s 할 수 없네요! 위치: %s, %s (%s)"
+L["MSG_FORMAT_LOCKED"] = "도적 여러분! 제가 열 수 없는 것을 발견했습니다: %s, 위치 %s, %s (%s)"
+L["MSG_FORMAT_HERB"] =
+	"약초채집가 여러분! 제가 채집할 수 없는 것을 발견했습니다: %s, 위치 %s, %s (%s)"
+L["MSG_FORMAT_MINE"] = "광부 여러분! 제가 캘 수 없는 것을 발견했습니다: %s, 위치 %s, %s (%s)"
 
 --------------------------------------------------------------------------------
 -- Chat
@@ -49,6 +45,9 @@ L["MSG_FORMAT"] = "저기요 %s님, 제가 %s %s(을)를 발견했는데 %s 할 
 
 L["CHAT_LOADED"] =
 	"버전 %s. 설정(이 메시지를 비활성화하는 옵션 포함)은 설정 > 애드온 > Come & Get It 에서 찾을 수 있습니다. 애드온이 마음에 드시나요? 친구에게 알려주세요! (="
+
+L["CHAT_TOO_LONG"] =
+	"이 알림은 %d바이트로 채팅 제한인 %d바이트를 초과합니다. 보내기 전에 줄여주세요."
 
 --------------------------------------------------------------------------------
 -- Options Panel

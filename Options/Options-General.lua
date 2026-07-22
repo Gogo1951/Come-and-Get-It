@@ -10,7 +10,7 @@ local OptionsSpacer = ns.OptionsSpacer
 -- Output Channel Dropdown
 --------------------------------------------------------------------------------
 
--- Derived from the OUTPUT_CHANNELS manifest (Data.lua); labels localized at display time.
+-- Derived from the OUTPUT_CHANNELS manifest (Data.lua); labels resolved once at load.
 local OUTPUT_VALUES = {}
 local OUTPUT_SORTING = {}
 for index, channel in ipairs(ns.OUTPUT_CHANNELS) do

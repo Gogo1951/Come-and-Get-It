@@ -14,34 +14,29 @@ L["ADDON_TITLE"] = "Come & Get It"
 --------------------------------------------------------------------------------
 
 --[[
-    Translator guidance. MSG_FORMAT is the announcement body; the code fills its
-    seven %s placeholders in this fixed order: role (ROGUES / HERBALISTS /
-    MINERS), prefix (PREFIX_*), node name, action verb (ACTION_*), x coordinate,
-    y coordinate, zone name. Reorder the sentence freely for your language, but
-    never reorder, add, or drop placeholders. PREFIX_* is the article/quantity
-    word placed directly before the node name; ACTION_* is the verb the player
-    cannot perform. The raid marker, add-on name, and " // " separator are
-    prepended by the code -- MSG_FORMAT must stay body-only. MATCH_* must equal
-    the profession skill names exactly as the game client displays them in this
-    language (they are substring-matched against the client's error text).
+    Translator guidance. Each MSG_FORMAT_* string is one complete announcement
+    body, picked by what the player could not interact with. The code fills four
+    %s placeholders in this fixed order: node name, x coordinate, y coordinate,
+    zone name. Reorder the sentence freely for your language, but never reorder,
+    add, or drop placeholders.
+
+    Nothing precedes the node name, so no article or adjective has to agree with
+    a name whose gender and number are unknown until runtime. Keep that property:
+    if your language reads better with an article, restructure the sentence so
+    the article attaches to a fixed word rather than to the placeholder.
+
+    The raid marker, add-on name, and " // " separator are prepended by the code
+    -- the bodies must stay body-only. MATCH_* must equal the profession skill
+    names exactly as the game client displays them in this language (they are
+    substring-matched against the client's error text).
 ]]
-
-L["ROGUES"] = "Ladinos"
-L["HERBALISTS"] = "Herboristas"
-L["MINERS"] = "Mineiros"
-
-L["ACTION_OPEN"] = "abrir"
-L["ACTION_PICK"] = "coletar"
-L["ACTION_MINE"] = "minerar"
-
-L["PREFIX_LOCKED"] = "um"
-L["PREFIX_HERB"] = "alguma"
-L["PREFIX_MINE"] = "um"
 
 L["MATCH_HERB"] = "Herborismo"
 L["MATCH_MINE"] = "Mineração"
 
-L["MSG_FORMAT"] = "Ei %s, encontrei %s %s que não consigo %s em %s, %s em %s!"
+L["MSG_FORMAT_LOCKED"] = "Ei Ladinos! Encontrei algo que não consigo abrir: %s (%s, %s) em %s."
+L["MSG_FORMAT_HERB"] = "Ei Herboristas! Encontrei algo que não consigo coletar: %s (%s, %s) em %s."
+L["MSG_FORMAT_MINE"] = "Ei Mineiros! Encontrei algo que não consigo minerar: %s (%s, %s) em %s."
 
 --------------------------------------------------------------------------------
 -- Chat
@@ -49,6 +44,8 @@ L["MSG_FORMAT"] = "Ei %s, encontrei %s %s que não consigo %s em %s, %s em %s!"
 
 L["CHAT_LOADED"] =
 	"Versão %s. As configurações (incluindo a opção de desativar esta mensagem) podem ser encontradas em Opções > AddOns > Come & Get It. Gostando do add-on? Conte para um amigo! (="
+
+L["CHAT_TOO_LONG"] = "Este anúncio tem %d bytes e ultrapassa o limite de %d bytes do chat. Encurte-o antes de enviar."
 
 --------------------------------------------------------------------------------
 -- Options Panel
@@ -65,7 +62,7 @@ L["OPTIONS_OUTPUT_NAME"] = "Saída padrão"
 L["OPTIONS_OUTPUT_DESCRIPTION"] =
 	"Escolha para qual canal de chat o anúncio será direcionado. O rascunho abre na sua caixa de chat para que você possa revisá-lo ou redirecioná-lo antes de enviar."
 L["OPTIONS_OUTPUT_NOTE"] =
-	"Observação: Local (/1) é o canal Geral da zona e é específico de cada camada: sua mensagem alcança toda a zona, mas apenas os jogadores na sua camada atual a verão."
+	"Observação: Local (/1) é o canal Geral da zona e é específico de cada camada. Sua mensagem alcança toda a zona, mas apenas os jogadores na sua camada atual a verão."
 
 L["OPTIONS_OUTPUT_CHANNEL1"] = "Local (/1)"
 L["OPTIONS_OUTPUT_SAY"] = "Falar"
