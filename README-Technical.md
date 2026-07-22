@@ -5,17 +5,20 @@ This document combines architecture notes and contribution guidance for develope
 ## File Map
 
 ```
-ComeAndGetIt/
+Come-and-Get-It/
+├── .github/workflows/package.yml   # CurseForge release + library vendoring (canonical, copied verbatim)
+├── .pkgmeta                        # package-as: ComeAndGetIt; library externals + ignore list
+├── LICENSE                         # MIT
 ├── ComeAndGetIt.toc                # Load manifest: Interface versions, SavedVariables, file order
 ├── README.md                       # Player-facing documentation
 ├── README-Technical.md             # This document
 ├── Data/
-│   ├── Data.lua                    # Constants: locked-chest error ID, cooldown, target marker,
-│   │                               #   output-channel manifest, URLs, registry names, ns.PALETTE
+│   ├── Data.lua                    # Constants: locked-chest error ID, cooldown, chat byte limit,
+│   │                               #   target marker, output-channel manifest, URLs, registry, ns.PALETTE
 │   └── Default-Settings.lua        # ns.DATABASE_DEFAULTS — the AceDB-3.0 defaults table (profile only)
 ├── Features/
 │   ├── Core.lua                    # Version resolver, event dispatcher, error->mapping match,
-│   │                               #   AnnounceNode pipeline, AceDB init + legacy-key migration
+│   │                               #   AnnounceNode pipeline, AceDB init + migration block
 │   ├── Utilities.lua               # Derived COLORS table + GetColor accessor
 │   ├── Announcements.lua           # Messaging: PrintMessage / PrintWelcome / BuildAnnounceMessage.
 │   │                               #   NOT AnnounceNode — that lives in Core.lua.
@@ -27,13 +30,15 @@ ComeAndGetIt/
 │   ├── Options-Diagnostics.lua     # Diagnostics panel: gate toggle + gated report buttons (canonical)
 │   └── Options.lua                 # ns.RegisterOptionsPanels() — registers all three; called at login
 ├── Locales/
-│   ├── enUS.lua                    # Default locale (NewLocale(..., true)); the canonical 31-key set
+│   ├── enUS.lua                    # Default locale (NewLocale(..., true)); the canonical 25-key set
 │   └── deDE / esES / esMX / frFR / itIT / koKR / ptBR / ruRU / zhCN / zhTW .lua   # Standalone translations
 └── Includes/
     ├── Images/Come-And-Get-It.tga  # Add-on icon (## IconTexture)
     └── Libraries/                  # Vendored: LibStub, CallbackHandler-1.0, AceLocale-3.0, AceDB-3.0,
                                     #   AceGUI-3.0, AceConfig-3.0 (+ Registry / Cmd / Dialog), AceDBOptions-3.0
 ```
+
+The three root files above the TOC exist in the repo but **not** in an installed copy: `.pkgmeta`'s `ignore` list strips `.github`, `.pkgmeta`, and `LICENSE` from the published zip. Don't be surprised when they're missing from `Interface/AddOns/ComeAndGetIt/`, and don't add them there.
 
 There are no deprecated or dead files. Every `Locales/*.lua` is standalone and translates the full `enUS.lua` key set; none registers another locale's strings.
 
@@ -86,11 +91,10 @@ The two key kinds share one table but occupy disjoint namespaces (integers vs. s
 **Compose — `AnnounceNode(mapping)`** runs cheap suppression gates first, then gathers data:
 
 1. Gates in order: `IsInInstance()` → `InCombatLockdown()` → cooldown (`ns.ANNOUNCE_COOLDOWN`, 5s) → `C_Map` availability.
-2. Node name from `GameTooltipTextLeft1:GetText()`. If nil or empty, bail — there is **no** fallback node name.
+2. Node name from `GameTooltipTextLeft1:GetText()`, read only while `GameTooltip` is shown. If nil or empty, bail — there is **no** fallback node name.
 3. Bag-item suppression via `TooltipShowsItem()`.
 4. Position and zone from the guarded `C_Map` chain.
-5. English-only article fix: `"a"` → `"an"` before a vowel-initial node name (`enUS`/`enGB` only).
-6. Decorated line via `ns:BuildAnnounceMessage("MSG_FORMAT", ...)`; bail if it returns nil.
+5. Decorated line via `ns:BuildAnnounceMessage(mapping.formatKey, ...)`; bail if it returns nil.
 
 **Write** opens — never sends — the chat editbox, pre-filled with the configured channel command:
 
@@ -102,21 +106,23 @@ ChatFrame_OpenChat(command .. " " .. announcement, ChatFrame1)
 
 A guard skips the write entirely if `ChatEdit_GetActiveWindow()` reports the player is already typing, so a draft in progress is never clobbered. `lastAnnounceTime` is stamped only after a successful open, so a bailed attempt never starts the cooldown.
 
+Immediately before the open, `AnnounceNode` measures `#announcement` (bytes, not characters) against `ns.CHAT_MESSAGE_MAX_LENGTH` and prints `L["CHAT_TOO_LONG"]` when it overflows. The draft still opens with the full text: the string is never trimmed, because a byte-wise cut would split a multi-byte character in ruRU/koKR/zhCN, and dropping the zone or coordinates would gut the message. The player edits it down themselves, which the never-auto-send design already assumes. The measurement targets `announcement` alone, not the `command .. " "` prefix, which the client strips as a channel selector rather than sending.
+
 ### Cross-Client API Guards
 
 The add-on ships against Classic Era and TBC Anniversary. Capabilities that differ across clients are resolved by availability, never by truthy result:
 
 - **`C_Map`** may be absent on the earliest Classic builds. `Core.lua` aliases the three needed functions at file scope and `AnnounceNode` bails if any alias is nil.
-- **Tooltip item read** — `TooltipShowsItem` picks `TooltipUtil.GetDisplayedItem` where present, else `GameTooltip:GetItem()`, calling exactly one.
-- **`C_AddOns.GetAddOnMetadata`** vs. the legacy global — `GetVersion` and Diagnostics use a `(modern) or (legacy)` shim; safe here because neither call can return `false`.
+- **Tooltip item read** — `TooltipShowsItem` picks `TooltipUtil.GetDisplayedItem` where present, else `GameTooltip:GetItem()`, calling exactly one. On Classic Era the legacy branch is the live path; `TooltipUtil` does not exist there.
+- **`C_AddOns.GetAddOnMetadata`** vs. the legacy global — `GetVersion` and Diagnostics use a `(modern) or (legacy)` shim; safe here because neither call can return `false`. On 1.15.9 the legacy global is gone, so the modern branch is the live path.
 - **`C_CVar.GetCVar` / `SetCVar`** vs. the legacy globals — the taint-log control picks by availability with an explicit `if`, because a CVar read *can* legitimately return `false`.
 - **`C_EventUtils.IsEventValid`** exists only on newer clients; the event check degrades to `"n/a"` when absent.
 
-`ns.DIAGNOSTIC_API_CHECKS` lists the modern and legacy forms separately so a bug report shows exactly what a given client provides.
+`ns.DIAGNOSTIC_API_CHECKS` lists the modern and legacy forms separately so a bug report shows exactly what a given client provides — a `[FAIL]` on one half of a pair is expected, not a defect, as long as its partner passes.
 
 ### Color System
 
-`Data/Data.lua` holds the raw hex palette as `ns.PALETTE`; `Features/Utilities.lua` derives the `COLORS` table (prefixing each with `|cff`) and exposes `ns.GetColor(key)`, which returns the escape string. Callers append the closing `|r` at the point of use, and each consuming file aliases the accessor once as `local GetColor = ns.GetColor`. An unknown key falls back to `TEXT`.
+`Data/Data.lua` holds the raw hex palette as `ns.PALETTE`; `Features/Utilities.lua` derives the `COLORS` table by looping over the palette (prefixing each entry with `|cff`) and exposes `ns.GetColor(key)`, which returns the escape string. Deriving rather than listing keys by hand means a new palette entry needs registering in one place only. Callers append the closing `|r` at the point of use, and each consuming file aliases the accessor once as `local GetColor = ns.GetColor`. An unknown key falls back to `TEXT`.
 
 The palette carries the BODY/HELP split: `BODY` is white (`FFFFFF`) for descriptions and options body text, `HELP` is silver (`CCCCCC`) for notes and helper text. Every note and hint in the options and diagnostics panels uses `GetColor("HELP")`. `BODY`, `ON`, and `OFF` are defined but currently unreferenced — that is deliberate; the palette is a fixed house set and unused keys stay.
 
@@ -129,21 +135,22 @@ The sent line is decorated in one place. `ns:BuildAnnounceMessage(formatKey, ...
 ns.TARGET_MARKER .. " " .. L["ADDON_TITLE"] .. " // " .. string.format(template, ...)
 ```
 
-So each locale's `MSG_FORMAT` is the **body only** — seven positional `%s`, filled by `AnnounceNode` in this fixed order: role, prefix/article, node name, action verb, x coord, y coord, zone name.
+There are three bodies, one per trigger, and `ERROR_MAPPING` selects which by carrying a `formatKey`. Each is the **body only** — four positional `%s`, filled by `AnnounceNode` in this fixed order: node name, x coord, y coord, zone name.
 
 ```lua
--- L["MSG_FORMAT"] (enUS) — body only, no marker or name
-"Hey %s, I came across %s %s that I can't %s at %s, %s in %s!"
+-- L["MSG_FORMAT_MINE"] (enUS) — body only, no marker or name
+"Hey Miners, I came across something I can't mine: %s at %s, %s in %s!"
 ```
 
 Produces, e.g.:
 
-> {rt7} Come & Get It // Hey Miners, I came across a Rich Thorium Vein that I can't mine at 25, 54 in Eastern Plaguelands!
+> {rt7} Come & Get It // Hey Miners, I came across something I can't mine: Rich Thorium Vein at 25, 54 in Eastern Plaguelands!
 
-Two non-obvious rules govern this:
+Three non-obvious rules govern this:
 
 - **The marker lives only in `ns.TARGET_MARKER` (`Data.lua`).** It is applied at send time, never baked into a locale body. A locale that re-adds the marker or name double-prefixes.
-- **Placeholder order is coupled across all locales.** A translation may reorder the *sentence* (German moves the coordinates into a trailing parenthetical) but must keep the seven `%s` in the same logical order, count, and type. A `%s`/`%d` mismatch crashes at runtime.
+- **Placeholder order is coupled across all locales.** A translation may reorder the *sentence* freely but must keep the four `%s` in the same logical order, count, and type. A `%s`/`%d` mismatch crashes at runtime.
+- **Nothing precedes the node name, and that is load-bearing.** The role and verb are baked into each sentence rather than passed as fragments, so no article or adjective ever has to agree with a name whose gender and number are unknown until runtime. The old fragment design forced exactly that and was unfixable in gendered languages: deDE rendered "ein Goldader" where "Ader" is feminine. A translation that reintroduces an article directly before `%s` reintroduces the bug.
 
 `BuildAnnounceMessage` also strips stray pipes (`|`) from the finished body — safe because announcement bodies never carry item links — and returns nil if the format key is missing, which `AnnounceNode` treats as "say nothing."
 
@@ -158,7 +165,7 @@ Two non-obvious rules govern this:
 Two derived lookups trace back to it so the list, its order, and the command mapping can never drift:
 
 - `Core.lua` builds `OUTPUT_COMMAND` (`key -> command`) for the write step.
-- `Options-General.lua` builds the dropdown's `values`/`sorting` from the same manifest, labels localized at display time.
+- `Options-General.lua` builds the dropdown's `values`/`sorting` from the same manifest, labels resolved once at load.
 
 The chosen key is saved to `ns.db.profile.defaultOutput`; array order is dropdown order. Adding a channel is one row here plus its `OPTIONS_OUTPUT_*` locale string. Local (`/1`) is the zone General channel — layer-specific in Classic, which the option's note string calls out.
 
@@ -193,7 +200,10 @@ The third argument (`true`) puts every character on one shared "Default" profile
 
 ### Migration Chain
 
-- **Flat-key lift** — an unnamed inline block at the end of `InitSavedVariables`, tagged `MIGRATION (remove after 2026-10-08)`. Pre-AceDB builds stored `showWelcome` / `defaultOutput` at the root of `ComeAndGetItDB`; on first login it lifts any such root value into `ns.db.profile` and clears the root key. Delete the block once the window closes — there is no legacy TOC entry to drop.
+Two cleanups share one inline block at the end of `InitSavedVariables`, under a single tag: `MIGRATION (remove after 2026-10-08)`. Delete the whole block once the window closes — there is no legacy TOC entry to drop.
+
+- **Flat-key lift** — pre-AceDB builds stored `showWelcome` / `defaultOutput` at the root of `ComeAndGetItDB`; on first login it lifts any such root value into `ns.db.profile` and clears the root key.
+- **Dead-key deletion** — `announceOnClick` was a setting in an earlier build and is gone from the code, but AceDB never removes it: a key absent from `ns.DATABASE_DEFAULTS` is ordinary user data, not a managed default, so it persists untouched forever. The block clears it by iterating `ns.db.profiles`, AceDB's table of *every* stored profile, rather than touching `ns.db.profile` alone — that would clean only whichever profile happened to be active at login and leave the key in all the others. The active profile is itself a member of that table, so no separate pass is needed.
 
 Defaults come from `ns.DATABASE_DEFAULTS` and are applied lazily by AceDB-3.0 via metatables — nothing is copied into the saved table, and explicit user values (including `false`) are never overridden.
 
@@ -202,8 +212,8 @@ There are no default item or spell lists, so there is no refill-on-empty logic.
 ## Adding a New Tracked Node Type
 
 1. **Identify the trigger.** If the client fires a *stable numeric* UI error ID, add it as a constant in `Data/Data.lua` (mirroring `ns.ERROR_ID_LOCKED_CHEST = 268`). If it fires only a localized *"Requires &lt;Skill&gt;"* string, match a localized substring instead — no constant needed.
-2. **Add an `ERROR_MAPPING` entry** in `Features/Core.lua`, keyed by the numeric ID (fast path) **or** by `L["MATCH_…"]` (substring path), with `role`, `prefix`, and `action`.
-3. **Add every referenced `L` key** to `Locales/enUS.lua` first: the role, prefix/article, action verb, and the `MATCH_…` skill string if you matched by substring. The Localization pass translates the rest.
+2. **Add an `ERROR_MAPPING` entry** in `Features/Core.lua`, keyed by the numeric ID (fast path) **or** by `L["MATCH_…"]` (substring path), carrying a single `formatKey` naming its `MSG_FORMAT_…` body.
+3. **Add every referenced `L` key** to `Locales/enUS.lua` first: the new `MSG_FORMAT_…` body, and the `MATCH_…` skill string if you matched by substring. Write the body with nothing preceding its leading `%s`. The Localization pass translates the rest.
 4. **Keep the key namespaces disjoint** — numeric keys take the fast path, string keys are lowercased and substring-scanned. Never reuse a number as a string key.
 5. **Watch the line length.** The composed announcement is a chat message, so the ceiling is the **255-byte chat line** — see Localization → Locale overflow.
 
@@ -212,6 +222,8 @@ There are no default item or spell lists, so there is no refill-on-empty logic.
 1. Add the default under `profile` in `ns.DATABASE_DEFAULTS` (`Data/Default-Settings.lua`); AceDB applies it lazily.
 2. Add a widget to `ns.BuildGeneralOptions()` in `Options/Options-General.lua` whose `get`/`set` read and write `ns.db.profile.<key>`. Guard the `get` with `ns.db and …`.
 3. Add the `L` keys to `Locales/enUS.lua`. Key names spell words out — `OPTIONS_<FEATURE>_NAME` and `OPTIONS_<FEATURE>_DESCRIPTION`, never `_DESC`.
+
+**Removing one is not the reverse of this.** Deleting the default and the widget leaves the key sitting in every existing player's saved profile forever, because AceDB only manages keys that are in the defaults table. Every removal needs a dated cleanup line in the migration block that iterates `ns.db.profiles` — see Saved Variables → Migration Chain for the shape.
 
 ## Adding a New Diagnostic Report
 
@@ -225,22 +237,27 @@ Append the event name to `ns.EVENT_NAMES` in `Features/Core.lua` and handle it i
 
 ## Localization
 
-- **Structure** — locale files live in `Locales/<locale>.lua`, each registered through AceLocale-3.0's `NewLocale`. `enUS.lua` is the source of truth and the only file that passes the `true` default-fallback flag; every string originates there and the other locales translate from it. The current key set is 31 keys, identical in all 11 files.
+- **Structure** — locale files live in `Locales/<locale>.lua`, each registered through AceLocale-3.0's `NewLocale`. `enUS.lua` is the source of truth and the only file that passes the `true` default-fallback flag; every string originates there and the other locales translate from it. The current key set is 25 keys, identical in all 11 files.
 - **Keeping locales in sync** — AceLocale falls back to English via `__index` for anything missing at runtime, so a missing key degrades to English rather than erroring. Translating each `enUS.lua` key into every locale and keeping the files aligned is the job of the Localization pass (`3 - Copy Cleanup & Localization Prompt.md`); don't hand-edit the other locales during ordinary work. When you add or rename a key, change `enUS.lua` and every code reference in the same commit.
-- **Placeholders** — `%s`/`%d` count, type, and order must match `enUS` per key in every locale, or the string crashes at runtime. `MSG_FORMAT`'s seven `%s` are the critical case; an in-file comment block documents their order for translators.
+- **Placeholders** — `%s`/`%d` count, type, and order must match `enUS` per key in every locale, or the string crashes at runtime. The `MSG_FORMAT_*` bodies (four `%s` each) are the critical case; an in-file comment block documents their order for translators. `CHAT_TOO_LONG`'s two `%d` are the silent case: swapping them does not crash, it just reports the numbers backwards.
+- **Keys reached indirectly** — eight of the 25 keys are never written as `L["KEY"]` anywhere in the code. The three `MSG_FORMAT_*` bodies resolve through `mapping.formatKey`, and the five `OPTIONS_OUTPUT_*` labels through `channel.labelKey`. A search for `L["` will report all eight as unused; they are not. Match bare string literals too before deleting anything.
 - **Spanish** — esES/esMX are two separate, self-contained files; identical Spanish in both is correct and expected.
-- **Locale overflow** — the ceiling is the **255-byte chat line**, and it is measured in *bytes*, not characters. German is the usual first suspect, but for this add-on the longest composed line is Russian: measured worst cases are ruRU 199 bytes and koKR 185, against deDE 171 and enUS 142. Cyrillic runs two bytes per character and CJK three, so check those locales, not just German, when `MSG_FORMAT` or the role/prefix/action strings grow.
+- **Locale overflow** — the ceiling is the **255-byte chat line**, and it is measured in *bytes*, not characters. German is the usual first suspect, but for this add-on the longest composed line is Russian. Measured against a Cyrillic-scale worst case (42-byte node name, 44-byte zone), the tightest locales are ruRU 217 bytes and koKR 209, against deDE 206, frFR 201, and enUS 178. Cyrillic runs two bytes per character and CJK three, so check those locales, not just German, whenever a `MSG_FORMAT_*` body grows. `AnnounceNode` also measures the composed line at runtime and warns the player when it overflows (see Detect → Compose → Write), but that is a backstop for the long-node-name-in-a-long-zone tail: measuring at translation time is still the first line of defence, because the runtime warning fires after the fact and only the player sees it.
 
 ## Common Pitfalls
 
 - **Announcing in combat**: `ChatFrame_OpenChat` steals keyboard focus and breaks movement. `AnnounceNode` deliberately *drops* the announcement when `InCombatLockdown()` is true — don't "fix" it into a deferred queue.
 - **`Announcements.lua` is misnamed**: it holds only the messaging helpers (`PrintMessage`, `PrintWelcome`, `BuildAnnounceMessage`). The node-announce logic is `AnnounceNode` in `Core.lua`.
 - **Baking the marker into a locale string**: the target marker lives only in `ns.TARGET_MARKER` and is applied by `BuildAnnounceMessage`. A body that includes `{rt7}` or the add-on name double-prefixes the sent line.
-- **Reordering `%s` in a locale's `MSG_FORMAT`**: argument order is fixed by the `AnnounceNode` call site across all locales. Reorder the sentence freely, but not the placeholders.
+- **Reordering `%s` in a locale's `MSG_FORMAT_*`**: argument order is fixed by the `AnnounceNode` call site across all locales. Reorder the sentence freely, but not the placeholders.
+- **Putting an article back in front of the node name**: the three `MSG_FORMAT_*` bodies deliberately lead into `%s` with nothing attached to it. An article or adjective there has to agree with a name whose gender and number are not known until runtime, which no translation can satisfy.
+- **Deleting a setting without a cleanup line**: removing it from `ns.DATABASE_DEFAULTS` and the options panel does not remove it from anyone's save file — AceDB only manages keys present in the defaults. `announceOnClick` survived that way and had to be swept later. Pair every removal with a dated migration-block deletion.
 - **Bag lockboxes**: a locked lockbox in the player's own bags fires the same error (`268`) as a world chest. `AnnounceNode` suppresses it via `TooltipShowsItem`; removing that gate calls out inventory items with world coordinates.
+- **Stale tooltip text**: WoW does not clear `GameTooltipTextLeft1` when a tooltip hides, so the FontString keeps returning the last thing hovered. `GetNodeName` therefore reads it only while `GameTooltip:IsShown()` is true. Drop that check and an error arriving with nothing hovered drafts the previous node's name, or a creature's, against your current coordinates. `TooltipShowsItem` does not cover this: it catches item tooltips only, not unit tooltips or stale text.
 - **Registering an event outside `EVENT_NAMES`**: Diagnostics' registration check and event log silently miss it. Always append to `ns.EVENT_NAMES`.
 - **Registering options panels at file scope**: the Profiles panel is built from `AceDBOptions:GetOptionsTable(ns.db)`, so it needs the database. Core calls `ns.RegisterOptionsPanels()` after `ns.db` exists; registering at file scope errors.
 - **Assuming `C_Map` exists**: it is nil on early Classic builds. Use the file-scope aliases and bail like `AnnounceNode` does.
+- **Reading a `[FAIL]` in the API report as a bug**: the manifest lists modern and legacy forms as separate rows on purpose. On 1.15.9, `GetAddOnMetadata (legacy)` and `TooltipUtil.GetDisplayedItem` both fail, and both are fine — their partners pass and the guards pick by availability.
 - **Using `GetColor("BODY")` for helper text**: `BODY` is white. Notes, hints, and pro tips use `GetColor("HELP")` (silver).
 - **Putting diagnostics text in `Locales/`**: diagnostics strings are intentionally English-only and live in `ns.DiagnosticsStrings`.
 - **Treating `ns.diagnostics` as persistent**: it is runtime-only and resets each session. Only `ComeAndGetItDB` survives a reload.
@@ -252,11 +269,11 @@ Append the event name to `ns.EVENT_NAMES` in `Features/Core.lua` and handle it i
 - **Bug reports** should include: game version + locale, character class + level, repro steps, and the relevant chat output — ideally the drafted announcement line, or a **Detection Context** report from the Diagnostics panel.
 - **Discord**: [discord.gg/eh8hKq992Q](https://discord.gg/eh8hKq992Q).
 - **Pull requests**:
-  - Keep each PR scoped to one change. Match the surrounding style (vararg namespace modules, `--` section banners, present-tense intent comments that explain *why*).
-  - Run StyLua with its default configuration before committing; the repo ships no `.stylua.toml`.
+  - Keep each PR scoped to one change. Match the surrounding style (vararg namespace modules, dashed section dividers, and comments reserved for the non-obvious *why*).
+  - Run StyLua with its default configuration before committing; the repo ships no `.stylua.toml`. Default output includes LF line endings.
   - Respect load order and the single-source-of-truth tables (`EVENT_NAMES`, `ERROR_MAPPING`, `OUTPUT_CHANNELS`, `PALETTE`, `DiagnosticsStrings`).
-  - If you change `MSG_FORMAT` or any locale string, verify the longest composed line stays within the **255-byte chat limit** (check ruRU and koKR, not just deDE) and keep the seven `%s` order intact.
-  - Saved-variable discipline: add settings as `ns.DATABASE_DEFAULTS.profile` defaults; any table or key reshape gets a dated `MIGRATION (remove after …)` block, never a rewrite of existing user values.
+  - If you change a `MSG_FORMAT_*` body or any locale string, verify the longest composed line stays within the **255-byte chat limit** (check ruRU and koKR, not just deDE) and keep the four `%s` order intact. The runtime check in `AnnounceNode` warns the player past that ceiling, but it does not excuse skipping the measurement: it fires only once the line has already overflowed.
+  - Saved-variable discipline: add settings as `ns.DATABASE_DEFAULTS.profile` defaults; any table or key reshape gets a dated `MIGRATION (remove after …)` block, never a rewrite of existing user values. Removing a setting needs a cleanup line, not just a deletion.
   - Update this document if the architecture or file map changes.
 - **Commit and PR descriptions require a User Story.** Don't just say "I changed X." Frame it as who it helps and why:
 

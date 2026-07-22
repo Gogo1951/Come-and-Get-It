@@ -1,5 +1,5 @@
 ## Title: Come & Get It
-## Notes: Found an herb you can't pick, an ore vein you can't mine, or a locked treasure chest with no Rogue around? Right-click it and Come & Get It drafts a chat message with the node name and coordinates, ready to share. Being a hero has never been easier.
+## Notes: Found an herb you can't pick, a mineral vein you can't mine, or a locked treasure chest with no Rogue in sight? Right-click it, and Come & Get It creates a message you can use to share or broadcast the coordinates. Being a hero has never been so easy.
 ## Author: Gogo1951
 
 ## Category-enUS: Other
@@ -14,10 +14,10 @@
 ## Category-zhCN: 其它
 ## Category-zhTW: 其他
 
-## IconTexture: Interface/AddOns/ComeAndGetIt/Includes/Images/Come-And-Get-It.tga
+## IconTexture: Interface/AddOns/ComeAndGetIt/Includes/Images/Come-and-Get-It.tga
 ## X-License: MIT
 
-## Interface: 11508, 20506
+## Interface: 11509, 20506
 ## Version: @project-version@
 ## X-Curse-Project-ID: 1128926
 ## X-Wago-ID: QN537vKB

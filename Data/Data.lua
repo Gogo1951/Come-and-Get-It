@@ -10,6 +10,9 @@ ns.ERROR_ID_LOCKED_CHEST = 268
 
 ns.ANNOUNCE_COOLDOWN = 5
 
+-- The client measures a sent chat body in bytes, not characters.
+ns.CHAT_MESSAGE_MAX_LENGTH = 255
+
 --------------------------------------------------------------------------------
 -- Target Marker
 --------------------------------------------------------------------------------
