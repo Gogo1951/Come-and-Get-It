@@ -48,14 +48,21 @@ There are no deprecated or dead files. Every `Locales/*.lua` is standalone and t
 
 ### Module Layout & Load Order
 
-Every file is a vararg module — `local ADDON_NAME, ns = ...` where the file needs the name, `local _, ns = ...` otherwise, and `local L = ns.L` only in files that read `L`. All files share the one namespace table, so the only globals are `ComeAndGetItDB` (owned by AceDB) and the anonymous event frame in `Core.lua`. Load order in `ComeAndGetIt.toc` is load-bearing:
+Every file is a vararg module — `local ADDON_NAME, ns = ...` where the file needs the name, `local _, ns = ...` otherwise, and `local L = ns.L` only in files that read `L`. All files share the one namespace table, so `ComeAndGetItDB` — created and owned by AceDB — is the add-on's **only** global. Both frames are file-locals built by `CreateFrame("Frame")` with no name argument (the dispatcher in `Core.lua`, the registration probe in `Diagnostics.lua`), so neither reaches `_G`. Load order in `ComeAndGetIt.toc` is load-bearing:
 
 1. **Libraries** — LibStub through AceDBOptions-3.0, in the fixed order the AceConfig stack requires.
 2. **Locales** — `enUS.lua` first (it owns the `true` default flag); the rest fill their own client locale.
 3. **Data** — `Data.lua` resolves `ns.L` and publishes constants; `Default-Settings.lua` publishes `ns.DATABASE_DEFAULTS`.
 4. **Features then Options** — Core wires events; Utilities / Announcements / Diagnostics add helpers; `Options.lua` loads last and defines `ns.RegisterOptionsPanels()`, which Core calls at login.
 
-Anything reading `ns.L` or a constant must load *after* `Data/Data.lua`. `Options-Utilities.lua` must load before `Options-General.lua`, which grabs the widget builders at file scope.
+Anything reading `ns.L` or a constant must load *after* `Data/Data.lua`. Four files resolve a dependency at *file scope* rather than at call time, which is what makes their position load-bearing rather than merely tidy:
+
+- `Features/Core.lua` builds `ERROR_MAPPING` and `OUTPUT_COMMAND` from `L["MATCH_…"]` and `ns.OUTPUT_CHANNELS` — needs `Data/Data.lua`.
+- `Features/Announcements.lua` aliases `ns.GetColor` — needs `Features/Utilities.lua`.
+- `Options/Options-General.lua` aliases the widget builders and resolves the dropdown labels — needs `Options-Utilities.lua` and `Data/Data.lua`.
+- `Options/Options-Diagnostics.lua` aliases `ns.DiagnosticsStrings` and `ns.GetColor` — needs `Features/Diagnostics.lua` and `Features/Utilities.lua`.
+
+Everything else reaches through `ns` at call time and is order-independent.
 
 ### Event Loop
 
@@ -69,28 +76,34 @@ The `OnEvent` handler is the only dispatcher, and runs in order:
 
 1. **Diagnostics tap** — if `ns.diagnostics.logging` is true, `ns:LogEvent(event, ...)` records the event first. A single boolean guard makes the tap free when logging is off.
 2. **`PLAYER_LOGIN`** — `InitSavedVariables()`, then `ns.RegisterOptionsPanels()`, then `ns:PrintWelcome()`.
-3. **`UI_ERROR_MESSAGE`** — `MatchError(messageID, message)`; on a match, `AnnounceNode(mapping)`.
+3. **`UI_ERROR_MESSAGE`** — `CanAnnounce()`, and only then `MatchError(messageID, message)`; on a match, `AnnounceNode(mapping)`.
 
-There is no throttling at the dispatcher; rate limiting lives in `AnnounceNode`'s cooldown gate. `EVENT_NAMES` is exported and reused by Diagnostics' registration check, so the probe can never drift. Add events by appending to this table, never by calling `RegisterEvent` ad hoc.
+The suppression gates run *before* matching on purpose. `UI_ERROR_MESSAGE` fires for every "Out of range" and "Not enough rage" the client shows, hardest in combat — exactly when `CanAnnounce` is guaranteed to say no — and `MatchError`'s slow path lowercases the message before scanning it. Gating first makes the discarded case allocation-free. The visible cost is that the `ns:LogEvent("GetNodeName", ...)` tap fires only on a match, so it is silent for errors seen in combat or in an instance; the `UI_ERROR_MESSAGE` entry itself is still logged, so the event timeline stays intact.
+
+`EVENT_NAMES` is exported and reused by Diagnostics' registration check, so the probe can never drift. Add events by appending to this table, never by calling `RegisterEvent` ad hoc.
 
 ### Combat Lockdown
 
-`AnnounceNode` returns immediately when `InCombatLockdown()` is true. This is **intentional and load-bearing, not a missing feature**: the write step calls `ChatFrame_OpenChat`, which steals keyboard focus and breaks WASD movement mid-fight. The announcement is *dropped*, not queued — a stale node callout after combat ends is noise, and the node re-fires its `UI_ERROR_MESSAGE` on the next interaction. Do not replace this with a deferred-replay queue.
+`CanAnnounce` returns false when `InCombatLockdown()` is true, so the dispatcher drops the error before it is even matched. This is **intentional and load-bearing, not a missing feature**: the write step calls `ChatFrame_OpenChat`, which steals keyboard focus and breaks WASD movement mid-fight. The announcement is *dropped*, not queued — a stale node callout after combat ends is noise, and the node re-fires its `UI_ERROR_MESSAGE` on the next interaction. Do not replace this with a deferred-replay queue.
 
 ### Detect → Compose → Write
 
 The announcement pipeline is the add-on's core flow, all in `Features/Core.lua`.
 
+**Gate — `CanAnnounce()`** runs first, in the dispatcher: `IsInInstance()` → `InCombatLockdown()` → cooldown (`ns.ANNOUNCE_COOLDOWN`, 5s). It has one call site, so the gates live only here.
+
 **Detect — `MatchError(messageID, message)`** uses two key kinds against one `ERROR_MAPPING` table:
 
 - **Fast path (numeric):** locked chests fire a stable Blizzard error ID (`ns.ERROR_ID_LOCKED_CHEST = 268`), looked up directly.
-- **Slow path (string):** herb/mine nodes fire a generic localized *"Requires &lt;Skill&gt;"* message with no stable ID, so the lowercased message is substring-scanned against `L["MATCH_HERB"]` / `L["MATCH_MINE"]`. A load-time `LOWER_MATCH` table keeps the hot path from re-lowercasing constants.
+- **Slow path (string):** herb and mine nodes **both** fire error `272` with a localized *"Requires &lt;Skill&gt;"* body (confirmed by `/etrace`, 2026-07-23). The ID is stable, but it is the same for both, so it establishes only that a profession skill was missing, never which one. Telling a herb from a vein requires the skill name, so the lowercased message is substring-scanned against `L["MATCH_HERB"]` / `L["MATCH_MINE"]`. A load-time `LOWER_MATCH` table keeps the hot path from re-lowercasing constants.
 
-The two key kinds share one table but occupy disjoint namespaces (integers vs. strings); the integer is checked first, then string keys only on a miss. Substring matching is an accepted tradeoff, documented at the call site: no gather error carries a numeric ID stable across the supported clients, word-boundary patterns break CJK locales, and the residual risk is bounded because the add-on never auto-sends.
+The two key kinds share one table but occupy disjoint namespaces (integers vs. strings); the integer is checked first, then string keys only on a miss. Substring matching is an accepted tradeoff, documented at the call site: error `272` cannot disambiguate the two gather skills, word-boundary patterns break CJK locales, and the residual risk is bounded because the add-on never auto-sends. **Do not "simplify" herb/mine onto the error ID** — both share `272`, so keying on it would collapse the two node types into one and announce every vein as a herb.
 
-**Compose — `AnnounceNode(mapping)`** runs cheap suppression gates first, then gathers data:
+Gating the scan behind `messageID == 272` (so it runs only on skill-requirement errors instead of every `UI_ERROR_MESSAGE`) was considered and declined, 2026-07-23. It would narrow the false-positive surface, but `272` has only been observed on one flavor, and the string path means normal play never exercises the ID — so a mismatch on the other flavor would kill herb and mine detection silently. All three node types are confirmed working on Classic Era and TBC Anniversary as built. Revisit only with an `/etrace` capture of the gather error from **both** clients.
 
-1. Gates in order: `IsInInstance()` → `InCombatLockdown()` → cooldown (`ns.ANNOUNCE_COOLDOWN`, 5s) → `C_Map` availability.
+**Compose — `AnnounceNode(mapping)`** gathers data, having already cleared the gates:
+
+1. `C_Map` availability.
 2. Node name from `GameTooltipTextLeft1:GetText()`, read only while `GameTooltip` is shown. If nil or empty, bail — there is **no** fallback node name.
 3. Bag-item suppression via `TooltipShowsItem()`.
 4. Position and zone from the guarded `C_Map` chain.
@@ -183,27 +196,42 @@ Design constraints:
 
 ## Saved Variables
 
-A single account-wide `SavedVariables` table, `ComeAndGetItDB`, declared in the `.toc` and managed by **AceDB-3.0**. Every user setting lives under the active profile:
+A single account-wide `SavedVariables` table, `ComeAndGetItDB`, declared in the `.toc` and managed by **AceDB-3.0**.
+
+**Come & Get It is a Simple add-on.** Every setting lives under `ns.db.profile`, and all characters share one `"Default"` profile:
 
 | Field (`ns.db.profile`) | Type | Default | Holds |
 | --- | --- | --- | --- |
 | `showWelcome` | boolean | `true` | Whether `PrintWelcome` prints the version/settings line on login |
 | `defaultOutput` | string | `"channel1"` | Which `ns.OUTPUT_CHANNELS` key the draft is addressed to |
 
-`ns.db.global` is unused — it is reserved for a minimap-button position, and this add-on has no minimap button. The database is created in `InitSavedVariables` (`Features/Core.lua`) on `PLAYER_LOGIN`:
+`ns.db.global` is deliberately empty, and that is the load-bearing part. `ns.db:ResetProfile()` — the stock **Reset Profile** control on the Profiles panel — clears `ns.db.profile` and nothing else; it never touches `ns.db.global`. A setting parked in `global` therefore *survives* a reset, so the button silently fails to restore it and the panel lies to the player. Keeping every setting in the profile is what makes Reset Profile a true factory reset. Do not "converge" these fields to `global`.
+
+The database is created in `InitSavedVariables` (`Features/Core.lua`) on `PLAYER_LOGIN`:
 
 ```lua
 ns.db = LibStub("AceDB-3.0"):New("ComeAndGetItDB", ns.DATABASE_DEFAULTS, true)
 ```
 
-The third argument (`true`) puts every character on one shared "Default" profile; per-character profiles are opt-in through the stock Profiles panel.
+The third argument (`true`) is what puts every character on the shared `"Default"` profile, so settings apply account-wide in practice and one reset resets them everywhere. Per-character profiles remain available through the stock Profiles panel for anyone who wants them.
+
+Immediately after the database is created, `ns:ApplyProfile` is registered against AceDB's `OnProfileChanged`, `OnProfileReset`, and `OnProfileCopied` callbacks. Those fire on a reset, a switch, or a copy, and only settings read live from the database update on their own — an options panel already on screen keeps rendering the values it was built with, so without the hook a reset appears to do nothing until a `/reload`. Come & Get It applies nothing imperatively (no frames, no events registered off a toggle, no minimap button), so `ApplyProfile` does one thing: `NotifyChange` on each `ns.OPTIONS_REGISTRY` name, so any open panel redraws. It is registered before `ns.RegisterOptionsPanels()` runs, which is safe because `NotifyChange` early-returns on a name that is not yet registered.
+
+### Simple vs. Per Character
+
+Two saved-variable models exist across these add-ons, and which one an add-on uses is a design decision made up front, not something to infer from the code:
+
+- **Simple** (Come & Get It, Play It Forward) — every setting in `ns.db.profile`, all characters on the shared `"Default"` profile via `AceDB:New`'s `true` third argument. Settings are effectively account-wide, and Reset Profile restores everything to install defaults.
+- **Per Character** (Magic Eraser, Tracking Eye) — account-wide behavior settings in `ns.db.global`, genuinely per-character state in `ns.db.profile`, and no `true` third argument so each character gets its own `"Name - Realm"` profile. Reset Profile clears only that character's state, and an `OnProfileReset` hook re-applies the account-wide settings.
+
+Moving an add-on between models is a saved-variable migration, not a refactor.
 
 ### Migration Chain
 
-Two cleanups share one inline block at the end of `InitSavedVariables`, under a single tag: `MIGRATION (remove after 2026-10-08)`. Delete the whole block once the window closes — there is no legacy TOC entry to drop.
+Two cleanups share one inline block at the end of `InitSavedVariables`, under a single tag: `MIGRATION (remove after 2026-08-15)`. Delete the whole block once the window closes — there is no legacy TOC entry to drop.
 
 - **Flat-key lift** — pre-AceDB builds stored `showWelcome` / `defaultOutput` at the root of `ComeAndGetItDB`; on first login it lifts any such root value into `ns.db.profile` and clears the root key.
-- **Dead-key deletion** — `announceOnClick` was a setting in an earlier build and is gone from the code, but AceDB never removes it: a key absent from `ns.DATABASE_DEFAULTS` is ordinary user data, not a managed default, so it persists untouched forever. The block clears it by iterating `ns.db.profiles`, AceDB's table of *every* stored profile, rather than touching `ns.db.profile` alone — that would clean only whichever profile happened to be active at login and leave the key in all the others. The active profile is itself a member of that table, so no separate pass is needed.
+- **Dead-key deletion** — `announceOnClick` was a setting in an earlier build and is gone from the code, but AceDB never removes it: a key absent from `ns.DATABASE_DEFAULTS` is ordinary user data, not a managed default, so it persists untouched forever. The block clears it by iterating `ns.db.profiles`, AceDB's table of *every* stored profile, rather than touching `ns.db.profile` alone — that would clean only whichever profile happened to be active at login and leave the key in all the others. The active profile is itself a member of that table, so no separate pass is needed. **Only ever add dead keys to this sweep.** `showWelcome` and `defaultOutput` are live settings stored in the profile, so nilling them here would wipe the player's choices on every login.
 
 Defaults come from `ns.DATABASE_DEFAULTS` and are applied lazily by AceDB-3.0 via metatables — nothing is copied into the saved table, and explicit user values (including `false`) are never overridden.
 
@@ -219,11 +247,11 @@ There are no default item or spell lists, so there is no refill-on-empty logic.
 
 ## Adding a New Setting
 
-1. Add the default under `profile` in `ns.DATABASE_DEFAULTS` (`Data/Default-Settings.lua`); AceDB applies it lazily.
+1. Add the default under `profile` in `ns.DATABASE_DEFAULTS` (`Data/Default-Settings.lua`); AceDB applies it lazily. Everything goes under `profile` in a Simple add-on — putting a setting in `global` would exempt it from Reset Profile.
 2. Add a widget to `ns.BuildGeneralOptions()` in `Options/Options-General.lua` whose `get`/`set` read and write `ns.db.profile.<key>`. Guard the `get` with `ns.db and …`.
 3. Add the `L` keys to `Locales/enUS.lua`. Key names spell words out — `OPTIONS_<FEATURE>_NAME` and `OPTIONS_<FEATURE>_DESCRIPTION`, never `_DESC`.
 
-**Removing one is not the reverse of this.** Deleting the default and the widget leaves the key sitting in every existing player's saved profile forever, because AceDB only manages keys that are in the defaults table. Every removal needs a dated cleanup line in the migration block that iterates `ns.db.profiles` — see Saved Variables → Migration Chain for the shape.
+**Removing one is not the reverse of this.** Deleting the default and the widget leaves the key sitting in every existing player's save file forever, because AceDB only manages keys that are in the defaults table. Every removal needs a dated cleanup line in the migration block that iterates `ns.db.profiles`, so no stored profile keeps a copy. See Saved Variables → Migration Chain for the shape.
 
 ## Adding a New Diagnostic Report
 
@@ -242,11 +270,11 @@ Append the event name to `ns.EVENT_NAMES` in `Features/Core.lua` and handle it i
 - **Placeholders** — `%s`/`%d` count, type, and order must match `enUS` per key in every locale, or the string crashes at runtime. The `MSG_FORMAT_*` bodies (four `%s` each) are the critical case; an in-file comment block documents their order for translators. `CHAT_TOO_LONG`'s two `%d` are the silent case: swapping them does not crash, it just reports the numbers backwards.
 - **Keys reached indirectly** — eight of the 25 keys are never written as `L["KEY"]` anywhere in the code. The three `MSG_FORMAT_*` bodies resolve through `mapping.formatKey`, and the five `OPTIONS_OUTPUT_*` labels through `channel.labelKey`. A search for `L["` will report all eight as unused; they are not. Match bare string literals too before deleting anything.
 - **Spanish** — esES/esMX are two separate, self-contained files; identical Spanish in both is correct and expected.
-- **Locale overflow** — the ceiling is the **255-byte chat line**, and it is measured in *bytes*, not characters. German is the usual first suspect, but for this add-on the longest composed line is Russian. Measured against a Cyrillic-scale worst case (42-byte node name, 44-byte zone), the tightest locales are ruRU 217 bytes and koKR 209, against deDE 206, frFR 201, and enUS 178. Cyrillic runs two bytes per character and CJK three, so check those locales, not just German, whenever a `MSG_FORMAT_*` body grows. `AnnounceNode` also measures the composed line at runtime and warns the player when it overflows (see Detect → Compose → Write), but that is a backstop for the long-node-name-in-a-long-zone tail: measuring at translation time is still the first line of defence, because the runtime warning fires after the fact and only the player sees it.
+- **Locale overflow** — the ceiling is the **255-byte chat line**, and it is measured in *bytes*, not characters. German is the usual first suspect, but for this add-on the longest composed line is Russian. Measured against a Cyrillic-scale worst case (42-byte node name, 44-byte zone), the tightest locales are ruRU 217 bytes and koKR 210, against deDE 206, frFR 202, and enUS 178. Cyrillic runs two bytes per character and CJK three, so check those locales, not just German, whenever a `MSG_FORMAT_*` body grows. `AnnounceNode` also measures the composed line at runtime and warns the player when it overflows (see Detect → Compose → Write), but that is a backstop for the long-node-name-in-a-long-zone tail: measuring at translation time is still the first line of defence, because the runtime warning fires after the fact and only the player sees it.
 
 ## Common Pitfalls
 
-- **Announcing in combat**: `ChatFrame_OpenChat` steals keyboard focus and breaks movement. `AnnounceNode` deliberately *drops* the announcement when `InCombatLockdown()` is true — don't "fix" it into a deferred queue.
+- **Announcing in combat**: `ChatFrame_OpenChat` steals keyboard focus and breaks movement. `CanAnnounce` deliberately *drops* the announcement when `InCombatLockdown()` is true — don't "fix" it into a deferred queue.
 - **`Announcements.lua` is misnamed**: it holds only the messaging helpers (`PrintMessage`, `PrintWelcome`, `BuildAnnounceMessage`). The node-announce logic is `AnnounceNode` in `Core.lua`.
 - **Baking the marker into a locale string**: the target marker lives only in `ns.TARGET_MARKER` and is applied by `BuildAnnounceMessage`. A body that includes `{rt7}` or the add-on name double-prefixes the sent line.
 - **Reordering `%s` in a locale's `MSG_FORMAT_*`**: argument order is fixed by the `AnnounceNode` call site across all locales. Reorder the sentence freely, but not the placeholders.
@@ -273,7 +301,7 @@ Append the event name to `ns.EVENT_NAMES` in `Features/Core.lua` and handle it i
   - Run StyLua with its default configuration before committing; the repo ships no `.stylua.toml`. Default output includes LF line endings.
   - Respect load order and the single-source-of-truth tables (`EVENT_NAMES`, `ERROR_MAPPING`, `OUTPUT_CHANNELS`, `PALETTE`, `DiagnosticsStrings`).
   - If you change a `MSG_FORMAT_*` body or any locale string, verify the longest composed line stays within the **255-byte chat limit** (check ruRU and koKR, not just deDE) and keep the four `%s` order intact. The runtime check in `AnnounceNode` warns the player past that ceiling, but it does not excuse skipping the measurement: it fires only once the line has already overflowed.
-  - Saved-variable discipline: add settings as `ns.DATABASE_DEFAULTS.profile` defaults; any table or key reshape gets a dated `MIGRATION (remove after …)` block, never a rewrite of existing user values. Removing a setting needs a cleanup line, not just a deletion.
+  - Saved-variable discipline: this is a Simple add-on, so add settings as `ns.DATABASE_DEFAULTS.profile` defaults and never in `global` (a `global` setting escapes Reset Profile); any table or key reshape gets a dated `MIGRATION (remove after …)` block, never a rewrite of existing user values. Removing a setting needs a cleanup line, not just a deletion.
   - Update this document if the architecture or file map changes.
 - **Commit and PR descriptions require a User Story.** Don't just say "I changed X." Frame it as who it helps and why:
 

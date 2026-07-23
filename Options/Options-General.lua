@@ -27,7 +27,7 @@ function ns.BuildGeneralOptions()
 		type = "group",
 		name = L["ADDON_TITLE"],
 		args = {
-			descIntro = OptionsDesc(L["OPTIONS_DESCRIPTION"], 1),
+			descIntro = OptionsDesc(L["OPTIONS_INTRO"], 1),
 
 			spacerWelcome0 = OptionsSpacer(5),
 			welcomeToggle = {

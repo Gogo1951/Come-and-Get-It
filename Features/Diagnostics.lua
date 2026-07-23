@@ -229,9 +229,9 @@ end
 
 --[[
     Existence and shape checks only: read-only, no side effects, no protected
-    calls. Kept aligned with the API guards in Features/Core.lua and
-    Data/Data.lua. Modern and legacy fallbacks are listed separately so the
-    report shows exactly what each client provides.
+    calls. Kept aligned with the API guards in Features/Core.lua and in this
+    file. Modern and legacy fallbacks are listed separately so the report shows
+    exactly what each client provides.
 ]]
 ns.DIAGNOSTIC_API_CHECKS = {
 	-- { label, testFunction }
@@ -398,7 +398,8 @@ function ns:BuildAddOnReport()
 	local lines = { GetClientHeader(), "" }
 	local getInfo = (C_AddOns and C_AddOns.GetAddOnInfo) or GetAddOnInfo
 	local getMeta = (C_AddOns and C_AddOns.GetAddOnMetadata) or GetAddOnMetadata
-	local count = (C_AddOns and C_AddOns.GetNumAddOns and C_AddOns.GetNumAddOns()) or GetNumAddOns()
+	local getCount = (C_AddOns and C_AddOns.GetNumAddOns) or GetNumAddOns
+	local count = getCount()
 	for index = 1, count do
 		local name, _, _, loadable = getInfo(index)
 		local version = getMeta(index, "Version") or "?"
@@ -470,10 +471,12 @@ end
 ]]
 
 function ns:GetTaintLogState()
-	-- COMPATIBILITY: C_CVar.GetCVar is canonical on Retail (the global is
-	-- deprecated/removed there); the Classic clients still expose the global.
-	-- Pick by availability and call exactly one -- never a (modern) or (legacy)
-	-- truthy fallback.
+	--[[
+        COMPATIBILITY: C_CVar.GetCVar is canonical on Retail (the global is
+        deprecated/removed there); the Classic clients still expose the global.
+        Pick by availability and call exactly one -- never a (modern) or
+        (legacy) truthy fallback.
+    ]]
 	local getCVar
 	if type(C_CVar) == "table" and type(C_CVar.GetCVar) == "function" then
 		getCVar = C_CVar.GetCVar
@@ -484,8 +487,10 @@ function ns:GetTaintLogState()
 end
 
 function ns:SetTaintLog(enabled)
-	-- COMPATIBILITY: see GetTaintLogState -- C_CVar.SetCVar on Retail, the global
-	-- on Classic. Pick by availability and call exactly one.
+	--[[
+        COMPATIBILITY: see GetTaintLogState -- C_CVar.SetCVar on Retail, the
+        global on Classic. Pick by availability and call exactly one.
+    ]]
 	local setCVar
 	if type(C_CVar) == "table" and type(C_CVar.SetCVar) == "function" then
 		setCVar = C_CVar.SetCVar
