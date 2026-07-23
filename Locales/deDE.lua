@@ -10,6 +10,20 @@ end
 L["ADDON_TITLE"] = "Come & Get It"
 
 --------------------------------------------------------------------------------
+-- Skill Names
+--------------------------------------------------------------------------------
+
+--[[
+    Not display copy. MATCH_* must equal the profession skill names exactly as
+    the game client displays them in this language: they are substring-matched
+    against the client's error text, so a loose or stylized translation silently
+    stops the add-on from detecting anything at all.
+]]
+
+L["MATCH_HERB"] = "Kräuterkunde"
+L["MATCH_MINE"] = "Bergbau"
+
+--------------------------------------------------------------------------------
 -- Announcement Strings
 --------------------------------------------------------------------------------
 
@@ -26,13 +40,8 @@ L["ADDON_TITLE"] = "Come & Get It"
     the article attaches to a fixed word rather than to the placeholder.
 
     The raid marker, add-on name, and " // " separator are prepended by the code
-    -- the bodies must stay body-only. MATCH_* must equal the profession skill
-    names exactly as the game client displays them in this language (they are
-    substring-matched against the client's error text).
+    -- the bodies must stay body-only.
 ]]
-
-L["MATCH_HERB"] = "Kräuterkunde"
-L["MATCH_MINE"] = "Bergbau"
 
 L["MSG_FORMAT_LOCKED"] = "Hey Schurken, ich habe hier etwas gefunden, das ich nicht öffnen kann: %s bei %s, %s in %s!"
 L["MSG_FORMAT_HERB"] =
@@ -53,7 +62,7 @@ L["CHAT_TOO_LONG"] =
 -- Options Panel
 --------------------------------------------------------------------------------
 
-L["OPTIONS_DESCRIPTION"] =
+L["OPTIONS_INTRO"] =
 	"Hast du ein Kraut gefunden, das du nicht pflücken kannst, eine Erzader, die du nicht abbauen kannst, oder eine verschlossene Schatztruhe und kein Schurke ist in Sicht? Klicke mit der rechten Maustaste darauf, und Come & Get It erstellt eine Nachricht, mit der du die Koordinaten teilen oder senden kannst. Ein Held zu sein war noch nie so einfach."
 
 L["OPTIONS_WELCOME_NAME"] = "Willkommensnachricht aktivieren"
@@ -64,7 +73,7 @@ L["OPTIONS_OUTPUT_NAME"] = "Standardausgabe"
 L["OPTIONS_OUTPUT_DESCRIPTION"] =
 	"Wähle, an welchen Chatkanal die Ankündigung gerichtet wird. Der Entwurf erscheint in deinem Chat-Eingabefeld, sodass du ihn vor dem Senden überprüfen oder umleiten kannst."
 L["OPTIONS_OUTPUT_NOTE"] =
-	"Hinweis: Lokal (/1) ist der Allgemein-Kanal der Zone und ist Layer-spezifisch. Deine Nachricht erreicht die ganze Zone, aber nur Spieler auf deinem aktuellen Layer sehen sie."
+	"Lokal (/1) ist der Allgemein-Kanal der Zone und ist Layer-spezifisch. Deine Ankündigung erreicht die ganze Zone, aber nur Spieler auf deinem aktuellen Layer sehen sie."
 
 L["OPTIONS_OUTPUT_CHANNEL1"] = "Lokal (/1)"
 L["OPTIONS_OUTPUT_SAY"] = "Sagen"

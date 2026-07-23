@@ -50,9 +50,10 @@ local lastAnnounceTime = 0
 --------------------------------------------------------------------------------
 
 --[[
-    Two key kinds in disjoint namespaces: locked chests key on Blizzard's stable
-    numeric error ID; herb/mine nodes fire a generic "Requires <Skill>" string
-    with no stable ID, so they key on the localized skill name.
+    Two key kinds in disjoint namespaces. Locked chests key on their own numeric
+    error ID. Herb and mine both fire error 272 with a "Requires <Skill>" body,
+    so the ID says a profession skill was missing but not which one -- only the
+    localized skill name separates them, which is why they key on that.
 ]]
 local ERROR_MAPPING = {
 	[ERROR_ID_LOCKED_CHEST] = { formatKey = "MSG_FORMAT_LOCKED" },
@@ -119,9 +120,10 @@ local function MatchError(messageID, message)
 
 	--[[
         ACCEPTED TRADEOFF: substring-scanning can fire on unrelated error text
-        containing the skill word. Kept because no gather error has a numeric ID
-        stable across the supported clients, word-boundary patterns break CJK
-        locales, and the risk is bounded -- AnnounceNode never auto-sends.
+        containing the skill word. Herb and mine share error 272, so the ID
+        cannot pick between them and the skill name has to. Kept because
+        word-boundary patterns break CJK locales and the risk is bounded --
+        AnnounceNode never auto-sends.
     ]]
 	local lowerMessage = string.lower(message)
 	for lowerKey, mapping in pairs(LOWER_MATCH) do
@@ -133,13 +135,10 @@ local function MatchError(messageID, message)
 	return nil
 end
 
---------------------------------------------------------------------------------
--- Announcement Logic
---------------------------------------------------------------------------------
-
-local function AnnounceNode(mapping)
+-- Runs before MatchError, so a suppressed error costs no string work.
+local function CanAnnounce()
 	if IsInInstance() then
-		return
+		return false
 	end
 
 	--[[
@@ -149,14 +148,17 @@ local function AnnounceNode(mapping)
         the next interaction. Do not replace this with a deferred-replay queue.
     ]]
 	if InCombatLockdown() then
-		return
+		return false
 	end
 
-	local now = GetTime()
-	if now - lastAnnounceTime < ANNOUNCE_COOLDOWN then
-		return
-	end
+	return GetTime() - lastAnnounceTime >= ANNOUNCE_COOLDOWN
+end
 
+--------------------------------------------------------------------------------
+-- Announcement Logic
+--------------------------------------------------------------------------------
+
+local function AnnounceNode(mapping)
 	if not GetBestMapForUnit or not GetPlayerMapPosition or not GetMapInfo then
 		return
 	end
@@ -182,8 +184,11 @@ local function AnnounceNode(mapping)
 		return
 	end
 
-	-- A locked lockbox in the player's own bags fires the same locked error as a
-	-- world chest; an item on the tooltip means it came from the bags, so drop it.
+	--[[
+        A locked lockbox in the player's own bags fires the same locked error
+        as a world chest; an item on the tooltip means it came from the bags,
+        so drop it.
+    ]]
 	if TooltipShowsItem() then
 		return
 	end
@@ -215,23 +220,38 @@ local function AnnounceNode(mapping)
 	end
 
 	ChatFrame_OpenChat(command .. " " .. announcement, ChatFrame1)
-	lastAnnounceTime = now
+	lastAnnounceTime = GetTime()
 end
 
 --------------------------------------------------------------------------------
 -- Saved Variables
 --------------------------------------------------------------------------------
 
+function ns:ApplyProfile()
+	local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
+	for _, registryName in pairs(ns.OPTIONS_REGISTRY) do
+		AceConfigRegistry:NotifyChange(registryName)
+	end
+end
+
 --[[
     The third argument (true) puts every character on one shared "Default"
-    profile; per-character profiles are opt-in via the Profiles panel. AceDB
-    applies the defaults via metatables -- no hand-rolled merge.
+    profile. That is what makes Reset Profile a true factory reset here: it
+    clears the one profile everybody is on, and since no setting lives in
+    ns.db.global -- a scope ResetProfile does not touch -- nothing survives it.
+    Per-character profiles stay available through the Profiles panel for anyone
+    who wants them. AceDB applies the defaults via metatables -- no hand-rolled
+    merge.
 ]]
 local function InitSavedVariables()
 	ns.db = LibStub("AceDB-3.0"):New("ComeAndGetItDB", ns.DATABASE_DEFAULTS, true)
 
+	for _, message in ipairs({ "OnProfileChanged", "OnProfileReset", "OnProfileCopied" }) do
+		ns.db.RegisterCallback(ns, message, "ApplyProfile")
+	end
+
 	--[[
-        MIGRATION (remove after 2026-10-08): two cleanups of pre-existing saved
+        MIGRATION (remove after 2026-08-15): two cleanups of pre-existing saved
         state.
 
         Pre-AceDB builds stored settings at the root of ComeAndGetItDB; lift
@@ -241,7 +261,9 @@ local function InitSavedVariables()
         announceOnClick is a removed setting that AceDB never drops on its own,
         because a key absent from the defaults is just user data. Clear it from
         every stored profile rather than ns.db.profile alone, which would leave
-        it behind in whichever profiles are not active at login.
+        it behind in whichever profiles are not active at login. Never add a
+        live setting to this sweep -- showWelcome and defaultOutput are stored
+        here, so nilling them would wipe the player's choices every login.
     ]]
 	for _, key in ipairs({ "showWelcome", "defaultOutput" }) do
 		if ComeAndGetItDB[key] ~= nil then
@@ -283,6 +305,10 @@ eventFrame:SetScript("OnEvent", function(_, event, ...)
 	end
 
 	if event == "UI_ERROR_MESSAGE" then
+		if not CanAnnounce() then
+			return
+		end
+
 		local messageID, message = ...
 		local mapping = MatchError(messageID, message)
 		if mapping then

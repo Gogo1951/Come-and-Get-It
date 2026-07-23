@@ -10,6 +10,20 @@ end
 L["ADDON_TITLE"] = "Come & Get It"
 
 --------------------------------------------------------------------------------
+-- Skill Names
+--------------------------------------------------------------------------------
+
+--[[
+    Not display copy. MATCH_* must equal the profession skill names exactly as
+    the game client displays them in this language: they are substring-matched
+    against the client's error text, so a loose or stylized translation silently
+    stops the add-on from detecting anything at all.
+]]
+
+L["MATCH_HERB"] = "Herboristería"
+L["MATCH_MINE"] = "Minería"
+
+--------------------------------------------------------------------------------
 -- Announcement Strings
 --------------------------------------------------------------------------------
 
@@ -26,17 +40,12 @@ L["ADDON_TITLE"] = "Come & Get It"
     the article attaches to a fixed word rather than to the placeholder.
 
     The raid marker, add-on name, and " // " separator are prepended by the code
-    -- the bodies must stay body-only. MATCH_* must equal the profession skill
-    names exactly as the game client displays them in this language (they are
-    substring-matched against the client's error text).
+    -- the bodies must stay body-only.
 ]]
 
-L["MATCH_HERB"] = "Herboristería"
-L["MATCH_MINE"] = "Minería"
-
-L["MSG_FORMAT_LOCKED"] = "¡Pícaros! Encontré algo que no puedo abrir: %s (%s, %s) en %s."
-L["MSG_FORMAT_HERB"] = "¡Herboristas! Encontré algo que no puedo recolectar: %s (%s, %s) en %s."
-L["MSG_FORMAT_MINE"] = "¡Mineros! Encontré algo que no puedo minar: %s (%s, %s) en %s."
+L["MSG_FORMAT_LOCKED"] = "¡Pícaros, encontré algo que no puedo abrir: %s (%s, %s) en %s!"
+L["MSG_FORMAT_HERB"] = "¡Herboristas, encontré algo que no puedo recolectar: %s (%s, %s) en %s!"
+L["MSG_FORMAT_MINE"] = "¡Mineros, encontré algo que no puedo minar: %s (%s, %s) en %s!"
 
 --------------------------------------------------------------------------------
 -- Chat
@@ -52,7 +61,7 @@ L["CHAT_TOO_LONG"] =
 -- Options Panel
 --------------------------------------------------------------------------------
 
-L["OPTIONS_DESCRIPTION"] =
+L["OPTIONS_INTRO"] =
 	"¿Encontraste una hierba que no puedes recolectar, una veta de mineral que no puedes minar o un cofre cerrado sin un Pícaro a la vista? Haz clic derecho y Come & Get It creará un mensaje que puedes usar para compartir o anunciar las coordenadas. Ser un héroe nunca fue tan fácil."
 
 L["OPTIONS_WELCOME_NAME"] = "Activar mensaje de bienvenida"
@@ -63,7 +72,7 @@ L["OPTIONS_OUTPUT_NAME"] = "Salida predeterminada"
 L["OPTIONS_OUTPUT_DESCRIPTION"] =
 	"Elige a qué canal de chat se dirige el anuncio. El borrador se abre en tu cuadro de chat para que puedas revisarlo o redirigirlo antes de enviarlo."
 L["OPTIONS_OUTPUT_NOTE"] =
-	"Nota: Local (/1) es el canal General de la zona y es específico de cada capa. Tu mensaje llega a toda la zona, pero solo lo verán los jugadores que estén en tu capa actual."
+	"Local (/1) es el canal General de la zona y es específico de cada capa. Tu anuncio llega a toda la zona, pero solo lo verán los jugadores que estén en tu capa actual."
 
 L["OPTIONS_OUTPUT_CHANNEL1"] = "Local (/1)"
 L["OPTIONS_OUTPUT_SAY"] = "Decir"
