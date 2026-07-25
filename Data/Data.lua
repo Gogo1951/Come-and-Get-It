@@ -5,7 +5,11 @@ ns.L = LibStub("AceLocale-3.0"):GetLocale(ADDON_NAME)
 -- Constants
 --------------------------------------------------------------------------------
 
--- Blizzard's "Item is locked" error. Herb/mine have no fixed ID; Core matches those by substring.
+--[[
+    Blizzard's "Item is locked" error. Herb and mine share error 272, which says
+    a profession skill was missing but not which one, so Core matches those by
+    localized skill name instead.
+]]
 ns.ERROR_ID_LOCKED_CHEST = 268
 
 ns.ANNOUNCE_COOLDOWN = 5
