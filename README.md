@@ -85,28 +85,10 @@ Please reach out if you would like to be involved!
 
 ## Related Add-ons
 
-🟢 Pairs With // BetterAddons's [GatherProClassic](https://www.curseforge.com/wow/addons/gatherproclassic)
-
-🟢 Pairs With // LazyLoafs_Addons's [Lazy LockBoxes](https://www.curseforge.com/wow/addons/lazy-lockboxes)
-
-🟢 Pairs With // Efron's [LockboxLVL](https://www.curseforge.com/wow/addons/lockboxlvl)
-
-🟢 Pairs With // Paldadin's [NodeTooltip Reloaded](https://www.curseforge.com/wow/addons/paldas-nodetooltip)
+🟢 Pairs With // Nevcairiel's [GatherMate2 Classic](https://www.curseforge.com/wow/addons/gathermate2-classic)
 
 🟢 Pairs With // Gogo1951's [Open Sesame](https://www.curseforge.com/wow/addons/open-sesame)
 
 🟢 Pairs With // Gogo1951's [Play It Forward](https://www.curseforge.com/wow/addons/play-it-forward)
 
-🟢 Pairs With // Protuhj's [TomPoints](https://www.curseforge.com/wow/addons/tompoints)
-
-🟢 Pairs With // jnwhiteh's [TomTom](https://www.curseforge.com/wow/addons/tomtom)
-
 🟢 Pairs With // Gogo1951's [Tracking Eye](https://www.curseforge.com/wow/addons/tracking-eye-classic)
-
-🟢 Pairs With // Trokko's [Trokkos NodeSkill Tooltip](https://www.curseforge.com/wow/addons/trokkos-nodeskill-tooltip)
-
-🟡 Some Overlap // Wuild's [GatherLite](https://www.curseforge.com/wow/addons/gatherlite)
-
-🟡 Some Overlap // Nevcairiel's [GatherMate2 Classic](https://www.curseforge.com/wow/addons/gathermate2-classic)
-
-🟡 Some Overlap // 0xTrk's [LockSmith Pro](https://www.curseforge.com/wow/addons/locksmithpro)

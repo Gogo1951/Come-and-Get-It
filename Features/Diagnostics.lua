@@ -248,6 +248,30 @@ ns.DIAGNOSTIC_API_CHECKS = {
 		end,
 	},
 	{
+		"C_AddOns.GetAddOnInfo",
+		function()
+			return type(C_AddOns) == "table" and type(C_AddOns.GetAddOnInfo) == "function"
+		end,
+	},
+	{
+		"GetAddOnInfo (legacy)",
+		function()
+			return type(GetAddOnInfo) == "function"
+		end,
+	},
+	{
+		"C_AddOns.GetNumAddOns",
+		function()
+			return type(C_AddOns) == "table" and type(C_AddOns.GetNumAddOns) == "function"
+		end,
+	},
+	{
+		"GetNumAddOns (legacy)",
+		function()
+			return type(GetNumAddOns) == "function"
+		end,
+	},
+	{
 		"C_Map.GetBestMapForUnit",
 		function()
 			return type(C_Map) == "table" and type(C_Map.GetBestMapForUnit) == "function"
@@ -275,6 +299,18 @@ ns.DIAGNOSTIC_API_CHECKS = {
 		"GameTooltip.GetItem (legacy)",
 		function()
 			return type(GameTooltip) == "table" and type(GameTooltip.GetItem) == "function"
+		end,
+	},
+	{
+		"GameTooltip.IsShown",
+		function()
+			return type(GameTooltip) == "table" and type(GameTooltip.IsShown) == "function"
+		end,
+	},
+	{
+		"GameTooltipTextLeft1",
+		function()
+			return type(GameTooltipTextLeft1) == "table"
 		end,
 	},
 	{

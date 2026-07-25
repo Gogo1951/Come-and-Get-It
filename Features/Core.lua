@@ -173,6 +173,11 @@ local function AnnounceNode(mapping)
 		return
 	end
 
+	-- An area the map can't resolve reports 0,0 rather than nil.
+	if position.x == 0 and position.y == 0 then
+		return
+	end
+
 	local mapInfo = GetMapInfo(mapID)
 	if not mapInfo or not mapInfo.name then
 		return
@@ -184,11 +189,6 @@ local function AnnounceNode(mapping)
 		return
 	end
 
-	--[[
-        A locked lockbox in the player's own bags fires the same locked error
-        as a world chest; an item on the tooltip means it came from the bags,
-        so drop it.
-    ]]
 	if TooltipShowsItem() then
 		return
 	end
@@ -248,32 +248,6 @@ local function InitSavedVariables()
 
 	for _, message in ipairs({ "OnProfileChanged", "OnProfileReset", "OnProfileCopied" }) do
 		ns.db.RegisterCallback(ns, message, "ApplyProfile")
-	end
-
-	--[[
-        MIGRATION (remove after 2026-08-15): two cleanups of pre-existing saved
-        state.
-
-        Pre-AceDB builds stored settings at the root of ComeAndGetItDB; lift
-        those into the active profile once, then clear the roots so AceDB owns
-        them from here on.
-
-        announceOnClick is a removed setting that AceDB never drops on its own,
-        because a key absent from the defaults is just user data. Clear it from
-        every stored profile rather than ns.db.profile alone, which would leave
-        it behind in whichever profiles are not active at login. Never add a
-        live setting to this sweep -- showWelcome and defaultOutput are stored
-        here, so nilling them would wipe the player's choices every login.
-    ]]
-	for _, key in ipairs({ "showWelcome", "defaultOutput" }) do
-		if ComeAndGetItDB[key] ~= nil then
-			ns.db.profile[key] = ComeAndGetItDB[key]
-			ComeAndGetItDB[key] = nil
-		end
-	end
-
-	for _, profile in pairs(ns.db.profiles) do
-		profile.announceOnClick = nil
 	end
 end
 
