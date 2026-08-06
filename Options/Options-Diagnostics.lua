@@ -10,10 +10,10 @@ local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 
 --[[
 	A single runtime toggle gates the whole panel. When off, only the warning
-	text and the enable toggle are visible; everything below is hidden. The
-	header widgets don't support `hidden`, so the gated sections inline their
-	header widgets with `hidden` functions; the always-visible warning and
-	toggle are plain widgets.
+	text and the enable toggle are visible; everything below is hidden. Every
+	gated widget hides on that one condition, so the shared Hidden predicate is
+	baked into the local SectionHeader / ReportOutput builders rather than
+	repeated per widget; the always-visible warning and toggle are plain widgets.
 ]]
 
 local function DiagnosticsOn()

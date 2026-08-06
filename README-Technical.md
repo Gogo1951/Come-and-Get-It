@@ -16,7 +16,8 @@ Come-and-Get-It/
 ├── README-Testing.md               Manual QA script
 ├── Data/
 │   ├── Data.lua                    Constants: locked-chest error ID, cooldown, chat byte limit,
-│   │                               #   target marker, output-channel manifest, URLs, registry, ns.PALETTE
+│   │                               #   target marker, output-channel manifest, URLs, registry,
+│   │                               #   options grid widths, ns.PALETTE
 │   └── Default-Settings.lua        ns.DATABASE_DEFAULTS — the AceDB-3.0 defaults table (profile only)
 ├── Features/
 │   ├── Core.lua                    Version resolver, event dispatcher, error->mapping match,
@@ -26,11 +27,11 @@ Come-and-Get-It/
 │   │                               #   NOT AnnounceNode — that lives in Core.lua.
 │   └── Diagnostics.lua             Opt-in report builders, event-log tap, taint toggle (canonical)
 ├── Options/
-│   ├── Options-Utilities.lua       Shared AceConfig widget builders (OptionsHeader / Desc / Spacer)
-│   ├── Options-General.lua         General panel: welcome toggle, output dropdown, links, version
+│   ├── Options-Utilities.lua       Shared AceConfig widget builders (OptionsHeader / Desc / Spacer / RowLabel)
+│   ├── Options-General.lua         General panel: welcome toggle, /Commands, output dropdown, links, version
 │   ├── Options-Profiles.lua        Stock AceDBOptions-3.0 profiles panel, returned as-is
 │   ├── Options-Diagnostics.lua     Diagnostics panel: gate toggle + gated report buttons (canonical)
-│   └── Options.lua                 ns.RegisterOptionsPanels() — registers all three; called at login
+│   └── Options.lua                 ns.RegisterOptionsPanels() (called at login), ns:OpenOptionsPanel(), /cgi
 ├── Locales/
 │   ├── enUS.lua                    Default locale (NewLocale(..., true)); the canonical 25-key set
 │   └── deDE / esES / esMX / frFR / itIT / koKR / ptBR / ruRU / zhCN / zhTW .lua   Standalone translations
@@ -42,7 +43,7 @@ Come-and-Get-It/
 
 The four files above the TOC exist in the repo but **not** in an installed copy: `.pkgmeta`'s `ignore` list strips `.gitattributes`, `.github`, `.pkgmeta`, and `LICENSE` from the published zip. Don't be surprised when they're missing from `Interface/AddOns/ComeAndGetIt/`, and don't add them there.
 
-There are no deprecated or dead files. Every `Locales/*.lua` is standalone and translates the full `enUS.lua` key set; none registers another locale's strings.
+There are no deprecated or dead files. Every `Locales/*.lua` is standalone and translates the `enUS.lua` key set (see Localization for the keys currently awaiting translation); none registers another locale's strings.
 
 `Features/Diagnostics.lua` and `Options/Options-Diagnostics.lua` are the canonical diagnostics framework copied from Open-Sesame. Only their manifests are re-authored here (`ns.DIAGNOSTIC_API_CHECKS`, `ns.DIAGNOSTIC_EVENT_EXCLUDE`, `ns:BuildContextReport`, the SavedVariables table name). Keep the framework verbatim so it stays diffable against the canonical.
 
@@ -50,12 +51,12 @@ There are no deprecated or dead files. Every `Locales/*.lua` is standalone and t
 
 ### Module Layout & Load Order
 
-Every file is a vararg module — `local ADDON_NAME, ns = ...` where the file needs the name, `local _, ns = ...` otherwise, and `local L = ns.L` only in files that read `L`. All files share the one namespace table, so `ComeAndGetItDB` — created and owned by AceDB — is the add-on's **only** global. Both frames are file-locals built by `CreateFrame("Frame")` with no name argument (the dispatcher in `Core.lua`, the registration probe in `Diagnostics.lua`), so neither reaches `_G`. Load order in `ComeAndGetIt.toc` is load-bearing:
+Every file is a vararg module — `local ADDON_NAME, ns = ...` where the file needs the name, `local _, ns = ...` otherwise, and `local L = ns.L` only in files that read `L`. All files share the one namespace table; the only globals are `ComeAndGetItDB` — created and owned by AceDB — and the `/cgi` slash registration (`SLASH_COMEANDGETIT1` plus its `SlashCmdList` entry). Both frames are file-locals built by `CreateFrame("Frame")` with no name argument (the dispatcher in `Core.lua`, the registration probe in `Diagnostics.lua`), so neither reaches `_G`. Load order in `ComeAndGetIt.toc` is load-bearing:
 
 1. **Libraries** — LibStub through AceDBOptions-3.0, in the fixed order the AceConfig stack requires.
 2. **Locales** — `enUS.lua` first (it owns the `true` default flag); the rest fill their own client locale.
 3. **Data** — `Data.lua` resolves `ns.L` and publishes constants; `Default-Settings.lua` publishes `ns.DATABASE_DEFAULTS`.
-4. **Features then Options** — Core wires events; Utilities / Announcements / Diagnostics add helpers; `Options.lua` loads last and defines `ns.RegisterOptionsPanels()`, which Core calls at login.
+4. **Features then Options** — Core wires events; Utilities / Announcements / Diagnostics add helpers; `Options.lua` loads last and defines `ns.RegisterOptionsPanels()` (which Core calls at login), `ns:OpenOptionsPanel()`, and the `/cgi` slash command.
 
 Anything reading `ns.L` or a constant must load *after* `Data/Data.lua`. Four files resolve a dependency at *file scope* rather than at call time, which is what makes their position load-bearing rather than merely tidy:
 
@@ -80,7 +81,7 @@ The `OnEvent` handler is the only dispatcher, and runs in order:
 2. **`PLAYER_LOGIN`** — `InitSavedVariables()`, then `ns.RegisterOptionsPanels()`, then `ns:PrintWelcome()`.
 3. **`UI_ERROR_MESSAGE`** — `CanAnnounce()`, and only then `MatchError(messageID, message)`; on a match, `AnnounceNode(mapping)`.
 
-The suppression gates run *before* matching on purpose. `UI_ERROR_MESSAGE` fires for every "Out of range" and "Not enough rage" the client shows, hardest in combat — exactly when `CanAnnounce` is guaranteed to say no — and `MatchError`'s slow path lowercases the message before scanning it. Gating first makes the discarded case allocation-free. The visible cost is that the `ns:LogEvent("GetNodeName", ...)` tap fires only on a match, so it is silent for errors seen in combat or in an instance; the `UI_ERROR_MESSAGE` entry itself is still logged, so the event timeline stays intact.
+The suppression gates run *before* matching on purpose. `UI_ERROR_MESSAGE` fires for every "Out of range" and "Not enough rage" the client shows, hardest in combat — exactly when `CanAnnounce` is guaranteed to say no — and `MatchError`'s slow path lowercases the message before scanning it. Gating first makes the discarded case allocation-free. The visible cost is that the `ns:LogEvent("GetNodeName", ...)` tap fires only on a match, so it is silent for errors seen in combat or in an instance; the `UI_ERROR_MESSAGE` firing still reaches the log — in full when `ns.MatchError` correlates it, otherwise folded into the suppressed-traffic summary — so the event timeline stays intact.
 
 `EVENT_NAMES` is exported and reused by Diagnostics' registration check, so the probe can never drift. Add events by appending to this table, never by calling `RegisterEvent` ad hoc.
 
@@ -134,6 +135,7 @@ The add-on ships against Classic Era and TBC Anniversary. Capabilities that diff
 - **`C_AddOns.GetAddOnMetadata`** vs. the legacy global — `GetVersion` and Diagnostics use a `(modern) or (legacy)` shim; safe here because neither call can return `false`. On 1.15.9 the legacy global is gone, so the modern branch is the live path. The same shim covers `GetAddOnInfo` and `GetNumAddOns` in `ns:BuildAddOnReport`.
 - **`C_CVar.GetCVar` / `SetCVar`** vs. the legacy globals — the taint-log control picks by availability with an explicit `if`, because a CVar read *can* legitimately return `false`.
 - **`C_EventUtils.IsEventValid`** exists only on newer clients; the event check degrades to `"n/a"` when absent.
+- **`Settings.OpenToCategory`** vs. the legacy `InterfaceOptionsFrame_OpenToCategory` — `ns:OpenOptionsPanel` gates on combat, then routes by the category ID captured at registration; the legacy opener is called twice (older clients need the repeat to scroll), with `AceConfigDialog:Open` as a last resort a correctly routed client never reaches. Looking a category up by *title* instead of the captured ID returns nil wherever the Settings API exists, which floats the panel loose on TBC Anniversary while still working on Classic Era — that is why the handles are captured.
 
 `ns.DIAGNOSTIC_API_CHECKS` lists the modern and legacy forms separately so a bug report shows exactly what a given client provides — a `[FAIL]` on one half of a pair is expected, not a defect, as long as its partner passes.
 
@@ -190,10 +192,10 @@ The chosen key is saved to `ns.db.profile.defaultOutput`; array order is dropdow
 
 Design constraints:
 
-- **Opt-in and runtime-only.** `ns.diagnostics = { enabled, logging, log }` is a plain namespace table, **not** a SavedVariable — it resets every session. A single toggle (`ns:SetDiagnosticsEnabled`) gates the whole panel; turning it off also calls `ns:StopEventLog`. Every section below the toggle is an inline widget with a `hidden` function, since header widgets don't honor `hidden` directly.
+- **Opt-in and runtime-only.** `ns.diagnostics = { enabled, logging, log }` is a plain namespace table, **not** a SavedVariable — it resets every session. A single toggle (`ns:SetDiagnosticsEnabled`) gates the whole panel; turning it off also calls `ns:StopEventLog`. Every section below the toggle hides on that one condition, baked into the panel's local `SectionHeader` / `ReportOutput` builders so the predicate is never repeated per widget.
 - **Read-only by contract.** Reports build only on a button press, never on load or panel open. The sole state any button writes is the `taintLog` CVar.
 - **Event-log tap.** `ns:LogEvent` snapshots arguments to strings *immediately* — never retaining frame/table references — caps at 8 args and 255 bytes each, escapes pipes (`|` → `||`) **after** the length cut, and keeps a 500-entry ring buffer.
-- **`ns.DIAGNOSTIC_EVENT_EXCLUDE` is deliberately empty.** The dispatcher only ever hands `LogEvent` the events this add-on registers, and neither is a firehose, so the log never sees an event worth dropping. The lookup stays so a genuine no-signal firehose can be excluded here if one is ever registered.
+- **Noise control is split by kind.** `ns.DIAGNOSTIC_EVENT_EXCLUDE` (deliberately empty) drops events that are *never* signal. `UI_ERROR_MESSAGE` is a firehose that is *sometimes* signal — every red combat error fires it — so it goes through the per-message-id filter instead: `ns.MESSAGE_ID_FILTERED_EVENTS` names the id's argument position, and `ns:SuppressUncorrelatedMessage` classifies each firing at capture with the live `ns.MatchError` lookup, so the filter can never drift from what the add-on acts on. Correlated firings log in full, a firing with no id logs verbatim, and everything else folds into a per-id counter (first-seen text plus count) rendered as a summary block at the end of the report, biggest offender first. Filtering happens before the entry reaches the buffer, so spam cannot evict real entries.
 - **Live detection context.** `ns:BuildContextReport` prints *actual values* — the match strings, the instance/combat gates, and the resolved `mapID`, position, and zone — because that is what explains a "nothing happened" report. It replaces Open-Sesame's loot-specific probe.
 - **Single sources of truth.** Event checks iterate `ns.EVENT_NAMES` (from Core); API checks iterate `ns.DIAGNOSTIC_API_CHECKS`, which covers every compatibility-guarded API plus the core loop's load-bearing reads, including the `GameTooltip` / `GameTooltipTextLeft1` pair `GetNodeName` dereferences on every match.
 - **Strings are not localized.** All diagnostics UI text lives in `ns.DiagnosticsStrings` as plain English. The one localized value is `L["ADDON_TITLE"]`, which is identity, not diagnostics copy.
@@ -260,18 +262,18 @@ There are no default item or spell lists, so there is no refill-on-empty logic.
 
 ## Adding a Registered Event
 
-Append the event name to `ns.EVENT_NAMES` in `Features/Core.lua` and handle it in the `OnEvent` dispatcher, so the dispatcher and diagnostics pick it up together. Registering it anywhere else means Diagnostics' registration check and event log silently miss it. If the new event is a firehose, add it to `ns.DIAGNOSTIC_EVENT_EXCLUDE` — that table is empty today precisely because nothing registered warrants it.
+Append the event name to `ns.EVENT_NAMES` in `Features/Core.lua` and handle it in the `OnEvent` dispatcher, so the dispatcher and diagnostics pick it up together. Registering it anywhere else means Diagnostics' registration check and event log silently miss it. If the new event is a firehose that is *never* signal, add it to `ns.DIAGNOSTIC_EVENT_EXCLUDE`; if it is *sometimes* signal, give it a row in `ns.MESSAGE_ID_FILTERED_EVENTS` so uncorrelated firings fold into the suppressed-traffic summary the way `UI_ERROR_MESSAGE`'s do.
 
 ## Localization
 
-- **Structure** — locale files live in `Locales/<locale>.lua`, each registered through AceLocale-3.0's `NewLocale`. `enUS.lua` is the source of truth and the only file that passes the `true` default-fallback flag; every string originates there and the other locales translate from it. The current key set is 25 keys, identical in all 11 files.
+- **Structure** — locale files live in `Locales/<locale>.lua`, each registered through AceLocale-3.0's `NewLocale`. `enUS.lua` is the source of truth and the only file that passes the `true` default-fallback flag; every string originates there and the other locales translate from it. The current key set is 29 keys in `enUS.lua`; the four options-command keys added with the `/cgi` opener are enUS-only until the next Localization pass, and AceLocale falls back to English for them in the meantime.
 - **Keeping locales in sync** — AceLocale falls back to English via `__index` for anything missing at runtime, so a missing key degrades to English rather than erroring. Translating each `enUS.lua` key into every locale and keeping the files aligned is the job of the Localization pass (`3 - Copy Cleanup & Localization Prompt.md`); don't hand-edit the other locales during ordinary work. When you add or rename a key, change `enUS.lua` and every code reference in the same commit.
 - **Placeholders** — `%s`/`%d` count, type, and order must match `enUS` per key in every locale, or the string crashes at runtime. The `MSG_FORMAT_*` bodies (four `%s` each) are the critical case; an in-file comment block documents their order for translators. `CHAT_TOO_LONG`'s two `%d` are the silent case: swapping them does not crash, it just reports the numbers backwards.
-- **Keys reached indirectly** — eight of the 25 keys are never written as `L["KEY"]` anywhere in the code. The three `MSG_FORMAT_*` bodies resolve through `mapping.formatKey`, and the five `OPTIONS_OUTPUT_*` labels through `channel.labelKey`. A search for `L["` will report all eight as unused; they are not. Match bare string literals too before deleting anything.
+- **Keys reached indirectly** — eight of the 29 keys are never written as `L["KEY"]` anywhere in the code. The three `MSG_FORMAT_*` bodies resolve through `mapping.formatKey`, and the five `OPTIONS_OUTPUT_*` labels through `channel.labelKey`. A search for `L["` will report all eight as unused; they are not. Match bare string literals too before deleting anything.
 - **`MATCH_*` is not display copy** — the two profession strings must equal what the game client shows in that language, because they are substring-matched against the client's error text. A stylized translation silently stops detection in that locale. The shipped values were verified against the live client names (itIT `Erbalismo` / `Estrazione`, frFR `Herboristerie` / `Minage`, and so on) rather than translated from English.
 - **Spanish** — esES/esMX are two separate, self-contained files; identical Spanish in both is correct and expected.
-- **Gendered speaker forms** — the announcement bodies are spoken in the player's voice, so any language with gendered verb agreement must be phrased so it reads correctly for any character. ruRU uses "Здесь есть кое-что, что я не могу…" rather than a masculine past tense for exactly this reason. Check this whenever a `MSG_FORMAT_*` body is rewritten.
-- **Locale overflow** — the ceiling is the **255-byte chat line**, and it is measured in *bytes*, not characters. German is the usual first suspect, but for this add-on the longest composed line is Russian. Measured against a Cyrillic-scale worst case (42-byte node name, 44-byte zone), the tightest locales are ruRU 226 bytes and koKR 210, against deDE 206, frFR 202, zhTW 197, zhCN 194, itIT 185, ptBR 180, and enUS/esES/esMX 178. Cyrillic runs two bytes per character and CJK three, so check those locales, not just German, whenever a `MSG_FORMAT_*` body grows. `AnnounceNode` also measures the composed line at runtime and warns the player when it overflows (see Detect → Compose → Write), but that is a backstop for the long-node-name-in-a-long-zone tail: measuring at translation time is still the first line of defence, because the runtime warning fires after the fact and only the player sees it.
+- **Gendered speaker forms** — the announcement bodies are spoken in the player's voice, so any language with gendered verb agreement must be phrased so it reads correctly for any character. The current bodies sidestep this entirely — they carry no first-person verb — but check it whenever a `MSG_FORMAT_*` body is rewritten.
+- **Locale overflow** — the ceiling is the **255-byte chat line**, and it is measured in *bytes*, not characters. German is the usual first suspect, but for this add-on the longest composed line is Korean. Measured against a Cyrillic-scale worst case (42-byte node name, 44-byte zone), the tightest locales are koKR 155 bytes and zhTW 152, against ruRU 151, zhCN 149, deDE 146, frFR 144, enUS 140, ptBR 139, and itIT/esES/esMX 138. Cyrillic runs two bytes per character and CJK three, so check those locales, not just German, whenever a `MSG_FORMAT_*` body grows. `AnnounceNode` also measures the composed line at runtime and warns the player when it overflows (see Detect → Compose → Write), but that is a backstop for the long-node-name-in-a-long-zone tail: measuring at translation time is still the first line of defence, because the runtime warning fires after the fact and only the player sees it.
 
 ## Common Pitfalls
 

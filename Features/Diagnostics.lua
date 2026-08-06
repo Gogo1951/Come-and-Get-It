@@ -45,7 +45,7 @@ ns.DiagnosticsStrings = {
 	EVENT_LOG_START = "Start Event Log",
 	EVENT_LOG_STOP = "Stop Event Log",
 	EVENT_LOG_SHOW = "Show Captured Events",
-	EVENT_LOG_HINT = "Captures the events the add-on registered for, with arguments, in the order they fired. Output can include UI error text. Review it before sharing.",
+	EVENT_LOG_HINT = "Captures the events the add-on registered for, with arguments, in the order they fired. Repeated errors the add-on doesn't act on are collapsed into a counted summary at the end. Output can include UI error text. Review it before sharing.",
 	EVENTS_TITLE = "Event Registration",
 	EVENTS_BUTTON = "Test Event Registration",
 	API_TITLE = "API Endpoints",
@@ -112,24 +112,62 @@ local EVENT_LOG_MAX_ARGS = 8
 local EVENT_LOG_MAX_ARG_LENGTH = 255
 
 --[[
-    Events ns:LogEvent drops before recording — deliberately empty. The
-    dispatcher only ever hands LogEvent the events Come & Get It registers
-    (ns.EVENT_NAMES: PLAYER_LOGIN, UI_ERROR_MESSAGE), and the log never sees an
-    event the add-on didn't register — so listing a generic offender here
-    (COMBAT_LOG_EVENT_UNFILTERED, UNIT_AURA, ...) would be dead code. The lookup
-    in LogEvent stays so a genuine no-signal firehose can be excluded here if one
-    is ever registered later.
+    Two noise mechanisms, split by kind. ns.DIAGNOSTIC_EVENT_EXCLUDE drops a
+    registered event entirely and is only for events that are never signal; it
+    stays empty because both registered events carry signal. A firehose that is
+    only SOMETIMES signal gets the per-message-id filter instead:
+    ns.MESSAGE_ID_FILTERED_EVENTS names the events carrying a message id and the
+    argument position it arrives in, and ns:SuppressUncorrelatedMessage folds
+    uncorrelated firings into a counted summary so they cannot evict real
+    entries from the bounded buffer. UI_ERROR_MESSAGE is exactly that case --
+    every red combat error fires it, but only the firings ns.MatchError
+    correlates are this add-on's signal.
 ]]
 ns.DIAGNOSTIC_EVENT_EXCLUDE = {}
 
+-- Event name -> argument position of the message id; the message body rides in the next position.
+ns.MESSAGE_ID_FILTERED_EVENTS = {
+	UI_ERROR_MESSAGE = 1,
+}
+
 function ns:StartEventLog()
 	ns.diagnostics.log = {}
+	ns.diagnostics.suppressed = {}
 	ns.diagnostics.logging = true
 end
 
 function ns:StopEventLog()
 	ns.diagnostics.logging = false
 	ns.diagnostics.log = nil
+	ns.diagnostics.suppressed = nil
+end
+
+--[[
+    Capture-time filter for the events in ns.MESSAGE_ID_FILTERED_EVENTS.
+    Classifies with ns.MatchError -- the exact lookup the live handler uses --
+    so the filter can never drift from what the add-on acts on. Correlated
+    firings log in full; a firing with no id logs verbatim (unclassifiable is
+    signal); everything else folds into a per-id counter rendered as a summary
+    at the end of the report. Returns true when the firing was folded.
+]]
+function ns:SuppressUncorrelatedMessage(event, ...)
+	local position = ns.MESSAGE_ID_FILTERED_EVENTS[event]
+	local messageID = select(position, ...)
+	if messageID == nil then
+		return false
+	end
+	local message = select(position + 1, ...)
+	if ns.MatchError(messageID, message) then
+		return false
+	end
+	local entry = ns.diagnostics.suppressed[messageID]
+	if not entry then
+		local raw = string.sub(tostring(message), 1, EVENT_LOG_MAX_ARG_LENGTH)
+		entry = { event = event, text = (raw:gsub("|", "||")), count = 0 }
+		ns.diagnostics.suppressed[messageID] = entry
+	end
+	entry.count = entry.count + 1
+	return true
 end
 
 --[[
@@ -144,6 +182,9 @@ end
 ]]
 function ns:LogEvent(event, ...)
 	if ns.DIAGNOSTIC_EVENT_EXCLUDE[event] then
+		return
+	end
+	if ns.MESSAGE_ID_FILTERED_EVENTS[event] and ns:SuppressUncorrelatedMessage(event, ...) then
 		return
 	end
 	local parts = {}
@@ -169,6 +210,22 @@ function ns:BuildEventLogReport()
 	else
 		for _, entry in ipairs(log) do
 			lines[#lines + 1] = entry
+		end
+	end
+	local suppressed = ns.diagnostics.suppressed
+	if suppressed and next(suppressed) then
+		lines[#lines + 1] = ""
+		lines[#lines + 1] = "Suppressed uncorrelated traffic, biggest first"
+		local ids = {}
+		for id in pairs(suppressed) do
+			ids[#ids + 1] = id
+		end
+		table.sort(ids, function(a, b)
+			return suppressed[a].count > suppressed[b].count
+		end)
+		for _, id in ipairs(ids) do
+			local entry = suppressed[id]
+			lines[#lines + 1] = string.format("%s(%s, %s) x%d", entry.event, tostring(id), entry.text, entry.count)
 		end
 	end
 	return table.concat(lines, "\n")
@@ -323,6 +380,18 @@ ns.DIAGNOSTIC_API_CHECKS = {
 		"ChatEdit_GetActiveWindow",
 		function()
 			return type(ChatEdit_GetActiveWindow) == "function"
+		end,
+	},
+	{
+		"Settings.OpenToCategory",
+		function()
+			return type(Settings) == "table" and type(Settings.OpenToCategory) == "function"
+		end,
+	},
+	{
+		"InterfaceOptionsFrame_OpenToCategory (legacy)",
+		function()
+			return type(InterfaceOptionsFrame_OpenToCategory) == "function"
 		end,
 	},
 	{

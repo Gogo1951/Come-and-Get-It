@@ -34,19 +34,20 @@ L["MATCH_MINE"] = "Bergbau"
     zone name. Reorder the sentence freely for your language, but never reorder,
     add, or drop placeholders.
 
-    Nothing precedes the node name, so no article or adjective has to agree with
-    a name whose gender and number are unknown until runtime. Keep that property:
-    if your language reads better with an article, restructure the sentence so
-    the article attaches to a fixed word rather than to the placeholder.
+    The greeting closes on "!" so the node name starts a fresh clause with nothing
+    in front of it. That is load-bearing, not stylistic: no article or adjective
+    has to agree with a name whose gender and number are unknown until runtime, and
+    English dodges a/an ("an Iron Deposit" vs "a Gold Vein") for free. If your
+    language reads better with an article, attach it to a fixed word rather than to
+    the placeholder.
 
     The raid marker, add-on name, and " // " separator are prepended by the code
     -- the bodies must stay body-only.
 ]]
 
-L["MSG_FORMAT_LOCKED"] = "Hey Schurken, ich habe hier etwas gefunden, das ich nicht öffnen kann: %s bei %s, %s in %s!"
-L["MSG_FORMAT_HERB"] =
-	"Hey Kräuterkundige, ich habe hier etwas gefunden, das ich nicht pflücken kann: %s bei %s, %s in %s!"
-L["MSG_FORMAT_MINE"] = "Hey Bergleute, ich habe hier etwas gefunden, das ich nicht abbauen kann: %s bei %s, %s in %s!"
+L["MSG_FORMAT_LOCKED"] = "Hey Schurken! %s bei %s, %s in %s."
+L["MSG_FORMAT_HERB"] = "Hey Kräuterkundige! %s bei %s, %s in %s."
+L["MSG_FORMAT_MINE"] = "Hey Bergleute! %s bei %s, %s in %s."
 
 --------------------------------------------------------------------------------
 -- Chat
@@ -58,6 +59,9 @@ L["CHAT_LOADED"] =
 L["CHAT_TOO_LONG"] =
 	"Diese Ankündigung hat %d Bytes und überschreitet das Chat-Limit von %d Bytes. Kürze sie vor dem Senden."
 
+L["CHAT_OPTIONS_IN_COMBAT"] =
+	"Aus Sicherheitsgründen kann die Optionsoberfläche während des Kampfes nicht geöffnet werden."
+
 --------------------------------------------------------------------------------
 -- Options Panel
 --------------------------------------------------------------------------------
@@ -67,6 +71,10 @@ L["OPTIONS_INTRO"] =
 
 L["OPTIONS_WELCOME_NAME"] = "Willkommensnachricht aktivieren"
 L["OPTIONS_WELCOME_DESCRIPTION"] = "Gibt die Willkommensnachricht im Chat aus, wenn du dich einloggst."
+
+L["OPTIONS_COMMANDS_HEADER"] = "/Befehle"
+L["OPTIONS_COMMAND"] = "/cgi"
+L["OPTIONS_COMMAND_DESCRIPTION"] = "Öffnet die Optionsoberfläche für dieses Add-on."
 
 L["OPTIONS_OUTPUT_HEADER"] = "Ausgabe"
 L["OPTIONS_OUTPUT_NAME"] = "Standardausgabe"

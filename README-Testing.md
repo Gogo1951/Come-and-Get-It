@@ -50,7 +50,7 @@ The node name, both coordinates, and the zone must all be filled in. `{rt7}` app
 
 **7.** Type `/reload`. The UI must come back with no error window and no red text, the welcome line must print again, and the settings panel must still open. Failure is an error on reload or a panel that no longer opens.
 
-**8.** Read the last line of the main Come & Get It panel. It must show a version. In an unpackaged working copy it correctly reads **"Version Dev"**; in a packaged release build it must read a real dated version. Failure is a literal `@project-version@` on screen in a release build.
+**8.** Read the last line of the main Come & Get It panel. It must show a version. In an unpackaged working copy it correctly reads **"Version Dev"**; in a packaged release build it must read a real dated version. Failure is a literal `2026.07.25.B` on screen in a release build.
 
 When steps 1–8 pass on both flavors, the add-on is smoke-clean. Run the rest of the plan, and when it passes on both flavors, proceed to `4 - Pre-Launch Review Prompt.md`.
 
@@ -148,7 +148,7 @@ When steps 1–8 pass on both flavors, the add-on is smoke-clean. Run the rest o
 
 **48.** Click **Show Captured Events** before starting a log. The output box must read **(no events captured)** under a header line naming the add-on, its version, and your client. Failure is an error or an empty box with no explanation.
 
-**49.** Click **Start Event Log**, go trigger an announcement in the world, then come back and click **Show Captured Events**. The output must list timestamped entries including a `UI_ERROR_MESSAGE` line and a `GetNodeName` line naming the node you clicked. Failure is an empty log after you demonstrably fired an error.
+**49.** Click **Start Event Log**, go trigger an announcement in the world, and also pick a fight — spam an ability off cooldown or out of range a few times so the game shows red error text that has nothing to do with gathering. Come back and click **Show Captured Events**. The gather error must appear as a full timestamped `UI_ERROR_MESSAGE` line with a `GetNodeName` line naming the node you clicked, while the unrelated combat errors must **not** appear as individual lines — they belong in the counted summary at the end of the report, one row per error in the shape `UI_ERROR_MESSAGE(56, Ability is not ready yet.) x12`. Failure is an empty log after you demonstrably fired a gather error, the gather error itself landing in the summary instead of a full line, or combat spam flooding the log as individual entries.
 
 **50.** Click **Stop Event Log**, then **Show Captured Events** again. The output must return to **(no events captured)**. Failure is the old entries persisting after a stop.
 

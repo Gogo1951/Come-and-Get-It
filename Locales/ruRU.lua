@@ -34,21 +34,20 @@ L["MATCH_MINE"] = "Горное дело"
     zone name. Reorder the sentence freely for your language, but never reorder,
     add, or drop placeholders.
 
-    Nothing precedes the node name, so no article or adjective has to agree with
-    a name whose gender and number are unknown until runtime. Keep that property:
-    if your language reads better with an article, restructure the sentence so
-    the article attaches to a fixed word rather than to the placeholder.
+    The greeting closes on "!" so the node name starts a fresh clause with nothing
+    in front of it. That is load-bearing, not stylistic: no article or adjective
+    has to agree with a name whose gender and number are unknown until runtime, and
+    English dodges a/an ("an Iron Deposit" vs "a Gold Vein") for free. If your
+    language reads better with an article, attach it to a fixed word rather than to
+    the placeholder.
 
     The raid marker, add-on name, and " // " separator are prepended by the code
     -- the bodies must stay body-only.
 ]]
 
-L["MSG_FORMAT_LOCKED"] =
-	"Эй, Разбойники! Здесь есть кое-что, что я не могу открыть: %s (%s, %s) в %s!"
-L["MSG_FORMAT_HERB"] =
-	"Эй, Травники! Здесь есть кое-что, что я не могу собрать: %s (%s, %s) в %s!"
-L["MSG_FORMAT_MINE"] =
-	"Эй, Рудокопы! Здесь есть кое-что, что я не могу добыть: %s (%s, %s) в %s!"
+L["MSG_FORMAT_LOCKED"] = "Эй, Разбойники! %s (%s, %s) в %s."
+L["MSG_FORMAT_HERB"] = "Эй, Травники! %s (%s, %s) в %s."
+L["MSG_FORMAT_MINE"] = "Эй, Рудокопы! %s (%s, %s) в %s."
 
 --------------------------------------------------------------------------------
 -- Chat
@@ -60,6 +59,9 @@ L["CHAT_LOADED"] =
 L["CHAT_TOO_LONG"] =
 	"Это объявление занимает %d байт и превышает лимит чата в %d байт. Сократите его перед отправкой."
 
+L["CHAT_OPTIONS_IN_COMBAT"] =
+	"В целях безопасности окно настроек нельзя открыть во время боя."
+
 --------------------------------------------------------------------------------
 -- Options Panel
 --------------------------------------------------------------------------------
@@ -70,6 +72,10 @@ L["OPTIONS_INTRO"] =
 L["OPTIONS_WELCOME_NAME"] = "Включить приветственное сообщение"
 L["OPTIONS_WELCOME_DESCRIPTION"] =
 	"Выводит приветственное сообщение в чат при входе в игру."
+
+L["OPTIONS_COMMANDS_HEADER"] = "/Команды"
+L["OPTIONS_COMMAND"] = "/cgi"
+L["OPTIONS_COMMAND_DESCRIPTION"] = "Открывает окно настроек этого аддона."
 
 L["OPTIONS_OUTPUT_HEADER"] = "Вывод"
 L["OPTIONS_OUTPUT_NAME"] = "Вывод по умолчанию"
