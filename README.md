@@ -2,11 +2,11 @@
 
 Found an herb you can't pick, a mineral vein you can't mine, or a locked treasure chest with no Rogue in sight? Right-click it, and Come & Get It creates a message you can use to share or broadcast the coordinates. Being a hero has never been so easy.
 
-> {rt7} Come & Get It // Hey Miners, I came across something I can't mine: Rich Thorium Vein at 25, 54 in Eastern Plaguelands!
+> {rt7} Come & Get It // Hey Miners! Rich Thorium Vein at 25, 54 in Eastern Plaguelands!
 
-> {rt7} Come & Get It // Hey Herbalists, I came across something I can't pick: Black Lotus at 62, 37 in Winterspring!
+> {rt7} Come & Get It // Hey Herbalists! Black Lotus at 62, 37 in Winterspring!
 
-> {rt7} Come & Get It // Hey Rogues, I came across something I can't open: Solid Chest at 18, 39 in Tanaris!
+> {rt7} Come & Get It // Hey Rogues! Solid Chest at 18, 39 in Tanaris!
 
 ## Features
 
