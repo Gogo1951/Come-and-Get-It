@@ -7,6 +7,10 @@ local OptionsDesc = ns.OptionsDesc
 local OptionsSpacer = ns.OptionsSpacer
 local OptionsRowLabel = ns.OptionsRowLabel
 
+-- Feedback & Support rows lead with a narrow label so the URL input gets most of the row.
+local LINK_LABEL_WIDTH = 0.6
+local LINK_URL_WIDTH = ns.OPTIONS_ROW_WIDTH - LINK_LABEL_WIDTH
+
 --------------------------------------------------------------------------------
 -- Output Channel Dropdown
 --------------------------------------------------------------------------------
@@ -90,12 +94,12 @@ function ns.BuildGeneralOptions()
 			headerFeedback = OptionsHeader(L["FEEDBACK_HEADER"], 21),
 			spacerFeedback1 = OptionsSpacer(22),
 
-			labelDiscord = OptionsRowLabel(GetColor("TITLE") .. L["FEEDBACK_DISCORD"] .. "|r", 23),
+			labelDiscord = OptionsRowLabel(GetColor("TITLE") .. L["FEEDBACK_DISCORD"] .. "|r", 23, LINK_LABEL_WIDTH),
 			feedbackDiscord = {
 				type = "input",
 				name = "",
 				order = 24,
-				width = ns.OPTIONS_CONTROL_WIDTH,
+				width = LINK_URL_WIDTH,
 				get = function()
 					return ns.URL_DISCORD
 				end,
@@ -103,12 +107,12 @@ function ns.BuildGeneralOptions()
 			},
 			spacerDiscord = OptionsSpacer(25),
 
-			labelGitHub = OptionsRowLabel(GetColor("TITLE") .. L["FEEDBACK_GITHUB"] .. "|r", 26),
+			labelGitHub = OptionsRowLabel(GetColor("TITLE") .. L["FEEDBACK_GITHUB"] .. "|r", 26, LINK_LABEL_WIDTH),
 			feedbackGitHub = {
 				type = "input",
 				name = "",
 				order = 27,
-				width = ns.OPTIONS_CONTROL_WIDTH,
+				width = LINK_URL_WIDTH,
 				get = function()
 					return ns.URL_GITHUB
 				end,
@@ -116,12 +120,16 @@ function ns.BuildGeneralOptions()
 			},
 			spacerGitHub = OptionsSpacer(28),
 
-			labelCurseForge = OptionsRowLabel(GetColor("TITLE") .. L["FEEDBACK_CURSEFORGE"] .. "|r", 29),
+			labelCurseForge = OptionsRowLabel(
+				GetColor("TITLE") .. L["FEEDBACK_CURSEFORGE"] .. "|r",
+				29,
+				LINK_LABEL_WIDTH
+			),
 			feedbackCurseForge = {
 				type = "input",
 				name = "",
 				order = 30,
-				width = ns.OPTIONS_CONTROL_WIDTH,
+				width = LINK_URL_WIDTH,
 				get = function()
 					return ns.URL_CURSEFORGE
 				end,
@@ -129,12 +137,12 @@ function ns.BuildGeneralOptions()
 			},
 			spacerCurseForge = OptionsSpacer(31),
 
-			labelWago = OptionsRowLabel(GetColor("TITLE") .. L["FEEDBACK_WAGO"] .. "|r", 32),
+			labelWago = OptionsRowLabel(GetColor("TITLE") .. L["FEEDBACK_WAGO"] .. "|r", 32, LINK_LABEL_WIDTH),
 			feedbackWago = {
 				type = "input",
 				name = "",
 				order = 33,
-				width = ns.OPTIONS_CONTROL_WIDTH,
+				width = LINK_URL_WIDTH,
 				get = function()
 					return ns.URL_WAGO
 				end,
