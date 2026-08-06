@@ -108,7 +108,9 @@ local function TooltipShowsItem()
 	return false
 end
 
-local function MatchError(messageID, message)
+-- Shared with Diagnostics' noise filter (ns:SuppressUncorrelatedMessage), which
+-- must classify with this exact lookup; making it local again silently breaks that.
+function ns.MatchError(messageID, message)
 	-- Fast path: locked chests fire a known numeric ID.
 	if ERROR_MAPPING[messageID] then
 		return ERROR_MAPPING[messageID]
@@ -284,7 +286,7 @@ eventFrame:SetScript("OnEvent", function(_, event, ...)
 		end
 
 		local messageID, message = ...
-		local mapping = MatchError(messageID, message)
+		local mapping = ns.MatchError(messageID, message)
 		if mapping then
 			-- Capture the tooltip read at match time; a nil entry is the read-missed signal.
 			if ns.diagnostics and ns.diagnostics.logging then

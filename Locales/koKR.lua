@@ -34,19 +34,20 @@ L["MATCH_MINE"] = "채광"
     zone name. Reorder the sentence freely for your language, but never reorder,
     add, or drop placeholders.
 
-    Nothing precedes the node name, so no article or adjective has to agree with
-    a name whose gender and number are unknown until runtime. Keep that property:
-    if your language reads better with an article, restructure the sentence so
-    the article attaches to a fixed word rather than to the placeholder.
+    The greeting closes on "!" so the node name starts a fresh clause with nothing
+    in front of it. That is load-bearing, not stylistic: no article or adjective
+    has to agree with a name whose gender and number are unknown until runtime, and
+    English dodges a/an ("an Iron Deposit" vs "a Gold Vein") for free. If your
+    language reads better with an article, attach it to a fixed word rather than to
+    the placeholder.
 
     The raid marker, add-on name, and " // " separator are prepended by the code
     -- the bodies must stay body-only.
 ]]
 
-L["MSG_FORMAT_LOCKED"] = "도적 여러분! 제가 열 수 없는 것을 발견했습니다: %s, 위치 %s, %s (%s)!"
-L["MSG_FORMAT_HERB"] =
-	"약초채집가 여러분! 제가 채집할 수 없는 것을 발견했습니다: %s, 위치 %s, %s (%s)!"
-L["MSG_FORMAT_MINE"] = "광부 여러분! 제가 캘 수 없는 것을 발견했습니다: %s, 위치 %s, %s (%s)!"
+L["MSG_FORMAT_LOCKED"] = "도적 여러분! %s, 위치 %s, %s (%s)."
+L["MSG_FORMAT_HERB"] = "약초채집가 여러분! %s, 위치 %s, %s (%s)."
+L["MSG_FORMAT_MINE"] = "광부 여러분! %s, 위치 %s, %s (%s)."
 
 --------------------------------------------------------------------------------
 -- Chat
@@ -58,6 +59,8 @@ L["CHAT_LOADED"] =
 L["CHAT_TOO_LONG"] =
 	"이 공지는 %d바이트로 채팅 제한인 %d바이트를 초과합니다. 보내기 전에 줄여주세요."
 
+L["CHAT_OPTIONS_IN_COMBAT"] = "안전을 위해 전투 중에는 설정 창을 열 수 없습니다."
+
 --------------------------------------------------------------------------------
 -- Options Panel
 --------------------------------------------------------------------------------
@@ -67,6 +70,10 @@ L["OPTIONS_INTRO"] =
 
 L["OPTIONS_WELCOME_NAME"] = "환영 메시지 활성화"
 L["OPTIONS_WELCOME_DESCRIPTION"] = "로그인 시 채팅창에 환영 메시지를 출력합니다."
+
+L["OPTIONS_COMMANDS_HEADER"] = "/명령어"
+L["OPTIONS_COMMAND"] = "/cgi"
+L["OPTIONS_COMMAND_DESCRIPTION"] = "이 애드온의 설정 창을 엽니다."
 
 L["OPTIONS_OUTPUT_HEADER"] = "출력"
 L["OPTIONS_OUTPUT_NAME"] = "기본 출력"

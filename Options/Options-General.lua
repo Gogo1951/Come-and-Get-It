@@ -5,6 +5,7 @@ local GetColor = ns.GetColor
 local OptionsHeader = ns.OptionsHeader
 local OptionsDesc = ns.OptionsDesc
 local OptionsSpacer = ns.OptionsSpacer
+local OptionsRowLabel = ns.OptionsRowLabel
 
 --------------------------------------------------------------------------------
 -- Output Channel Dropdown
@@ -44,25 +45,29 @@ function ns.BuildGeneralOptions()
 				end,
 			},
 
+			-- /Commands
+			spacerCommands0 = OptionsSpacer(7),
+			headerCommands = OptionsHeader(L["OPTIONS_COMMANDS_HEADER"], 8),
+			spacerCommands1 = OptionsSpacer(9),
+			descCommands = OptionsDesc(
+				GetColor("INFO") .. L["OPTIONS_COMMAND"] .. "|r" .. "  " .. L["OPTIONS_COMMAND_DESCRIPTION"],
+				10
+			),
+
 			-- Output
-			spacerOutput0 = OptionsSpacer(10),
-			headerOutput = OptionsHeader(L["OPTIONS_OUTPUT_HEADER"], 11),
-			spacerOutput1 = OptionsSpacer(12),
+			spacerOutput0 = OptionsSpacer(12),
+			headerOutput = OptionsHeader(L["OPTIONS_OUTPUT_HEADER"], 13),
+			spacerOutput1 = OptionsSpacer(14),
 
 			-- Default Output (label and dropdown share one line)
-			labelOutput = {
-				type = "description",
-				name = GetColor("TITLE") .. L["OPTIONS_OUTPUT_NAME"] .. "|r",
-				fontSize = "medium",
-				width = "double",
-				order = 13,
-			},
+			labelOutput = OptionsRowLabel(GetColor("TITLE") .. L["OPTIONS_OUTPUT_NAME"] .. "|r", 15),
 			outputChannel = {
 				type = "select",
 				name = "",
 				desc = L["OPTIONS_OUTPUT_DESCRIPTION"],
 				style = "dropdown",
-				order = 14,
+				width = ns.OPTIONS_CONTROL_WIDTH,
+				order = 16,
 				values = OUTPUT_VALUES,
 				sorting = OUTPUT_SORTING,
 				get = function()
@@ -72,25 +77,25 @@ function ns.BuildGeneralOptions()
 					ns.db.profile.defaultOutput = value
 				end,
 			},
-			spacerOutput2 = OptionsSpacer(15),
+			spacerOutput2 = OptionsSpacer(17),
 
 			descOutputNote = {
 				type = "description",
 				name = GetColor("HELP") .. L["OPTIONS_OUTPUT_NOTE"] .. "|r",
 				fontSize = "medium",
-				order = 16,
+				order = 18,
 			},
 
 			spacerFeedback0 = OptionsSpacer(20),
 			headerFeedback = OptionsHeader(L["FEEDBACK_HEADER"], 21),
 			spacerFeedback1 = OptionsSpacer(22),
 
-			labelDiscord = OptionsDesc(GetColor("TITLE") .. L["FEEDBACK_DISCORD"] .. "|r", 23),
+			labelDiscord = OptionsRowLabel(GetColor("TITLE") .. L["FEEDBACK_DISCORD"] .. "|r", 23),
 			feedbackDiscord = {
 				type = "input",
 				name = "",
 				order = 24,
-				width = "double",
+				width = ns.OPTIONS_CONTROL_WIDTH,
 				get = function()
 					return ns.URL_DISCORD
 				end,
@@ -98,12 +103,12 @@ function ns.BuildGeneralOptions()
 			},
 			spacerDiscord = OptionsSpacer(25),
 
-			labelGitHub = OptionsDesc(GetColor("TITLE") .. L["FEEDBACK_GITHUB"] .. "|r", 26),
+			labelGitHub = OptionsRowLabel(GetColor("TITLE") .. L["FEEDBACK_GITHUB"] .. "|r", 26),
 			feedbackGitHub = {
 				type = "input",
 				name = "",
 				order = 27,
-				width = "double",
+				width = ns.OPTIONS_CONTROL_WIDTH,
 				get = function()
 					return ns.URL_GITHUB
 				end,
@@ -111,12 +116,12 @@ function ns.BuildGeneralOptions()
 			},
 			spacerGitHub = OptionsSpacer(28),
 
-			labelCurseForge = OptionsDesc(GetColor("TITLE") .. L["FEEDBACK_CURSEFORGE"] .. "|r", 29),
+			labelCurseForge = OptionsRowLabel(GetColor("TITLE") .. L["FEEDBACK_CURSEFORGE"] .. "|r", 29),
 			feedbackCurseForge = {
 				type = "input",
 				name = "",
 				order = 30,
-				width = "double",
+				width = ns.OPTIONS_CONTROL_WIDTH,
 				get = function()
 					return ns.URL_CURSEFORGE
 				end,
@@ -124,12 +129,12 @@ function ns.BuildGeneralOptions()
 			},
 			spacerCurseForge = OptionsSpacer(31),
 
-			labelWago = OptionsDesc(GetColor("TITLE") .. L["FEEDBACK_WAGO"] .. "|r", 32),
+			labelWago = OptionsRowLabel(GetColor("TITLE") .. L["FEEDBACK_WAGO"] .. "|r", 32),
 			feedbackWago = {
 				type = "input",
 				name = "",
 				order = 33,
-				width = "double",
+				width = ns.OPTIONS_CONTROL_WIDTH,
 				get = function()
 					return ns.URL_WAGO
 				end,

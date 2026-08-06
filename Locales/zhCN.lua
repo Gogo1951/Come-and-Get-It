@@ -34,18 +34,20 @@ L["MATCH_MINE"] = "采矿"
     zone name. Reorder the sentence freely for your language, but never reorder,
     add, or drop placeholders.
 
-    Nothing precedes the node name, so no article or adjective has to agree with
-    a name whose gender and number are unknown until runtime. Keep that property:
-    if your language reads better with an article, restructure the sentence so
-    the article attaches to a fixed word rather than to the placeholder.
+    The greeting closes on "!" so the node name starts a fresh clause with nothing
+    in front of it. That is load-bearing, not stylistic: no article or adjective
+    has to agree with a name whose gender and number are unknown until runtime, and
+    English dodges a/an ("an Iron Deposit" vs "a Gold Vein") for free. If your
+    language reads better with an article, attach it to a fixed word rather than to
+    the placeholder.
 
     The raid marker, add-on name, and " // " separator are prepended by the code
     -- the bodies must stay body-only.
 ]]
 
-L["MSG_FORMAT_LOCKED"] = "潜行者们！我发现了一个我打不开的东西：%s，坐标 %s, %s（%s）！"
-L["MSG_FORMAT_HERB"] = "草药师们！我发现了一个我无法采集的东西：%s，坐标 %s, %s（%s）！"
-L["MSG_FORMAT_MINE"] = "矿工们！我发现了一个我无法开采的东西：%s，坐标 %s, %s（%s）！"
+L["MSG_FORMAT_LOCKED"] = "潜行者们！%s，坐标 %s, %s（%s）。"
+L["MSG_FORMAT_HERB"] = "草药师们！%s，坐标 %s, %s（%s）。"
+L["MSG_FORMAT_MINE"] = "矿工们！%s，坐标 %s, %s（%s）。"
 
 --------------------------------------------------------------------------------
 -- Chat
@@ -56,6 +58,8 @@ L["CHAT_LOADED"] =
 
 L["CHAT_TOO_LONG"] = "此通告为 %d 字节，超过了 %d 字节的聊天上限。请在发送前缩短。"
 
+L["CHAT_OPTIONS_IN_COMBAT"] = "出于安全考虑，战斗中无法打开选项界面。"
+
 --------------------------------------------------------------------------------
 -- Options Panel
 --------------------------------------------------------------------------------
@@ -65,6 +69,10 @@ L["OPTIONS_INTRO"] =
 
 L["OPTIONS_WELCOME_NAME"] = "启用欢迎消息"
 L["OPTIONS_WELCOME_DESCRIPTION"] = "登录时在聊天窗口打印欢迎消息。"
+
+L["OPTIONS_COMMANDS_HEADER"] = "/命令"
+L["OPTIONS_COMMAND"] = "/cgi"
+L["OPTIONS_COMMAND_DESCRIPTION"] = "打开此插件的选项界面。"
 
 L["OPTIONS_OUTPUT_HEADER"] = "输出"
 L["OPTIONS_OUTPUT_NAME"] = "默认输出"

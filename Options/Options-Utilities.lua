@@ -7,8 +7,8 @@ local GetColor = ns.GetColor
 
 -- Dot-defined (no self) so callers use dot invocation, matching the panel builders.
 
-function ns.OptionsHeader(text, order)
-	return { type = "header", name = GetColor("TITLE") .. text .. "|r", order = order }
+function ns.OptionsHeader(text, order, hidden)
+	return { type = "header", name = GetColor("TITLE") .. text .. "|r", order = order, hidden = hidden }
 end
 
 function ns.OptionsDesc(text, order)
@@ -17,4 +17,14 @@ end
 
 function ns.OptionsSpacer(order)
 	return { type = "description", name = " ", order = order }
+end
+
+function ns.OptionsRowLabel(text, order, width)
+	return {
+		type = "description",
+		name = text,
+		fontSize = "medium",
+		width = width or ns.OPTIONS_LABEL_WIDTH,
+		order = order,
+	}
 end
