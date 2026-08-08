@@ -2,11 +2,11 @@
 
 Found an herb you can't pick, a mineral vein you can't mine, or a locked treasure chest with no Rogue in sight? Right-click it, and Come & Get It creates a message you can use to share or broadcast the coordinates. Being a hero has never been so easy.
 
-> {rt7} Come & Get It // Hey Miners! Rich Thorium Vein at 25, 54 in Eastern Plaguelands!
+    {rt7} Come & Get It // Hey Miners! Rich Thorium Vein at 25, 54 in Eastern Plaguelands!
 
-> {rt7} Come & Get It // Hey Herbalists! Black Lotus at 62, 37 in Winterspring!
+    {rt7} Come & Get It // Hey Herbalists! Black Lotus at 62, 37 in Winterspring!
 
-> {rt7} Come & Get It // Hey Rogues! Solid Chest at 18, 39 in Tanaris!
+    {rt7} Come & Get It // Hey Rogues! Solid Chest at 18, 39 in Tanaris!
 
 ## Features
 
@@ -49,7 +49,7 @@ A cross raid marker so it stands out in a busy chat window, who the callout is f
 
 | Channel | Who sees it |
 | --- | --- |
-| Local (/1) | The whole zone — though Classic layering means only players on your layer |
+| Local /1 | The whole zone — though Classic layering means only players on your layer |
 | Say / Yell | Whoever is close enough to hear you |
 | Party | Your group |
 | Guild | Your guild |
