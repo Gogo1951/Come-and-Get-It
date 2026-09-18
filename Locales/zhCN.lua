@@ -28,8 +28,8 @@ L["MATCH_MINE"] = "采矿"
 --------------------------------------------------------------------------------
 
 --[[
-    Translator guidance. Each MSG_FORMAT_* string is one complete announcement
-    body, picked by what the player could not interact with. The code fills four
+    Translator guidance. Each MSG_FORMAT_* string is the complete line sent to
+    chat, picked by what the player could not interact with. The code fills four
     %s placeholders in this fixed order: node name, x coordinate, y coordinate,
     zone name. Reorder the sentence freely for your language, but never reorder,
     add, or drop placeholders.
@@ -41,8 +41,8 @@ L["MATCH_MINE"] = "采矿"
     language reads better with an article, attach it to a fixed word rather than to
     the placeholder.
 
-    The raid marker, add-on name, and " // " separator are prepended by the code
-    -- the bodies must stay body-only.
+    Don't add a raid marker or the add-on name: WoW Forever blocks raid markers
+    in chat, and the line reads as the player talking.
 ]]
 
 L["MSG_FORMAT_LOCKED"] = "潜行者们！%s，坐标 %s, %s（%s）。"
@@ -56,7 +56,7 @@ L["MSG_FORMAT_MINE"] = "矿工们！%s，坐标 %s, %s（%s）。"
 L["CHAT_LOADED"] =
 	"版本 %s。设置（包括禁用此消息的选项）可以在 选项 > 插件 > Come & Get It 下找到。喜欢这个插件吗？告诉你的朋友吧！(="
 
-L["CHAT_TOO_LONG"] = "此通告为 %d 字节，超过了 %d 字节的聊天上限。请在发送前缩短。"
+L["CHAT_TOO_LONG"] = "此草稿为 %d 字节，超过了 %d 字节的聊天上限。请在发送前缩短。"
 
 L["CHAT_OPTIONS_IN_COMBAT"] = "出于安全考虑，战斗中无法打开选项界面。"
 
@@ -64,8 +64,8 @@ L["CHAT_OPTIONS_IN_COMBAT"] = "出于安全考虑，战斗中无法打开选项�
 -- Options Panel
 --------------------------------------------------------------------------------
 
-L["OPTIONS_INTRO"] =
-	"发现了你无法采集的草药、无法开采的矿脉，或者是一个上锁的宝箱，而附近却没有潜行者？右键点击它，Come & Get It 会生成一条消息，你可以用来分享或广播坐标。成为英雄从未如此简单。"
+L["OPTIONS_DESCRIPTION"] =
+	"发现了采不了的草药、挖不了的矿脉，或是一个上了锁的宝箱，附近却没有潜行者？右键点击它，Come & Get It 就会生成一条消息，供你分享或广播坐标。当英雄从未如此轻松。"
 
 L["OPTIONS_WELCOME_NAME"] = "启用欢迎消息"
 L["OPTIONS_WELCOME_DESCRIPTION"] = "登录时在聊天窗口打印欢迎消息。"
@@ -77,9 +77,7 @@ L["OPTIONS_COMMAND_DESCRIPTION"] = "打开此插件的选项界面。"
 L["OPTIONS_OUTPUT_HEADER"] = "输出"
 L["OPTIONS_OUTPUT_NAME"] = "默认输出"
 L["OPTIONS_OUTPUT_DESCRIPTION"] =
-	"选择将通告定向到哪个聊天频道。草稿会出现在你的聊天输入框中，你可以在发送前检查，或更改目标频道。"
-L["OPTIONS_OUTPUT_NOTE"] =
-	"本地 (/1) 是该区域的综合频道，且因分层而异。你的通告会传遍整个区域，但只有与你处于同一层的玩家才能看到。"
+	"选择草稿要打开的聊天频道；本地 (/1) 覆盖整个区域，但只有与你同层的玩家能看到。"
 
 L["OPTIONS_OUTPUT_CHANNEL1"] = "本地 (/1)"
 L["OPTIONS_OUTPUT_SAY"] = "说"

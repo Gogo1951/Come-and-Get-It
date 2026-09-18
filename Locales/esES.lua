@@ -28,8 +28,8 @@ L["MATCH_MINE"] = "Minería"
 --------------------------------------------------------------------------------
 
 --[[
-    Translator guidance. Each MSG_FORMAT_* string is one complete announcement
-    body, picked by what the player could not interact with. The code fills four
+    Translator guidance. Each MSG_FORMAT_* string is the complete line sent to
+    chat, picked by what the player could not interact with. The code fills four
     %s placeholders in this fixed order: node name, x coordinate, y coordinate,
     zone name. Reorder the sentence freely for your language, but never reorder,
     add, or drop placeholders.
@@ -41,13 +41,13 @@ L["MATCH_MINE"] = "Minería"
     language reads better with an article, attach it to a fixed word rather than to
     the placeholder.
 
-    The raid marker, add-on name, and " // " separator are prepended by the code
-    -- the bodies must stay body-only.
+    Don't add a raid marker or the add-on name: WoW Forever blocks raid markers
+    in chat, and the line reads as the player talking.
 ]]
 
-L["MSG_FORMAT_LOCKED"] = "¡Pícaros! %s (%s, %s) en %s."
-L["MSG_FORMAT_HERB"] = "¡Herboristas! %s (%s, %s) en %s."
-L["MSG_FORMAT_MINE"] = "¡Mineros! %s (%s, %s) en %s."
+L["MSG_FORMAT_LOCKED"] = "¡Ey, Pícaros! %s (%s, %s) en %s."
+L["MSG_FORMAT_HERB"] = "¡Ey, Herboristas! %s (%s, %s) en %s."
+L["MSG_FORMAT_MINE"] = "¡Ey, Mineros! %s (%s, %s) en %s."
 
 --------------------------------------------------------------------------------
 -- Chat
@@ -57,7 +57,7 @@ L["CHAT_LOADED"] =
 	"Versión %s. Los ajustes (incluida la opción para desactivar este mensaje) se encuentran en Opciones > AddOns > Come & Get It. ¿Te gusta el add-on? ¡Cuéntaselo a un amigo! (="
 
 L["CHAT_TOO_LONG"] =
-	"Este anuncio tiene %d bytes y supera el límite de %d bytes del chat. Acórtalo antes de enviarlo."
+	"Este borrador tiene %d bytes y supera el límite de %d bytes del chat. Acórtalo antes de enviarlo."
 
 L["CHAT_OPTIONS_IN_COMBAT"] = "Como medida de seguridad, la interfaz de opciones no se puede abrir durante el combate."
 
@@ -65,8 +65,8 @@ L["CHAT_OPTIONS_IN_COMBAT"] = "Como medida de seguridad, la interfaz de opciones
 -- Options Panel
 --------------------------------------------------------------------------------
 
-L["OPTIONS_INTRO"] =
-	"¿Encontraste una hierba que no puedes recolectar, una veta de mineral que no puedes minar o un cofre cerrado sin un Pícaro a la vista? Haz clic derecho y Come & Get It creará un mensaje que puedes usar para compartir o anunciar las coordenadas. Ser un héroe nunca fue tan fácil."
+L["OPTIONS_DESCRIPTION"] =
+	"¿Has encontrado una hierba que no puedes recoger, una veta de mineral que no puedes extraer o un cofre del tesoro cerrado con llave sin ningún Pícaro a la vista? Haz clic derecho encima y Come & Get It crea un mensaje que puedes usar para compartir o difundir las coordenadas. Ser un héroe nunca ha sido tan fácil."
 
 L["OPTIONS_WELCOME_NAME"] = "Activar mensaje de bienvenida"
 L["OPTIONS_WELCOME_DESCRIPTION"] = "Muestra el mensaje de bienvenida en el chat al iniciar sesión."
@@ -78,9 +78,7 @@ L["OPTIONS_COMMAND_DESCRIPTION"] = "Abre la interfaz de opciones de este add-on.
 L["OPTIONS_OUTPUT_HEADER"] = "Salida"
 L["OPTIONS_OUTPUT_NAME"] = "Salida predeterminada"
 L["OPTIONS_OUTPUT_DESCRIPTION"] =
-	"Elige a qué canal de chat se dirige el anuncio. El borrador se abre en tu cuadro de chat para que puedas revisarlo o redirigirlo antes de enviarlo."
-L["OPTIONS_OUTPUT_NOTE"] =
-	"Local (/1) es el canal General de la zona y es específico de cada capa. Tu anuncio llega a toda la zona, pero solo lo verán los jugadores que estén en tu capa actual."
+	"Elige el canal de chat en el que se abre tu borrador; Local (/1) llega a toda la zona, pero solo a los jugadores de tu capa actual."
 
 L["OPTIONS_OUTPUT_CHANNEL1"] = "Local (/1)"
 L["OPTIONS_OUTPUT_SAY"] = "Decir"

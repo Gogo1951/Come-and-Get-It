@@ -286,9 +286,7 @@ end
 
 --[[
     Existence and shape checks only: read-only, no side effects, no protected
-    calls. Kept aligned with the API guards in Features/Core.lua and in this
-    file. Modern and legacy fallbacks are listed separately so the report shows
-    exactly what each client provides.
+    calls. One row per API the add-on depends on.
 ]]
 ns.DIAGNOSTIC_API_CHECKS = {
 	-- { label, testFunction }
@@ -299,33 +297,15 @@ ns.DIAGNOSTIC_API_CHECKS = {
 		end,
 	},
 	{
-		"GetAddOnMetadata (legacy)",
-		function()
-			return type(GetAddOnMetadata) == "function"
-		end,
-	},
-	{
 		"C_AddOns.GetAddOnInfo",
 		function()
 			return type(C_AddOns) == "table" and type(C_AddOns.GetAddOnInfo) == "function"
 		end,
 	},
 	{
-		"GetAddOnInfo (legacy)",
-		function()
-			return type(GetAddOnInfo) == "function"
-		end,
-	},
-	{
 		"C_AddOns.GetNumAddOns",
 		function()
 			return type(C_AddOns) == "table" and type(C_AddOns.GetNumAddOns) == "function"
-		end,
-	},
-	{
-		"GetNumAddOns (legacy)",
-		function()
-			return type(GetNumAddOns) == "function"
 		end,
 	},
 	{
@@ -347,13 +327,13 @@ ns.DIAGNOSTIC_API_CHECKS = {
 		end,
 	},
 	{
-		"TooltipUtil.GetDisplayedItem",
+		"GetGameMessageInfo",
 		function()
-			return type(TooltipUtil) == "table" and type(TooltipUtil.GetDisplayedItem) == "function"
+			return type(GetGameMessageInfo) == "function"
 		end,
 	},
 	{
-		"GameTooltip.GetItem (legacy)",
+		"GameTooltip.GetItem",
 		function()
 			return type(GameTooltip) == "table" and type(GameTooltip.GetItem) == "function"
 		end,
@@ -389,12 +369,6 @@ ns.DIAGNOSTIC_API_CHECKS = {
 		end,
 	},
 	{
-		"InterfaceOptionsFrame_OpenToCategory (legacy)",
-		function()
-			return type(InterfaceOptionsFrame_OpenToCategory) == "function"
-		end,
-	},
-	{
 		"InCombatLockdown",
 		function()
 			return type(InCombatLockdown) == "function"
@@ -419,21 +393,9 @@ ns.DIAGNOSTIC_API_CHECKS = {
 		end,
 	},
 	{
-		"GetCVar (legacy)",
-		function()
-			return type(GetCVar) == "function"
-		end,
-	},
-	{
 		"C_CVar.SetCVar",
 		function()
 			return type(C_CVar) == "table" and type(C_CVar.SetCVar) == "function"
-		end,
-	},
-	{
-		"SetCVar (legacy)",
-		function()
-			return type(SetCVar) == "function"
 		end,
 	},
 }
@@ -461,7 +423,7 @@ end
 function ns:BuildContextReport()
 	local lines = { GetClientHeader(), "" }
 
-	lines[#lines + 1] = string.format("Locked-chest error ID = %s", tostring(ns.ERROR_ID_LOCKED_CHEST))
+	lines[#lines + 1] = string.format("Locked-chest error string = %s", ns.ERROR_STRING_LOCKED_CHEST)
 	lines[#lines + 1] = string.format("Herb match string = %q", tostring(L["MATCH_HERB"]))
 	lines[#lines + 1] = string.format("Mine match string = %q", tostring(L["MATCH_MINE"]))
 
@@ -472,22 +434,15 @@ function ns:BuildContextReport()
 		string.format("InCombatLockdown() = %s (announcements suppressed in combat)", tostring(InCombatLockdown()))
 
 	lines[#lines + 1] = ""
-	if type(C_Map) ~= "table" then
-		lines[#lines + 1] = "C_Map: not available"
-		return table.concat(lines, "\n")
-	end
-
-	local mapID = C_Map.GetBestMapForUnit and C_Map.GetBestMapForUnit("player")
+	local mapID = C_Map.GetBestMapForUnit("player")
 	lines[#lines + 1] = string.format("C_Map.GetBestMapForUnit('player') = %s", tostring(mapID))
-	if mapID and C_Map.GetPlayerMapPosition then
+	if mapID then
 		local position = C_Map.GetPlayerMapPosition(mapID, "player")
 		if position then
 			lines[#lines + 1] = string.format("  position = %.1f, %.1f", position.x * 100, position.y * 100)
 		else
 			lines[#lines + 1] = "  position = nil"
 		end
-	end
-	if mapID and C_Map.GetMapInfo then
 		local info = C_Map.GetMapInfo(mapID)
 		lines[#lines + 1] = string.format("  zone = %s", info and info.name or "nil")
 	end
@@ -501,13 +456,9 @@ end
 
 function ns:BuildAddOnReport()
 	local lines = { GetClientHeader(), "" }
-	local getInfo = (C_AddOns and C_AddOns.GetAddOnInfo) or GetAddOnInfo
-	local getMeta = (C_AddOns and C_AddOns.GetAddOnMetadata) or GetAddOnMetadata
-	local getCount = (C_AddOns and C_AddOns.GetNumAddOns) or GetNumAddOns
-	local count = getCount()
-	for index = 1, count do
-		local name, _, _, loadable = getInfo(index)
-		local version = getMeta(index, "Version") or "?"
+	for index = 1, C_AddOns.GetNumAddOns() do
+		local name, _, _, loadable = C_AddOns.GetAddOnInfo(index)
+		local version = C_AddOns.GetAddOnMetadata(index, "Version") or "?"
 		lines[#lines + 1] = string.format("%s v%s [%s]", name, version, loadable and "loadable" or "disabled")
 	end
 	return table.concat(lines, "\n")
@@ -576,31 +527,9 @@ end
 ]]
 
 function ns:GetTaintLogState()
-	--[[
-        COMPATIBILITY: C_CVar.GetCVar is canonical on Retail (the global is
-        deprecated/removed there); the Classic clients still expose the global.
-        Pick by availability and call exactly one -- never a (modern) or
-        (legacy) truthy fallback.
-    ]]
-	local getCVar
-	if type(C_CVar) == "table" and type(C_CVar.GetCVar) == "function" then
-		getCVar = C_CVar.GetCVar
-	else
-		getCVar = GetCVar
-	end
-	return tonumber(getCVar("taintLog")) or 0
+	return tonumber(C_CVar.GetCVar("taintLog")) or 0
 end
 
 function ns:SetTaintLog(enabled)
-	--[[
-        COMPATIBILITY: see GetTaintLogState -- C_CVar.SetCVar on Retail, the
-        global on Classic. Pick by availability and call exactly one.
-    ]]
-	local setCVar
-	if type(C_CVar) == "table" and type(C_CVar.SetCVar) == "function" then
-		setCVar = C_CVar.SetCVar
-	else
-		setCVar = SetCVar
-	end
-	setCVar("taintLog", enabled and 2 or 0)
+	C_CVar.SetCVar("taintLog", enabled and 2 or 0)
 end

@@ -10,7 +10,7 @@ local _, ns = ...
     account-wide in practice and Reset Profile restores every one of them to its
     install value. Nothing goes in `global` -- AceDB's ResetProfile does not
     touch that scope, so a setting parked there would survive a reset and make
-    the Profiles panel lie. AceDB applies these via metatables.
+    the Profiles panel lie.
 ]]
 ns.DATABASE_DEFAULTS = {
 	profile = {

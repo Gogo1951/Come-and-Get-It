@@ -28,8 +28,8 @@ L["MATCH_MINE"] = "Bergbau"
 --------------------------------------------------------------------------------
 
 --[[
-    Translator guidance. Each MSG_FORMAT_* string is one complete announcement
-    body, picked by what the player could not interact with. The code fills four
+    Translator guidance. Each MSG_FORMAT_* string is the complete line sent to
+    chat, picked by what the player could not interact with. The code fills four
     %s placeholders in this fixed order: node name, x coordinate, y coordinate,
     zone name. Reorder the sentence freely for your language, but never reorder,
     add, or drop placeholders.
@@ -41,8 +41,8 @@ L["MATCH_MINE"] = "Bergbau"
     language reads better with an article, attach it to a fixed word rather than to
     the placeholder.
 
-    The raid marker, add-on name, and " // " separator are prepended by the code
-    -- the bodies must stay body-only.
+    Don't add a raid marker or the add-on name: WoW Forever blocks raid markers
+    in chat, and the line reads as the player talking.
 ]]
 
 L["MSG_FORMAT_LOCKED"] = "Hey Schurken! %s bei %s, %s in %s."
@@ -57,7 +57,7 @@ L["CHAT_LOADED"] =
 	"Version %s. Einstellungen (einschließlich der Option, diese Nachricht zu deaktivieren) finden sich unter Optionen > AddOns > Come & Get It. Gefällt dir das Add-on? Erzähl einem Freund davon! (="
 
 L["CHAT_TOO_LONG"] =
-	"Diese Ankündigung hat %d Bytes und überschreitet das Chat-Limit von %d Bytes. Kürze sie vor dem Senden."
+	"Dieser Entwurf hat %d Bytes und überschreitet das Chat-Limit von %d Bytes. Kürze ihn vor dem Senden."
 
 L["CHAT_OPTIONS_IN_COMBAT"] =
 	"Aus Sicherheitsgründen kann die Optionsoberfläche während des Kampfes nicht geöffnet werden."
@@ -66,8 +66,8 @@ L["CHAT_OPTIONS_IN_COMBAT"] =
 -- Options Panel
 --------------------------------------------------------------------------------
 
-L["OPTIONS_INTRO"] =
-	"Hast du ein Kraut gefunden, das du nicht pflücken kannst, eine Erzader, die du nicht abbauen kannst, oder eine verschlossene Schatztruhe und kein Schurke ist in Sicht? Klicke mit der rechten Maustaste darauf, und Come & Get It erstellt eine Nachricht, mit der du die Koordinaten teilen oder senden kannst. Ein Held zu sein war noch nie so einfach."
+L["OPTIONS_DESCRIPTION"] =
+	"Ein Kraut gefunden, das du nicht pflücken kannst, eine Erzader, die du nicht abbauen kannst, oder eine verschlossene Schatztruhe, und kein Schurke in Sicht? Rechtsklicke darauf, und Come & Get It erstellt eine Nachricht, mit der du die Koordinaten teilen oder verbreiten kannst. Ein Held zu sein war noch nie so einfach."
 
 L["OPTIONS_WELCOME_NAME"] = "Willkommensnachricht aktivieren"
 L["OPTIONS_WELCOME_DESCRIPTION"] = "Gibt die Willkommensnachricht im Chat aus, wenn du dich einloggst."
@@ -79,9 +79,7 @@ L["OPTIONS_COMMAND_DESCRIPTION"] = "Öffnet die Optionsoberfläche für dieses A
 L["OPTIONS_OUTPUT_HEADER"] = "Ausgabe"
 L["OPTIONS_OUTPUT_NAME"] = "Standardausgabe"
 L["OPTIONS_OUTPUT_DESCRIPTION"] =
-	"Wähle, an welchen Chatkanal die Ankündigung gerichtet wird. Der Entwurf erscheint in deinem Chat-Eingabefeld, sodass du ihn vor dem Senden überprüfen oder umleiten kannst."
-L["OPTIONS_OUTPUT_NOTE"] =
-	"Lokal (/1) ist der Allgemein-Kanal der Zone und ist Layer-spezifisch. Deine Ankündigung erreicht die ganze Zone, aber nur Spieler auf deinem aktuellen Layer sehen sie."
+	"Legt fest, in welchem Chatkanal dein Entwurf geöffnet wird; Lokal (/1) erreicht die ganze Zone, aber nur Spieler auf deinem aktuellen Layer."
 
 L["OPTIONS_OUTPUT_CHANNEL1"] = "Lokal (/1)"
 L["OPTIONS_OUTPUT_SAY"] = "Sagen"

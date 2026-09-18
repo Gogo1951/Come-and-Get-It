@@ -37,15 +37,16 @@ end
 --------------------------------------------------------------------------------
 
 --[[
-    Prepends the marker, add-on name, and " // " so every locale's MSG_FORMAT
-    carries the BODY ONLY. A locale that re-bakes the prefix double-prefixes.
+    Sends the locale body as-is: no raid marker, no add-on name prefix. WoW
+    Forever blocks raid-marker tokens in chat, so the line stays plain on every
+    client. Locale MSG_FORMATs carry the whole sent line.
 ]]
 function ns:BuildAnnounceMessage(formatKey, ...)
 	local template = L[formatKey]
 	if not template then
 		return nil
 	end
-	local message = ns.TARGET_MARKER .. " " .. L["ADDON_TITLE"] .. " // " .. string.format(template, ...)
+	local message = string.format(template, ...)
 	-- Bodies never carry item links, so stripping stray pipes is safe here.
 	return (message:gsub("|", ""))
 end

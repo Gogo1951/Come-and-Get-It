@@ -28,8 +28,8 @@ L["MATCH_MINE"] = "Горное дело"
 --------------------------------------------------------------------------------
 
 --[[
-    Translator guidance. Each MSG_FORMAT_* string is one complete announcement
-    body, picked by what the player could not interact with. The code fills four
+    Translator guidance. Each MSG_FORMAT_* string is the complete line sent to
+    chat, picked by what the player could not interact with. The code fills four
     %s placeholders in this fixed order: node name, x coordinate, y coordinate,
     zone name. Reorder the sentence freely for your language, but never reorder,
     add, or drop placeholders.
@@ -41,8 +41,8 @@ L["MATCH_MINE"] = "Горное дело"
     language reads better with an article, attach it to a fixed word rather than to
     the placeholder.
 
-    The raid marker, add-on name, and " // " separator are prepended by the code
-    -- the bodies must stay body-only.
+    Don't add a raid marker or the add-on name: WoW Forever blocks raid markers
+    in chat, and the line reads as the player talking.
 ]]
 
 L["MSG_FORMAT_LOCKED"] = "Эй, Разбойники! %s (%s, %s) в %s."
@@ -54,10 +54,10 @@ L["MSG_FORMAT_MINE"] = "Эй, Рудокопы! %s (%s, %s) в %s."
 --------------------------------------------------------------------------------
 
 L["CHAT_LOADED"] =
-	"Версия %s. Настройки (включая возможность отключить это сообщение) находятся в меню Настройки > Модификации > Come & Get It. Нравится аддон? Расскажи другу! (="
+	"Версия %s. Настройки (включая возможность отключить это сообщение) находятся в меню Настройки > Модификации > Come & Get It. Нравится аддон? Расскажите другу! (="
 
 L["CHAT_TOO_LONG"] =
-	"Это объявление занимает %d байт и превышает лимит чата в %d байт. Сократите его перед отправкой."
+	"Этот черновик занимает %d байт и превышает лимит чата в %d байт. Сократите его перед отправкой."
 
 L["CHAT_OPTIONS_IN_COMBAT"] =
 	"В целях безопасности окно настроек нельзя открыть во время боя."
@@ -66,8 +66,8 @@ L["CHAT_OPTIONS_IN_COMBAT"] =
 -- Options Panel
 --------------------------------------------------------------------------------
 
-L["OPTIONS_INTRO"] =
-	"Нашли траву, которую не можете собрать, рудную жилу, которую не можете добыть, или запертый сундук с сокровищами, а Разбойника поблизости нет? Кликните по нему правой кнопкой мыши, и Come & Get It создаст сообщение, которое можно использовать, чтобы поделиться координатами или объявить их. Быть героем еще никогда не было так просто."
+L["OPTIONS_DESCRIPTION"] =
+	"Нашли траву, которую не можете собрать, рудную жилу, которую не можете разработать, или запертый сундук с сокровищами, а Разбойника рядом нет? Щелкните по находке правой кнопкой мыши, и Come & Get It создаст сообщение, с помощью которого можно поделиться координатами или объявить их всем. Быть героем еще никогда не было так просто."
 
 L["OPTIONS_WELCOME_NAME"] = "Включить приветственное сообщение"
 L["OPTIONS_WELCOME_DESCRIPTION"] =
@@ -80,9 +80,7 @@ L["OPTIONS_COMMAND_DESCRIPTION"] = "Открывает окно настроек
 L["OPTIONS_OUTPUT_HEADER"] = "Вывод"
 L["OPTIONS_OUTPUT_NAME"] = "Вывод по умолчанию"
 L["OPTIONS_OUTPUT_DESCRIPTION"] =
-	"Выберите, в какой канал чата будет адресовано объявление. Черновик откроется в поле ввода чата, чтобы вы могли проверить его или перенаправить перед отправкой."
-L["OPTIONS_OUTPUT_NOTE"] =
-	"Локальный (/1) относится к общему каналу зоны и зависит от слоя. Ваше объявление дойдет до всей зоны, но увидят его только игроки на вашем текущем слое."
+	"Выбирает канал чата, в котором откроется ваш черновик; Локальный (/1) охватывает всю зону, но только игроков на вашем текущем слое."
 
 L["OPTIONS_OUTPUT_CHANNEL1"] = "Локальный (/1)"
 L["OPTIONS_OUTPUT_SAY"] = "Сказать"
