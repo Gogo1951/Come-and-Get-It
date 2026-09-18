@@ -28,8 +28,8 @@ L["MATCH_MINE"] = "Mineração"
 --------------------------------------------------------------------------------
 
 --[[
-    Translator guidance. Each MSG_FORMAT_* string is one complete announcement
-    body, picked by what the player could not interact with. The code fills four
+    Translator guidance. Each MSG_FORMAT_* string is the complete line sent to
+    chat, picked by what the player could not interact with. The code fills four
     %s placeholders in this fixed order: node name, x coordinate, y coordinate,
     zone name. Reorder the sentence freely for your language, but never reorder,
     add, or drop placeholders.
@@ -41,8 +41,8 @@ L["MATCH_MINE"] = "Mineração"
     language reads better with an article, attach it to a fixed word rather than to
     the placeholder.
 
-    The raid marker, add-on name, and " // " separator are prepended by the code
-    -- the bodies must stay body-only.
+    Don't add a raid marker or the add-on name: WoW Forever blocks raid markers
+    in chat, and the line reads as the player talking.
 ]]
 
 L["MSG_FORMAT_LOCKED"] = "Ei Ladinos! %s (%s, %s) em %s."
@@ -56,7 +56,7 @@ L["MSG_FORMAT_MINE"] = "Ei Mineiros! %s (%s, %s) em %s."
 L["CHAT_LOADED"] =
 	"Versão %s. As configurações (incluindo a opção de desativar esta mensagem) podem ser encontradas em Opções > AddOns > Come & Get It. Gostando do add-on? Conte para um amigo! (="
 
-L["CHAT_TOO_LONG"] = "Este anúncio tem %d bytes e ultrapassa o limite de %d bytes do chat. Encurte-o antes de enviar."
+L["CHAT_TOO_LONG"] = "Este rascunho tem %d bytes e ultrapassa o limite de %d bytes do chat. Encurte-o antes de enviar."
 
 L["CHAT_OPTIONS_IN_COMBAT"] =
 	"Como medida de segurança, a interface de opções não pode ser aberta durante o combate."
@@ -65,8 +65,8 @@ L["CHAT_OPTIONS_IN_COMBAT"] =
 -- Options Panel
 --------------------------------------------------------------------------------
 
-L["OPTIONS_INTRO"] =
-	"Encontrou uma erva que você não pode coletar, um veio de minério que você não pode minerar ou um baú de tesouro trancado sem nenhum Ladino à vista? Clique com o botão direito nele e o Come & Get It criará uma mensagem que você pode usar para compartilhar ou transmitir as coordenadas. Ser um herói nunca foi tão fácil."
+L["OPTIONS_DESCRIPTION"] =
+	"Achou uma erva que não consegue colher, um veio de minério que não consegue minerar ou um baú do tesouro trancado sem nenhum Ladino por perto? Clique nele com o botão direito e o Come & Get It cria uma mensagem que você pode usar para compartilhar ou divulgar as coordenadas. Ser herói nunca foi tão fácil."
 
 L["OPTIONS_WELCOME_NAME"] = "Ativar mensagem de boas-vindas"
 L["OPTIONS_WELCOME_DESCRIPTION"] = "Mostra a mensagem de boas-vindas no chat ao entrar no jogo."
@@ -78,9 +78,7 @@ L["OPTIONS_COMMAND_DESCRIPTION"] = "Abre a interface de opções deste add-on."
 L["OPTIONS_OUTPUT_HEADER"] = "Saída"
 L["OPTIONS_OUTPUT_NAME"] = "Saída padrão"
 L["OPTIONS_OUTPUT_DESCRIPTION"] =
-	"Escolha para qual canal de chat o anúncio será direcionado. O rascunho abre na sua caixa de chat para que você possa revisá-lo ou redirecioná-lo antes de enviar."
-L["OPTIONS_OUTPUT_NOTE"] =
-	"Local (/1) é o canal Geral da zona e é específico de cada camada. Seu anúncio alcança toda a zona, mas apenas os jogadores na sua camada atual o verão."
+	"Escolhe o canal de chat em que o seu rascunho abre; Local (/1) alcança toda a zona, mas só os jogadores na sua camada atual."
 
 L["OPTIONS_OUTPUT_CHANNEL1"] = "Local (/1)"
 L["OPTIONS_OUTPUT_SAY"] = "Falar"

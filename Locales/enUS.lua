@@ -28,8 +28,8 @@ L["MATCH_MINE"] = "Mining"
 --------------------------------------------------------------------------------
 
 --[[
-    Translator guidance. Each MSG_FORMAT_* string is one complete announcement
-    body, picked by what the player could not interact with. The code fills four
+    Translator guidance. Each MSG_FORMAT_* string is the complete line sent to
+    chat, picked by what the player could not interact with. The code fills four
     %s placeholders in this fixed order: node name, x coordinate, y coordinate,
     zone name. Reorder the sentence freely for your language, but never reorder,
     add, or drop placeholders.
@@ -41,8 +41,8 @@ L["MATCH_MINE"] = "Mining"
     language reads better with an article, attach it to a fixed word rather than to
     the placeholder.
 
-    The raid marker, add-on name, and " // " separator are prepended by the code
-    -- the bodies must stay body-only.
+    Don't add a raid marker or the add-on name: WoW Forever blocks raid markers
+    in chat, and the line reads as the player talking.
 ]]
 
 L["MSG_FORMAT_LOCKED"] = "Hey Rogues! %s at %s, %s in %s."
@@ -56,7 +56,7 @@ L["MSG_FORMAT_MINE"] = "Hey Miners! %s at %s, %s in %s."
 L["CHAT_LOADED"] =
 	"Version %s. Settings (including the option to disable this message) can be found under Options > AddOns > Come & Get It. Enjoying the add-on? Tell a friend about it! (="
 
-L["CHAT_TOO_LONG"] = "This announcement is %d bytes, over the %d-byte chat limit. Shorten it before sending."
+L["CHAT_TOO_LONG"] = "This draft is %d bytes, over the %d-byte chat limit. Shorten it before sending."
 
 L["CHAT_OPTIONS_IN_COMBAT"] = "As a safety precaution, the Options Interface cannot be opened during combat."
 
@@ -64,7 +64,7 @@ L["CHAT_OPTIONS_IN_COMBAT"] = "As a safety precaution, the Options Interface can
 -- Options Panel
 --------------------------------------------------------------------------------
 
-L["OPTIONS_INTRO"] =
+L["OPTIONS_DESCRIPTION"] =
 	"Found an herb you can't pick, a mineral vein you can't mine, or a locked treasure chest with no Rogue in sight? Right-click it, and Come & Get It creates a message you can use to share or broadcast the coordinates. Being a hero has never been so easy."
 
 L["OPTIONS_WELCOME_NAME"] = "Enable Welcome Message"
@@ -77,9 +77,7 @@ L["OPTIONS_COMMAND_DESCRIPTION"] = "Opens the Options Interface for this add-on.
 L["OPTIONS_OUTPUT_HEADER"] = "Output"
 L["OPTIONS_OUTPUT_NAME"] = "Default Output"
 L["OPTIONS_OUTPUT_DESCRIPTION"] =
-	"Choose which chat channel the announcement is addressed to. The draft opens in your chat box so you can review or redirect it before sending."
-L["OPTIONS_OUTPUT_NOTE"] =
-	"Local (/1) is the zone's General channel, and it is layer-specific. Your announcement reaches the whole zone, but only players on your current layer will see it."
+	"Picks the chat channel your draft opens in; Local (/1) reaches the whole zone, but only players on your current layer."
 
 L["OPTIONS_OUTPUT_CHANNEL1"] = "Local (/1)"
 L["OPTIONS_OUTPUT_SAY"] = "Say"

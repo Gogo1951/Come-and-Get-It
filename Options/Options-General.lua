@@ -32,7 +32,7 @@ function ns.BuildGeneralOptions()
 		type = "group",
 		name = L["ADDON_TITLE"],
 		args = {
-			descIntro = OptionsDesc(L["OPTIONS_INTRO"], 1),
+			descDescription = OptionsDesc(L["OPTIONS_DESCRIPTION"], 1),
 
 			spacerWelcome0 = OptionsSpacer(5),
 			welcomeToggle = {
@@ -80,14 +80,6 @@ function ns.BuildGeneralOptions()
 				set = function(_, value)
 					ns.db.profile.defaultOutput = value
 				end,
-			},
-			spacerOutput2 = OptionsSpacer(17),
-
-			descOutputNote = {
-				type = "description",
-				name = GetColor("HELP") .. L["OPTIONS_OUTPUT_NOTE"] .. "|r",
-				fontSize = "medium",
-				order = 18,
 			},
 
 			spacerFeedback0 = OptionsSpacer(20),

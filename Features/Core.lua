@@ -7,8 +7,7 @@ local L = ns.L
 
 -- "Dev" until the packager substitutes the version token at build time; @ is the signal.
 local function GetVersion()
-	local getMetadata = (C_AddOns and C_AddOns.GetAddOnMetadata) or GetAddOnMetadata
-	local version = getMetadata and getMetadata(ADDON_NAME, "Version")
+	local version = C_AddOns.GetAddOnMetadata(ADDON_NAME, "Version")
 	if not version or version:find("@") then
 		return "Dev"
 	end
@@ -21,7 +20,6 @@ ns.Version = GetVersion()
 -- Constants
 --------------------------------------------------------------------------------
 
-local ERROR_ID_LOCKED_CHEST = ns.ERROR_ID_LOCKED_CHEST
 local ANNOUNCE_COOLDOWN = ns.ANNOUNCE_COOLDOWN
 
 --------------------------------------------------------------------------------
@@ -34,10 +32,9 @@ local IsInInstance = IsInInstance
 local InCombatLockdown = InCombatLockdown
 local format = string.format
 
--- C_Map is nil on early Classic builds; AnnounceNode bails if any alias is missing.
-local GetBestMapForUnit = C_Map and C_Map.GetBestMapForUnit
-local GetPlayerMapPosition = C_Map and C_Map.GetPlayerMapPosition
-local GetMapInfo = C_Map and C_Map.GetMapInfo
+local GetBestMapForUnit = C_Map.GetBestMapForUnit
+local GetPlayerMapPosition = C_Map.GetPlayerMapPosition
+local GetMapInfo = C_Map.GetMapInfo
 
 --------------------------------------------------------------------------------
 -- State
@@ -50,23 +47,23 @@ local lastAnnounceTime = 0
 --------------------------------------------------------------------------------
 
 --[[
-    Two key kinds in disjoint namespaces. Locked chests key on their own numeric
-    error ID. Herb and mine both fire error 272 with a "Requires <Skill>" body,
-    so the ID says a profession skill was missing but not which one -- only the
-    localized skill name separates them, which is why they key on that.
+    Two tables so the key kinds can never collide. Locked chests key on the
+    error's GlobalStrings name. Herb and mine share one error with a
+    "Requires <Skill>" body, so only the localized skill name separates them.
 ]]
-local ERROR_MAPPING = {
-	[ERROR_ID_LOCKED_CHEST] = { formatKey = "MSG_FORMAT_LOCKED" },
+local ERROR_STRING_MAPPING = {
+	[ns.ERROR_STRING_LOCKED_CHEST] = { formatKey = "MSG_FORMAT_LOCKED" },
+}
+
+local SKILL_MAPPING = {
 	[L["MATCH_HERB"]] = { formatKey = "MSG_FORMAT_HERB" },
 	[L["MATCH_MINE"]] = { formatKey = "MSG_FORMAT_MINE" },
 }
 
--- Lowercased string keys, built once so the slow path never re-lowers constants.
+-- Lowercased skill names, built once so the slow path never re-lowers constants.
 local LOWER_MATCH = {}
-for key, mapping in pairs(ERROR_MAPPING) do
-	if type(key) == "string" then
-		LOWER_MATCH[string.lower(key)] = mapping
-	end
+for key, mapping in pairs(SKILL_MAPPING) do
+	LOWER_MATCH[string.lower(key)] = mapping
 end
 
 --------------------------------------------------------------------------------
@@ -84,36 +81,29 @@ end
 --------------------------------------------------------------------------------
 
 local function GetNodeName()
-	if not GameTooltip or not GameTooltip:IsShown() then
+	if not GameTooltip:IsShown() then
 		return nil
 	end
-	local tooltipLine = _G.GameTooltipTextLeft1
-	return tooltipLine and tooltipLine:GetText()
+	return GameTooltipTextLeft1:GetText()
 end
 
 --[[
     Bag lockboxes fire the same locked error as world chests. World nodes are
     never items, so an item on the tooltip means the trigger came from the bags.
-    Pick one API by availability and call exactly one.
+    GameTooltip:GetItem ships on every supported client; TooltipUtil does not.
 ]]
 local function TooltipShowsItem()
-	if TooltipUtil and TooltipUtil.GetDisplayedItem then
-		local name, link = TooltipUtil.GetDisplayedItem(GameTooltip)
-		return name ~= nil or link ~= nil
-	end
-	if GameTooltip.GetItem then
-		local name, link = GameTooltip:GetItem()
-		return name ~= nil or link ~= nil
-	end
-	return false
+	local name, link = GameTooltip:GetItem()
+	return name ~= nil or link ~= nil
 end
 
 -- Shared with Diagnostics' noise filter (ns:SuppressUncorrelatedMessage), which
 -- must classify with this exact lookup; making it local again silently breaks that.
 function ns.MatchError(messageID, message)
-	-- Fast path: locked chests fire a known numeric ID.
-	if ERROR_MAPPING[messageID] then
-		return ERROR_MAPPING[messageID]
+	-- Fast path: locked chests resolve to a known error string id.
+	local stringId = messageID and GetGameMessageInfo(messageID)
+	if stringId and ERROR_STRING_MAPPING[stringId] then
+		return ERROR_STRING_MAPPING[stringId]
 	end
 
 	if not message then
@@ -122,7 +112,7 @@ function ns.MatchError(messageID, message)
 
 	--[[
         ACCEPTED TRADEOFF: substring-scanning can fire on unrelated error text
-        containing the skill word. Herb and mine share error 272, so the ID
+        containing the skill word. Herb and mine share one error, so the error
         cannot pick between them and the skill name has to. Kept because
         word-boundary patterns break CJK locales and the risk is bounded --
         AnnounceNode never auto-sends.
@@ -161,10 +151,6 @@ end
 --------------------------------------------------------------------------------
 
 local function AnnounceNode(mapping)
-	if not GetBestMapForUnit or not GetPlayerMapPosition or not GetMapInfo then
-		return
-	end
-
 	local mapID = GetBestMapForUnit("player")
 	if not mapID then
 		return
@@ -195,7 +181,7 @@ local function AnnounceNode(mapping)
 		return
 	end
 
-	-- Decoration lives in ns:BuildAnnounceMessage (Announcements.lua); the MSG_FORMAT_* bodies are body-only.
+	-- The MSG_FORMAT_* strings are sent as-is: no raid marker, no add-on name prefix.
 	local announcement = ns:BuildAnnounceMessage(
 		mapping.formatKey,
 		nodeName,
@@ -208,7 +194,7 @@ local function AnnounceNode(mapping)
 	end
 
 	-- Don't clobber a draft the user is already typing in any chat editbox.
-	if ChatEdit_GetActiveWindow and ChatEdit_GetActiveWindow() then
+	if ChatEdit_GetActiveWindow() then
 		return
 	end
 
@@ -242,8 +228,8 @@ end
     clears the one profile everybody is on, and since no setting lives in
     ns.db.global -- a scope ResetProfile does not touch -- nothing survives it.
     Per-character profiles stay available through the Profiles panel for anyone
-    who wants them. AceDB applies the defaults via metatables -- no hand-rolled
-    merge.
+    who wants them. AceDB applies the defaults itself, so there is no
+    hand-rolled merge.
 ]]
 local function InitSavedVariables()
 	ns.db = LibStub("AceDB-3.0"):New("ComeAndGetItDB", ns.DATABASE_DEFAULTS, true)

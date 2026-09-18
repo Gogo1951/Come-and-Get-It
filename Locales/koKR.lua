@@ -28,8 +28,8 @@ L["MATCH_MINE"] = "채광"
 --------------------------------------------------------------------------------
 
 --[[
-    Translator guidance. Each MSG_FORMAT_* string is one complete announcement
-    body, picked by what the player could not interact with. The code fills four
+    Translator guidance. Each MSG_FORMAT_* string is the complete line sent to
+    chat, picked by what the player could not interact with. The code fills four
     %s placeholders in this fixed order: node name, x coordinate, y coordinate,
     zone name. Reorder the sentence freely for your language, but never reorder,
     add, or drop placeholders.
@@ -41,8 +41,8 @@ L["MATCH_MINE"] = "채광"
     language reads better with an article, attach it to a fixed word rather than to
     the placeholder.
 
-    The raid marker, add-on name, and " // " separator are prepended by the code
-    -- the bodies must stay body-only.
+    Don't add a raid marker or the add-on name: WoW Forever blocks raid markers
+    in chat, and the line reads as the player talking.
 ]]
 
 L["MSG_FORMAT_LOCKED"] = "도적 여러분! %s, 위치 %s, %s (%s)."
@@ -54,10 +54,10 @@ L["MSG_FORMAT_MINE"] = "광부 여러분! %s, 위치 %s, %s (%s)."
 --------------------------------------------------------------------------------
 
 L["CHAT_LOADED"] =
-	"버전 %s. 설정(이 메시지를 비활성화하는 옵션 포함)은 설정 > 애드온 > Come & Get It 에서 찾을 수 있습니다. 애드온이 마음에 드시나요? 친구에게 알려주세요! (="
+	"버전 %s. 설정(이 메시지를 비활성화하는 옵션 포함)은 설정 > 애드온 > Come & Get It에서 찾을 수 있습니다. 애드온이 마음에 드시나요? 친구에게 알려주세요! (="
 
 L["CHAT_TOO_LONG"] =
-	"이 공지는 %d바이트로 채팅 제한인 %d바이트를 초과합니다. 보내기 전에 줄여주세요."
+	"이 초안은 %d바이트로 채팅 제한인 %d바이트를 초과합니다. 보내기 전에 줄여주세요."
 
 L["CHAT_OPTIONS_IN_COMBAT"] = "안전을 위해 전투 중에는 설정 창을 열 수 없습니다."
 
@@ -65,8 +65,8 @@ L["CHAT_OPTIONS_IN_COMBAT"] = "안전을 위해 전투 중에는 설정 창을 �
 -- Options Panel
 --------------------------------------------------------------------------------
 
-L["OPTIONS_INTRO"] =
-	"채집할 수 없는 약초, 캘 수 없는 광맥, 또는 근처에 도적이 없는 잠긴 보물 상자를 발견하셨나요? 우클릭하면 Come & Get It이 좌표를 공유하거나 알릴 수 있는 메시지를 생성합니다. 영웅이 되는 것이 이렇게 쉬운 적은 없었습니다."
+L["OPTIONS_DESCRIPTION"] =
+	"채집할 수 없는 약초, 캘 수 없는 광맥, 아니면 주변에 도적도 없는데 잠겨 있는 보물 상자를 발견하셨나요? 우클릭하면 Come & Get It이 좌표를 공유하거나 널리 알릴 수 있는 메시지를 만들어 줍니다. 영웅이 되는 일이 이렇게 쉬웠던 적은 없습니다."
 
 L["OPTIONS_WELCOME_NAME"] = "환영 메시지 활성화"
 L["OPTIONS_WELCOME_DESCRIPTION"] = "로그인 시 채팅창에 환영 메시지를 출력합니다."
@@ -78,9 +78,7 @@ L["OPTIONS_COMMAND_DESCRIPTION"] = "이 애드온의 설정 창을 엽니다."
 L["OPTIONS_OUTPUT_HEADER"] = "출력"
 L["OPTIONS_OUTPUT_NAME"] = "기본 출력"
 L["OPTIONS_OUTPUT_DESCRIPTION"] =
-	"공지를 어느 채팅 채널로 보낼지 선택합니다. 초안이 채팅 입력창에 표시되므로 보내기 전에 검토하거나 다른 채널로 변경할 수 있습니다."
-L["OPTIONS_OUTPUT_NOTE"] =
-	"지역 (/1)은 현재 지역의 공개 채널이며 레이어별로 분리됩니다. 공지는 지역 전체에 전달되지만, 현재 레이어에 있는 플레이어만 볼 수 있습니다."
+	"초안이 열릴 채팅 채널을 선택합니다. 지역 (/1)은 지역 전체에 전달되지만, 현재 레이어의 플레이어만 볼 수 있습니다."
 
 L["OPTIONS_OUTPUT_CHANNEL1"] = "지역 (/1)"
 L["OPTIONS_OUTPUT_SAY"] = "말하기"

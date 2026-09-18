@@ -6,29 +6,16 @@ ns.L = LibStub("AceLocale-3.0"):GetLocale(ADDON_NAME)
 --------------------------------------------------------------------------------
 
 --[[
-    Blizzard's "Item is locked" error. Herb and mine share error 272, which says
-    a profession skill was missing but not which one, so Core matches those by
-    localized skill name instead.
+    UI_ERROR_MESSAGE indexes shift between patches and clients, so the locked
+    error is matched by its GlobalStrings name via GetGameMessageInfo. Herb and
+    mine share one error and are matched by localized skill name instead.
 ]]
-ns.ERROR_ID_LOCKED_CHEST = 268
+ns.ERROR_STRING_LOCKED_CHEST = "ERR_ITEM_LOCKED"
 
 ns.ANNOUNCE_COOLDOWN = 5
 
 -- The client measures a sent chat body in bytes, not characters.
 ns.CHAT_MESSAGE_MAX_LENGTH = 255
-
---------------------------------------------------------------------------------
--- Target Marker
---------------------------------------------------------------------------------
-
---[[
-    {rt1} Star, {rt2} Circle, {rt3} Diamond, {rt4} Triangle,
-    {rt5} Moon, {rt6} Square, {rt7} Cross, {rt8} Skull
-
-    Applied at send time by ns:BuildAnnounceMessage (Features/Announcements.lua),
-    so changing it here takes effect everywhere without touching locale files.
-]]
-ns.TARGET_MARKER = "{rt7}" -- Cross
 
 --------------------------------------------------------------------------------
 -- Output Channels
@@ -78,8 +65,8 @@ ns.OPTIONS_REGISTRY = {
 
 -- Label-beside-control rows: label plus control always total ns.OPTIONS_ROW_WIDTH.
 
-ns.OPTIONS_ROW_WIDTH = 2.6
-ns.OPTIONS_LABEL_WIDTH = 1.3
+ns.OPTIONS_ROW_WIDTH = 3.4
+ns.OPTIONS_LABEL_WIDTH = 2.1
 ns.OPTIONS_CONTROL_WIDTH = ns.OPTIONS_ROW_WIDTH - ns.OPTIONS_LABEL_WIDTH
 ns.OPTIONS_REMOVE_ICON_WIDTH = 0.25 -- the item lists' remove column, sized to its icon
 ns.OPTIONS_SUB_INDENT_WIDTH = 0.115 -- the blank cell a sub-option row leads with

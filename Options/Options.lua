@@ -50,12 +50,6 @@ function ns:OpenOptionsPanel()
 		Settings.OpenToCategory(ns.optionsFrames.categoryID)
 		return
 	end
-	if InterfaceOptionsFrame_OpenToCategory then
-		InterfaceOptionsFrame_OpenToCategory(ns.optionsFrames.main)
-		-- Called twice for Classic compatibility
-		InterfaceOptionsFrame_OpenToCategory(ns.optionsFrames.main)
-		return
-	end
 	AceConfigDialog:Open(ns.OPTIONS_REGISTRY.General)
 end
 
