@@ -150,7 +150,7 @@ function ns.BuildGeneralOptions()
 			},
 			versionLine = {
 				type = "description",
-				name = GetColor("MUTED") .. "Version " .. ns.Version .. "|r",
+				name = GetColor("MUTED") .. L["OPTIONS_VERSION"]:format(ns.Version) .. "|r",
 				fontSize = "medium",
 				order = 999,
 			},

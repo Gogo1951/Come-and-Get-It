@@ -56,6 +56,9 @@ L["MSG_FORMAT_MINE"] = "Ehi Minatori! %s (%s, %s) in %s."
 L["CHAT_LOADED"] =
 	"Versione %s. Le impostazioni (inclusa l'opzione per disabilitare questo messaggio) si trovano in Opzioni > AddOns > Come & Get It. Ti piace l'add-on? Parlane con un amico! (="
 
+L["CHAT_END_OF_SUPPORT"] =
+	"Fine del supporto: questo add-on ora fa parte di Tracking Eye e questa è la sua ultima versione. Installa Tracking Eye per continuare a ricevere gli aggiornamenti, poi potrai disinstallare Come & Get It."
+
 L["CHAT_TOO_LONG"] =
 	"Questa bozza è di %d byte e supera il limite della chat di %d byte. Accorciala prima di inviarla."
 
@@ -92,3 +95,5 @@ L["FEEDBACK_CURSEFORGE"] = "CurseForge"
 L["FEEDBACK_GITHUB"] = "GitHub"
 L["FEEDBACK_DISCORD"] = "Discord"
 L["FEEDBACK_WAGO"] = "Wago"
+
+L["OPTIONS_VERSION"] = "Versione %s"

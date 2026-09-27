@@ -86,14 +86,15 @@ end
 local function GetClientHeader()
 	local version, build, _, tocVersion = GetBuildInfo()
 	return string.format(
-		"%s %s // Client %s // Build %s // TOC %s // Locale %s // Project %s",
+		"%s %s // Client %s // Build %s // TOC %s // Locale %s // Flavor %s // Data %s",
 		L["ADDON_TITLE"],
 		ns.Version,
 		version,
 		build,
 		tocVersion,
 		GetLocale(),
-		tostring(WOW_PROJECT_ID)
+		tostring(ns.FLAVOR),
+		tostring(ns.DATA_FOLDER)
 	)
 end
 
@@ -351,15 +352,15 @@ ns.DIAGNOSTIC_API_CHECKS = {
 		end,
 	},
 	{
-		"ChatFrame_OpenChat",
+		"ChatFrameUtil.OpenChat",
 		function()
-			return type(ChatFrame_OpenChat) == "function"
+			return type(ChatFrameUtil) == "table" and type(ChatFrameUtil.OpenChat) == "function"
 		end,
 	},
 	{
-		"ChatEdit_GetActiveWindow",
+		"ChatFrameUtil.GetActiveWindow",
 		function()
-			return type(ChatEdit_GetActiveWindow) == "function"
+			return type(ChatFrameUtil) == "table" and type(ChatFrameUtil.GetActiveWindow) == "function"
 		end,
 	},
 	{

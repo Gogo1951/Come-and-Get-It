@@ -1,3 +1,12 @@
+# Come & Get It Is Now Part of Tracking Eye
+
+This is Come & Get It's final release. Install Tracking Eye to keep getting updates, and then you can remove Come & Get It.
+
+### Download Tracking Eye
+
+* [Tracking Eye on CurseForge](https://www.curseforge.com/wow/addons/tracking-eye-classic)
+* [Tracking Eye on Wago](https://addons.wago.io/addons/tracking-eye)
+
 # Come & Get It
 
 Found an herb you can't pick, a mineral vein you can't mine, or a locked treasure chest with no Rogue in sight? Right-click it, and Come & Get It creates a message you can use to share or broadcast the coordinates. Being a hero has never been so easy.

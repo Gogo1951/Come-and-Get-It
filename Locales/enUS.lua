@@ -17,7 +17,9 @@ L["ADDON_TITLE"] = "Come & Get It"
     Not display copy. MATCH_* must equal the profession skill names exactly as
     the game client displays them in this language: they are substring-matched
     against the client's error text, so a loose or stylized translation silently
-    stops the add-on from detecting anything at all.
+    stops the add-on from detecting herbs and ore at all. Where this language's
+    clients disagree on a name, list every one, separated by semicolons with no
+    space on either side: a space there becomes part of the name.
 ]]
 
 L["MATCH_HERB"] = "Herbalism"
@@ -56,6 +58,9 @@ L["MSG_FORMAT_MINE"] = "Hey Miners! %s at %s, %s in %s."
 L["CHAT_LOADED"] =
 	"Version %s. Settings (including the option to disable this message) can be found under Options > AddOns > Come & Get It. Enjoying the add-on? Tell a friend about it! (="
 
+L["CHAT_END_OF_SUPPORT"] =
+	"End of Support: this add-on is now part of Tracking Eye, and this is its final release. Install Tracking Eye to keep getting updates, and then you can remove Come & Get It."
+
 L["CHAT_TOO_LONG"] = "This draft is %d bytes, over the %d-byte chat limit. Shorten it before sending."
 
 L["CHAT_OPTIONS_IN_COMBAT"] = "As a safety precaution, the Options Interface cannot be opened during combat."
@@ -90,3 +95,5 @@ L["FEEDBACK_CURSEFORGE"] = "CurseForge"
 L["FEEDBACK_GITHUB"] = "GitHub"
 L["FEEDBACK_DISCORD"] = "Discord"
 L["FEEDBACK_WAGO"] = "Wago"
+
+L["OPTIONS_VERSION"] = "Version %s"

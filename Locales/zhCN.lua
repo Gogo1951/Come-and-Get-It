@@ -56,6 +56,9 @@ L["MSG_FORMAT_MINE"] = "矿工们！%s，坐标 %s, %s（%s）。"
 L["CHAT_LOADED"] =
 	"版本 %s。设置（包括禁用此消息的选项）可以在 选项 > 插件 > Come & Get It 下找到。喜欢这个插件吗？告诉你的朋友吧！(="
 
+L["CHAT_END_OF_SUPPORT"] =
+	"停止支持：本插件现已成为 Tracking Eye 的一部分，这是它的最后一个版本。安装 Tracking Eye 即可继续获得更新，之后你就可以移除 Come & Get It 了。"
+
 L["CHAT_TOO_LONG"] = "此草稿为 %d 字节，超过了 %d 字节的聊天上限。请在发送前缩短。"
 
 L["CHAT_OPTIONS_IN_COMBAT"] = "出于安全考虑，战斗中无法打开选项界面。"
@@ -90,3 +93,5 @@ L["FEEDBACK_CURSEFORGE"] = "CurseForge"
 L["FEEDBACK_GITHUB"] = "GitHub"
 L["FEEDBACK_DISCORD"] = "Discord"
 L["FEEDBACK_WAGO"] = "Wago"
+
+L["OPTIONS_VERSION"] = "版本 %s"
