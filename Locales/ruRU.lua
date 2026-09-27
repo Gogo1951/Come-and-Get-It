@@ -56,6 +56,9 @@ L["MSG_FORMAT_MINE"] = "Эй, Рудокопы! %s (%s, %s) в %s."
 L["CHAT_LOADED"] =
 	"Версия %s. Настройки (включая возможность отключить это сообщение) находятся в меню Настройки > Модификации > Come & Get It. Нравится аддон? Расскажите другу! (="
 
+L["CHAT_END_OF_SUPPORT"] =
+	"Поддержка прекращена: этот аддон теперь входит в состав Tracking Eye, и это его последняя версия. Установите Tracking Eye, чтобы и дальше получать обновления, после чего Come & Get It можно удалить."
+
 L["CHAT_TOO_LONG"] =
 	"Этот черновик занимает %d байт и превышает лимит чата в %d байт. Сократите его перед отправкой."
 
@@ -93,3 +96,5 @@ L["FEEDBACK_CURSEFORGE"] = "CurseForge"
 L["FEEDBACK_GITHUB"] = "GitHub"
 L["FEEDBACK_DISCORD"] = "Discord"
 L["FEEDBACK_WAGO"] = "Wago"
+
+L["OPTIONS_VERSION"] = "Версия %s"

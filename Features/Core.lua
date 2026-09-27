@@ -26,7 +26,7 @@ local ANNOUNCE_COOLDOWN = ns.ANNOUNCE_COOLDOWN
 -- Performance Aliases
 --------------------------------------------------------------------------------
 
--- Hot-path globals only; ChatFrame_OpenChat runs once per cooldown window, so it stays unaliased.
+-- Hot-path globals only; ChatFrameUtil.OpenChat runs once per cooldown window, so it stays unaliased.
 local GetTime = GetTime
 local IsInInstance = IsInInstance
 local InCombatLockdown = InCombatLockdown
@@ -60,10 +60,17 @@ local SKILL_MAPPING = {
 	[L["MATCH_MINE"]] = { formatKey = "MSG_FORMAT_MINE" },
 }
 
--- Lowercased skill names, built once so the slow path never re-lowers constants.
+--[[
+    Lowercased skill names, built once so the slow path never re-lowers
+    constants. One MATCH_* string can hold several names, separated by
+    semicolons, for a language whose clients don't all name the skill the
+    same way.
+]]
 local LOWER_MATCH = {}
-for key, mapping in pairs(SKILL_MAPPING) do
-	LOWER_MATCH[string.lower(key)] = mapping
+for names, mapping in pairs(SKILL_MAPPING) do
+	for name in names:gmatch("[^;]+") do
+		LOWER_MATCH[string.lower(name)] = mapping
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -97,8 +104,10 @@ local function TooltipShowsItem()
 	return name ~= nil or link ~= nil
 end
 
--- Shared with Diagnostics' noise filter (ns:SuppressUncorrelatedMessage), which
--- must classify with this exact lookup; making it local again silently breaks that.
+--[[
+    Shared with Diagnostics' noise filter (ns:SuppressUncorrelatedMessage), which
+    must classify with this exact lookup; making it file-local silently breaks that.
+]]
 function ns.MatchError(messageID, message)
 	-- Fast path: locked chests resolve to a known error string id.
 	local stringId = messageID and GetGameMessageInfo(messageID)
@@ -134,7 +143,7 @@ local function CanAnnounce()
 	end
 
 	--[[
-        INTENTIONAL, not a bug: ChatFrame_OpenChat steals keyboard focus and
+        INTENTIONAL, not a bug: ChatFrameUtil.OpenChat steals keyboard focus and
         breaks movement mid-fight. Drop the announcement rather than queue it --
         a stale callout after combat is noise, and the node re-fires its error on
         the next interaction. Do not replace this with a deferred-replay queue.
@@ -194,7 +203,7 @@ local function AnnounceNode(mapping)
 	end
 
 	-- Don't clobber a draft the user is already typing in any chat editbox.
-	if ChatEdit_GetActiveWindow() then
+	if ChatFrameUtil.GetActiveWindow() then
 		return
 	end
 
@@ -207,7 +216,7 @@ local function AnnounceNode(mapping)
 		ns:PrintMessage(format(L["CHAT_TOO_LONG"], messageLength, ns.CHAT_MESSAGE_MAX_LENGTH))
 	end
 
-	ChatFrame_OpenChat(command .. " " .. announcement, ChatFrame1)
+	ChatFrameUtil.OpenChat(command .. " " .. announcement, ChatFrame1)
 	lastAnnounceTime = GetTime()
 end
 
@@ -263,6 +272,7 @@ eventFrame:SetScript("OnEvent", function(_, event, ...)
 		InitSavedVariables()
 		ns.RegisterOptionsPanels()
 		ns:PrintWelcome()
+		ns:PrintEndOfSupport()
 		return
 	end
 

@@ -56,6 +56,9 @@ L["MSG_FORMAT_MINE"] = "광부 여러분! %s, 위치 %s, %s (%s)."
 L["CHAT_LOADED"] =
 	"버전 %s. 설정(이 메시지를 비활성화하는 옵션 포함)은 설정 > 애드온 > Come & Get It에서 찾을 수 있습니다. 애드온이 마음에 드시나요? 친구에게 알려주세요! (="
 
+L["CHAT_END_OF_SUPPORT"] =
+	"지원 종료: 이 애드온은 이제 Tracking Eye의 일부가 되었으며, 이번이 마지막 버전입니다. 업데이트를 계속 받으려면 Tracking Eye를 설치하세요. 그 후에는 Come & Get It을 삭제해도 됩니다."
+
 L["CHAT_TOO_LONG"] =
 	"이 초안은 %d바이트로 채팅 제한인 %d바이트를 초과합니다. 보내기 전에 줄여주세요."
 
@@ -91,3 +94,5 @@ L["FEEDBACK_CURSEFORGE"] = "CurseForge"
 L["FEEDBACK_GITHUB"] = "GitHub"
 L["FEEDBACK_DISCORD"] = "Discord"
 L["FEEDBACK_WAGO"] = "Wago"
+
+L["OPTIONS_VERSION"] = "버전 %s"

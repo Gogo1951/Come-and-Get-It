@@ -33,13 +33,21 @@ function ns:PrintWelcome()
 end
 
 --------------------------------------------------------------------------------
+-- End of Support
+--------------------------------------------------------------------------------
+
+function ns:PrintEndOfSupport()
+	ns:PrintMessage(L["CHAT_END_OF_SUPPORT"])
+end
+
+--------------------------------------------------------------------------------
 -- Announcement Builder
 --------------------------------------------------------------------------------
 
 --[[
-    Sends the locale body as-is: no raid marker, no add-on name prefix. WoW
-    Forever blocks raid-marker tokens in chat, so the line stays plain on every
-    client. Locale MSG_FORMATs carry the whole sent line.
+    Returns the locale body as the whole draft line: no raid marker, no add-on
+    name prefix. WoW Forever blocks raid-marker tokens in chat, so the line
+    stays plain on every client.
 ]]
 function ns:BuildAnnounceMessage(formatKey, ...)
 	local template = L[formatKey]
