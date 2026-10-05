@@ -1,11 +1,13 @@
-# Come & Get It Is Now Part of Tracking Eye
+# 😎 Come & Get It Is Now Part of Tracking Eye 🔥
 
-This is Come & Get It's final release. Install Tracking Eye to keep getting updates, and then you can remove Come & Get It.
+This is the final release of Come & Get It. All of its features have been merged into Tracking Eye.
+
+You will need to install Tracking Eye to keep receiving updates. Once it's installed, you can safely remove Come & Get It.
 
 ### Download Tracking Eye
 
-* [Tracking Eye on CurseForge](https://www.curseforge.com/wow/addons/tracking-eye-classic)
-* [Tracking Eye on Wago](https://addons.wago.io/addons/tracking-eye)
+*   [Tracking Eye on CurseForge](https://www.curseforge.com/wow/addons/tracking-eye-classic)
+*   [Tracking Eye on Wago](https://addons.wago.io/addons/tracking-eye)
 
 # Come & Get It
 
@@ -31,51 +33,51 @@ Found an herb you can't pick, a mineral vein you can't mine, or a locked treasur
 
 ## Setup
 
-1. Install the add-on, ideally using [CurseForge](https://www.curseforge.com/wow/addons/come-get-it) or [Wago](https://addons.wago.io/addons/come-and-get-it).
-2. Log in.
-3. Type `/cgi` and pick where your callouts go: Local, Say, Yell, Party, or Guild.
-4. Right-click an herb, ore vein, or locked treasure chest you can't gather.
-5. The draft appears in your chat box. Edit it if you like, then hit Enter.
-6. *"If you ping it, they will come."*
+1.  Install the add-on, ideally using [CurseForge](https://www.curseforge.com/wow/addons/come-get-it) or [Wago](https://addons.wago.io/addons/come-and-get-it).
+2.  Log in.
+3.  Type `/cgi` and pick where your callouts go: Local, Say, Yell, Party, or Guild.
+4.  Right-click an herb, ore vein, or locked treasure chest you can't gather.
+5.  The draft appears in your chat box. Edit it if you like, then hit Enter.
+6.  _"If you ping it, they will come."_
 
 ## How It Works
 
 ### What Sets It Off
 
-You don't need the profession to use this, you need to *not* have it. Come & Get It waits for the moment the game tells you no, then drafts the callout for whoever can finish the job.
+You don't need the profession to use this, you need to _not_ have it. Come & Get It waits for the moment the game tells you no, then drafts the callout for whoever can finish the job.
 
-| You right-click | It calls out to |
-| --- | --- |
-| An herb you don't have the Herbalism for | Herbalists |
-| A vein you don't have the Mining for | Miners |
-| A locked treasure chest you can't open | Rogues |
+| You right-click                          |It calls out to |
+| ---------------------------------------- |--------------- |
+| An herb you don't have the Herbalism for |Herbalists      |
+| A vein you don't have the Mining for     |Miners          |
+| A locked treasure chest you can't open   |Rogues          |
 
 ### Where It Posts
 
-| Channel | Who sees it |
-| --- | --- |
-| Local (/1) | The whole zone, though layering means only players on your layer |
-| Say / Yell | Whoever is close enough to hear you |
-| Party | Your group |
-| Guild | Your guild |
+| Channel    |Who sees it                                                      |
+| ---------- |---------------------------------------------------------------- |
+| Local (/1) |The whole zone, though layering means only players on your layer |
+| Say / Yell |Whoever is close enough to hear you                              |
+| Party      |Your group                                                       |
+| Guild      |Your guild                                                       |
 
 Local is the default. Every draft opens with your chosen channel already filled in, so redirecting one message is just editing the slash command before you press Enter.
 
 ### When It Stays Quiet
 
-- **Inside dungeons and raids.** Nobody in there is coming out to pick your herb.
-- **In combat.** An open chat box eats your movement keys, so the callout is dropped rather than saved for later. Click the node again once the fight's over.
-- **For five seconds after a callout.** One node, one message.
-- **While you're typing.** A message you're already writing never gets clobbered.
-- **For locked boxes in your bags.** They're locked too, but the coordinates would just be yours.
+*   **Inside dungeons and raids.** Nobody in there is coming out to pick your herb.
+*   **In combat.** An open chat box eats your movement keys, so the callout is dropped rather than saved for later. Click the node again once the fight's over.
+*   **For five seconds after a callout.** One node, one message.
+*   **While you're typing.** A message you're already writing never gets clobbered.
+*   **For locked boxes in your bags.** They're locked too, but the coordinates would just be yours.
 
 ### Options
 
 Open with `/cgi`, or find it under Options > AddOns > Come & Get It.
 
-- **Come & Get It** // Pick the Default Output channel for your drafts and turn the login welcome message on or off.
-- **Profiles** // Share one setup across every character, give a character its own, or reset everything to defaults.
-- **Diagnostic Tools** // Reports you can copy and paste into a bug report if something ever misbehaves.
+*   **Come & Get It** // Pick the Default Output channel for your drafts and turn the login welcome message on or off.
+*   **Profiles** // Share one setup across every character, give a character its own, or reset everything to defaults.
+*   **Diagnostic Tools** // Reports you can copy and paste into a bug report if something ever misbehaves.
 
 ## Testing & Localization Status
 
@@ -95,8 +97,8 @@ Please reach out if you would like to be involved!
 
 ## Links
 
-- [GitHub](https://github.com/Gogo1951/Come-and-Get-It)
-- [Discord](https://discord.gg/eh8hKq992Q)
+*   [GitHub](https://github.com/Gogo1951/Come-and-Get-It)
+*   [Discord](https://discord.gg/eh8hKq992Q)
 
 ## Related Add-ons
 
