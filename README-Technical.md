@@ -8,7 +8,8 @@ This document combines architecture notes and contribution guidance for develope
 Come-and-Get-It/
 ├── .github/
 │   └── workflows/
-│       └── package.yml          CurseForge and Wago release plus library vendoring
+│       ├── ci.yml               Calls Common-Core: Lua 5.1 syntax, luacheck, StyLua and tests on every PR
+│       └── package.yml          Calls Common-Core: CurseForge and Wago release plus library vendoring
 ├── .gitattributes               Line-ending normalization
 ├── .gitignore                   Dev-clutter ignore list
 ├── .luacheckrc                  Lint config
