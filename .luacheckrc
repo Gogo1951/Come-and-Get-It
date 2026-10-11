@@ -23,8 +23,8 @@ read_globals = {
 	"IsInInstance",
 	"LibStub",
 	"Settings",
-	SlashCmdList = { read_only = false, other_fields = true },
 }
 globals = {
 	"SLASH_COMEANDGETIT1",
+	SlashCmdList = { fields = { "COMEANDGETIT" } }, -- a field, so only the add-on's own slash entry is writable
 }
