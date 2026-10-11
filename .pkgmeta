@@ -28,3 +28,4 @@ ignore:
   - .pkgmeta
   - .vscode
   - LICENSE
+  - Tests
