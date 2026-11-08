@@ -17,6 +17,9 @@ externals:
   Includes/Libraries/AceDBOptions-3.0:
     url: https://repos.curseforge.com/wow/ace3/trunk/AceDBOptions-3.0/
 
+required-dependencies:
+  - tracking-eye-classic
+
 ignore:
   - .DS_Store
   - .git
